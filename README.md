@@ -6,6 +6,8 @@ This repository is a personal skills collection for Claude Code / Codex-compatib
 
 ## Install
 
+See [`INSTALL.md`](INSTALL.md) for copy-paste commands for every individual skill.
+
 ```bash
 # List available skills
 npx skills add JOHNadonis/claude-code-skills --list
