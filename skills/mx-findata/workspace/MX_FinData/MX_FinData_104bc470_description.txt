@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 中钨高新 000657 前五大客户 前五大供应商 客户集中度 供应商集中度
+数据文件路径: workspace/MX_FinData/MX_FinData_104bc470.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_104bc470_description.txt
+数据行数: 10
+表数量: 1
+Sheet 列表: 中钨高新(000657.SZ)主要客户和供应商(2024-12

@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 中钨高新 000657 近3年营收 净利润 毛利率 净利率 ROE 经营现金流
+数据文件路径: workspace/MX_FinData/MX_FinData_ac73fa07.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_ac73fa07_description.txt
+数据行数: 20
+表数量: 2
+Sheet 列表: 中钨高新(000657.SZ)的净利润、归属于母公司股东的净利, 中钨高新(000657.SZ)的预测归属于母公司的净利润中值(

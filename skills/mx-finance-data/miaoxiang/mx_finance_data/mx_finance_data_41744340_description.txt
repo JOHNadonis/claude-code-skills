@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 002149 西部材料 000657 中钨高新 600602 云赛智联 RSI MACD KDJ BOLL 5日均线 20日均线 60日均线
+数据文件路径: /Users/whc/.claude/skills/mx-finance-data/miaoxiang/mx_finance_data/mx_finance_data_41744340.xlsx
+描述文件路径: /Users/whc/.claude/skills/mx-finance-data/miaoxiang/mx_finance_data/mx_finance_data_41744340_description.txt
+数据行数: 37
+表数量: 3
+Sheet 列表: 西部材料(002149.SZ)的BOLL布林线UP、60日MA, 中钨高新(000657.SZ)的60日MA简单移动平均、5日M, 云赛智联(600602.SH)的BOLL布林线UP、60日MA

@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 璞泰来603659 BOLL上轨 BOLL中轨 BOLL下轨
+数据文件路径: workspace/MX_FinData/MX_FinData_a3b58435.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_a3b58435_description.txt
+数据行数: 3
+表数量: 2
+Sheet 列表: 璞泰来(603659.SH)的BOLL布林线UP、BOLL布林, 璞泰来新能源(H2678.HK)的BOLL布林线

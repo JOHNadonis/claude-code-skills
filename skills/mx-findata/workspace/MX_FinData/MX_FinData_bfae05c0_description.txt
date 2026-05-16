@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 璞泰来 603659 RSI 5日均线 10日均线 20日均线 近期收盘价 成交量
+数据文件路径: workspace/MX_FinData/MX_FinData_bfae05c0.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_bfae05c0_description.txt
+数据行数: 9
+表数量: 4
+Sheet 列表: 璞泰来(603659.SH)当前的成交量、最新价, 璞泰来(603659.SH)的成交量、收盘价, 璞泰来(603659.SH)的5日MA简单移动平均、20日MA, 璞泰来新能源(H2678.HK)的RSI相对强弱指标

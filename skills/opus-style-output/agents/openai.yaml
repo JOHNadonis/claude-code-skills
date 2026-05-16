@@ -1,0 +1,6 @@
+interface:
+  display_name: "Opus-Style Output"
+  short_description: "Polished summaries, tables, emoji, and user-facing copy"
+  default_prompt: "Use $opus-style-output to make the response polished, concise, and easy to scan."
+policy:
+  allow_implicit_invocation: true

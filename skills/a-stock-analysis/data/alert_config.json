@@ -1,0 +1,28 @@
+{
+  "_comment": "主动预警阈值配置。修改此文件中的值可覆盖默认阈值，不需要的字段直接删除即可。",
+  "_doc": "各字段说明：",
+  "_stop_loss": "止损相关：stop_loss_pct=触发止损的价格比例（成本×0.95），stop_loss_warn_pct=预警线（成本×0.97）",
+  "_volume": "量比相关：volume_ratio_low=地量阈值，volume_ratio_spike=异动阈值",
+  "_capital": "资金流向（单位：万元）：capital_outflow_warn=超大单净流出预警，capital_inflow_info=超大单净流入提示",
+  "_market": "大盘相关（百分比）：market_drop_warn=跌幅预警，market_drop_critical=跌幅严重预警，market_rise_info=涨幅追高风险提示",
+  "_unlock": "解禁相关（天数）：unlock_warn_days=距解禁天数预警，unlock_critical_days=距解禁严重预警",
+  "_pledge": "质押相关：pledge_warn_pct=大股东质押比例预警阈值（百分比）",
+
+  "stop_loss_pct": 0.95,
+  "stop_loss_warn_pct": 0.97,
+
+  "volume_ratio_low": 0.5,
+  "volume_ratio_spike": 3.0,
+
+  "capital_outflow_warn": -3000,
+  "capital_inflow_info": 3000,
+
+  "market_drop_warn": -1.0,
+  "market_drop_critical": -2.0,
+  "market_rise_info": 2.0,
+
+  "unlock_warn_days": 30,
+  "unlock_critical_days": 7,
+
+  "pledge_warn_pct": 40
+}

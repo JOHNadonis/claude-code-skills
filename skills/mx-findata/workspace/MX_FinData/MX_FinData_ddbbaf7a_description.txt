@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 翔鹭钨业002842 大股东质押比例 融资余额 RSI
+数据文件路径: workspace/MX_FinData/MX_FinData_ddbbaf7a.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_ddbbaf7a_description.txt
+数据行数: 2
+表数量: 1
+Sheet 列表: 翔鹭钨业(002842.SZ)的大股东累计质押数占持股数比例、

@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 中钨高新 000657 应收账款周转天数 存货周转天数 资产负债率 流动比率 研发费用 研发占比
+数据文件路径: workspace/MX_FinData/MX_FinData_fdebd0e9.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_fdebd0e9_description.txt
+数据行数: 5
+表数量: 1
+Sheet 列表: 中钨高新(000657.SZ)的资产负债率、应收账款周转天数(

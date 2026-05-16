@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 紫金矿业601899 山东黄金600547 最新价 量比 DDX今日 超大单净流入 换手率 BOLL上轨 RSI
+数据文件路径: workspace/MX_FinData/MX_FinData_224d1215.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_224d1215_description.txt
+数据行数: 8
+表数量: 3
+Sheet 列表: 紫金矿业(601899.SH)等的BOLL布林线UP、RSI相, 紫金矿业(601899.SH)等当前的量比、最新价等, 紫金矿业(601899.SH)等的(区间)超大单净流入资金

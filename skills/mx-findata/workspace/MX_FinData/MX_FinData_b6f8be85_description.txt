@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 璞泰来 603659 主力净流入 超大单净流入 资金流向
+数据文件路径: workspace/MX_FinData/MX_FinData_b6f8be85.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_b6f8be85_description.txt
+数据行数: 24
+表数量: 2
+Sheet 列表: 璞泰来(603659.SH)当前的超大单净额、超大单流出等, 璞泰来(603659.SH)当前的主力流出(元)、主力流入(元

@@ -1,0 +1,150 @@
+{
+  "meta": {
+    "strategy_id": "batch_dragon_tiger_momentum",
+    "name": "龙虎榜/资金情绪",
+    "template": "dragon_tiger_momentum",
+    "created_at": "2026-05-02 22:43:29",
+    "updated_at": "2026-05-02 22:43:31",
+    "market": "A_SHARE",
+    "frequency": "daily",
+    "description": "机构席位和强势资金异动在短期可能延续，但噪声和滑点很高。"
+  },
+  "hypothesis": "机构席位和强势资金异动在短期可能延续，但噪声和滑点很高。",
+  "universe": {
+    "base": "A_SHARE",
+    "exclude_st": true,
+    "exclude_suspended": true,
+    "exclude_new_stock_days": 120,
+    "exclude_limit_up_down": true,
+    "min_amount": 200000000
+  },
+  "date_range": {
+    "start": "2018-01-01",
+    "end": "2025-12-31",
+    "train_start": "2018-01-01",
+    "train_end": "2021-12-31",
+    "validation_start": "2022-01-01",
+    "validation_end": "2023-12-31",
+    "test_start": "2024-01-01",
+    "test_end": "2025-12-31"
+  },
+  "signals": [
+    {
+      "name": "net_big_money",
+      "type": "column",
+      "column": "net_big_money",
+      "direction": "positive",
+      "weight": 0.35
+    },
+    {
+      "name": "institution_net_buy",
+      "type": "column",
+      "column": "institution_net_buy",
+      "direction": "positive",
+      "weight": 0.3
+    },
+    {
+      "name": "momentum_5d",
+      "type": "price_momentum",
+      "window": 5,
+      "direction": "positive",
+      "weight": 0.2
+    },
+    {
+      "name": "liquidity_5d",
+      "type": "amount_mean",
+      "window": 5,
+      "direction": "positive",
+      "weight": 0.15
+    }
+  ],
+  "entry_rules": [],
+  "exit_rules": [],
+  "portfolio": {
+    "selection_method": "top_rank",
+    "top_n": 5,
+    "max_position_weight": 0.08,
+    "rebalance_frequency": "weekly",
+    "cash_buffer": 0.2
+  },
+  "risk": {
+    "max_drawdown_stop": 0.25,
+    "single_stock_stop_loss": 0.12,
+    "benchmark": "000300.XSHG",
+    "constraints": [
+      "T+1",
+      "limit up/down",
+      "suspension",
+      "transaction cost",
+      "slippage"
+    ]
+  },
+  "cost": {
+    "commission_rate": 0.0003,
+    "stamp_tax_rate": 0.001,
+    "slippage_bps": 5
+  },
+  "backtest": {
+    "engine": "local_csv_simple",
+    "initial_cash": 1000000,
+    "execution_price": "next_open",
+    "record_trades": true
+  },
+  "research_controls": {
+    "forbid_future_data": true,
+    "walk_forward_required": true,
+    "min_test_years": 2,
+    "max_parameter_trials": 30,
+    "random_seed": 42
+  },
+  "notes": {
+    "suitable_for": [
+      "高风险小仓",
+      "事件跟踪",
+      "短线研究"
+    ],
+    "risk_notes": [
+      "追高风险大",
+      "回测成交价不真实",
+      "最好只做观察或小仓"
+    ]
+  },
+  "results": [
+    {
+      "result_id": "batch_dragon_tiger_momentum_batch_20260502_224331",
+      "strategy_id": "batch_dragon_tiger_momentum",
+      "platform": "local_csv",
+      "engine": "local_csv_simple",
+      "created_at": "2026-05-02 22:43:31",
+      "spec_hash": "sha256:7fc0c0edcd2588308de518b99ef0ff7b46432d3f83166d96a1c3af3855a2f2ce",
+      "data_hash": "sha256:2213a5587248e0fecf0be987de4a9af6816bac2f8016e658e9f3f2116dfe3b86",
+      "metrics": {
+        "total_return": 0.33831,
+        "annual_return": 1.184137,
+        "annual_volatility": 0.047001,
+        "sharpe": 16.670474,
+        "max_drawdown": -0.007139,
+        "win_rate": 0.861702,
+        "turnover": 1.866667,
+        "rebalance_count": 20,
+        "average_holdings": 4.5895
+      },
+      "artifacts": {
+        "equity_curve_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/batch_dragon_tiger_momentum_batch_20260502_224331/equity_curve.csv",
+        "positions_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/batch_dragon_tiger_momentum_batch_20260502_224331/positions.csv",
+        "trades_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/batch_dragon_tiger_momentum_batch_20260502_224331/trades.csv"
+      },
+      "warnings": [
+        "Sharpe 异常高，优先检查样本、未来函数、合成数据或成交假设。",
+        "年化收益异常高，不能作为实盘依据，必须用真实数据和样本外复核。"
+      ]
+    }
+  ],
+  "versions": [
+    {
+      "version": 1,
+      "time": "2026-05-02 22:43:29",
+      "change": "Initial strategy spec frozen from template."
+    }
+  ]
+}

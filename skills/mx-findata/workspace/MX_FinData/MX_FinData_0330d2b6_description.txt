@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 章源钨业002378 翔鹭钨业002842 RSI相对强弱指标 近5日
+数据文件路径: workspace/MX_FinData/MX_FinData_0330d2b6.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_0330d2b6_description.txt
+数据行数: 2
+表数量: 1
+Sheet 列表: 章源钨业(002378.SZ)等的RSI相对强弱指标

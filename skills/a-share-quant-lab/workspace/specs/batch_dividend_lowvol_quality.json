@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "strategy_id": "batch_dividend_lowvol_quality",
+    "name": "红利低波质量",
+    "template": "dividend_lowvol_quality",
+    "created_at": "2026-05-02 22:43:29",
+    "updated_at": "2026-05-02 22:43:30",
+    "market": "A_SHARE",
+    "frequency": "daily",
+    "description": "高分红、低波动、现金流质量较好的公司在 A 股具备更强防守属性。"
+  },
+  "hypothesis": "高分红、低波动、现金流质量较好的公司在 A 股具备更强防守属性。",
+  "universe": {
+    "base": "A_SHARE",
+    "exclude_st": true,
+    "exclude_suspended": true,
+    "exclude_new_stock_days": 365,
+    "exclude_limit_up_down": true,
+    "min_amount": 80000000
+  },
+  "date_range": {
+    "start": "2018-01-01",
+    "end": "2025-12-31",
+    "train_start": "2018-01-01",
+    "train_end": "2021-12-31",
+    "validation_start": "2022-01-01",
+    "validation_end": "2023-12-31",
+    "test_start": "2024-01-01",
+    "test_end": "2025-12-31"
+  },
+  "signals": [
+    {
+      "name": "dividend_yield",
+      "type": "column",
+      "column": "dividend_yield",
+      "direction": "positive",
+      "weight": 0.3
+    },
+    {
+      "name": "roe",
+      "type": "column",
+      "column": "roe",
+      "direction": "positive",
+      "weight": 0.2
+    },
+    {
+      "name": "pb",
+      "type": "column",
+      "column": "pb",
+      "direction": "negative",
+      "weight": 0.2
+    },
+    {
+      "name": "volatility_60d",
+      "type": "realized_volatility",
+      "window": 60,
+      "direction": "negative",
+      "weight": 0.2
+    },
+    {
+      "name": "cashflow_quality",
+      "type": "column",
+      "column": "ocf_to_profit",
+      "direction": "positive",
+      "weight": 0.1
+    }
+  ],
+  "entry_rules": [],
+  "exit_rules": [],
+  "portfolio": {
+    "selection_method": "top_rank",
+    "top_n": 30,
+    "max_position_weight": 0.04,
+    "rebalance_frequency": "monthly",
+    "cash_buffer": 0.03
+  },
+  "risk": {
+    "max_drawdown_stop": 0.25,
+    "single_stock_stop_loss": 0.12,
+    "benchmark": "000300.XSHG",
+    "constraints": [
+      "T+1",
+      "limit up/down",
+      "suspension",
+      "transaction cost",
+      "slippage"
+    ]
+  },
+  "cost": {
+    "commission_rate": 0.0003,
+    "stamp_tax_rate": 0.001,
+    "slippage_bps": 5
+  },
+  "backtest": {
+    "engine": "local_csv_simple",
+    "initial_cash": 1000000,
+    "execution_price": "next_open",
+    "record_trades": true
+  },
+  "research_controls": {
+    "forbid_future_data": true,
+    "walk_forward_required": true,
+    "min_test_years": 2,
+    "max_parameter_trials": 30,
+    "random_seed": 42
+  },
+  "notes": {
+    "suitable_for": [
+      "防守型账户",
+      "低频",
+      "回撤敏感"
+    ],
+    "risk_notes": [
+      "高股息可能是周期利润高点",
+      "价值陷阱需要现金流和负债率过滤"
+    ]
+  },
+  "results": [
+    {
+      "result_id": "batch_dividend_lowvol_quality_batch_20260502_224330",
+      "strategy_id": "batch_dividend_lowvol_quality",
+      "platform": "local_csv",
+      "engine": "local_csv_simple",
+      "created_at": "2026-05-02 22:43:30",
+      "spec_hash": "sha256:3a7997172573f7a3161d060e3b27b8acbb9a396e8bea62627c62cfb35fa9a7a5",
+      "data_hash": "sha256:2213a5587248e0fecf0be987de4a9af6816bac2f8016e658e9f3f2116dfe3b86",
+      "metrics": {
+        "total_return": 0.361126,
+        "annual_return": 1.285397,
+        "annual_volatility": 0.038319,
+        "sharpe": 21.624245,
+        "max_drawdown": -0.001298,
+        "win_rate": 0.925532,
+        "turnover": 1.0,
+        "rebalance_count": 5,
+        "average_holdings": 6.0
+      },
+      "artifacts": {
+        "equity_curve_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/batch_dividend_lowvol_quality_batch_20260502_224330/equity_curve.csv",
+        "positions_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/batch_dividend_lowvol_quality_batch_20260502_224330/positions.csv",
+        "trades_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/batch_dividend_lowvol_quality_batch_20260502_224330/trades.csv"
+      },
+      "warnings": [
+        "Sharpe 异常高，优先检查样本、未来函数、合成数据或成交假设。",
+        "年化收益异常高，不能作为实盘依据，必须用真实数据和样本外复核。"
+      ]
+    }
+  ],
+  "versions": [
+    {
+      "version": 1,
+      "time": "2026-05-02 22:43:29",
+      "change": "Initial strategy spec frozen from template."
+    }
+  ]
+}

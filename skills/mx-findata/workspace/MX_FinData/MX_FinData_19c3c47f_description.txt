@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 通鼎互联 002491 最新股价 量比 BOLL布林线 换手率
+数据文件路径: workspace/MX_FinData/MX_FinData_19c3c47f.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_19c3c47f_description.txt
+数据行数: 7
+表数量: 3
+Sheet 列表: 通鼎互联(002491.SZ)的BOLL布林线、量比, 通鼎互联(002491.SZ)当前的量比、最新价等, 通鼎互联(002491.SZ)的收盘价、换手率

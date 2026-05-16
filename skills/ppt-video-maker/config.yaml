@@ -1,0 +1,26 @@
+# PPT 视频生成器配置文件
+
+api:
+  # 你的中转 API 地址
+  base_url: "https://your-proxy.com/v1"
+
+  # 你的 API Key
+  api_key: "sk-your-key-here"
+
+  # 使用的模型（支持 OpenAI 兼容格式）
+  model: "claude-sonnet-4-20250514"
+
+whisper:
+  # Whisper 模型大小: tiny, base, small, medium, large
+  # medium 适合中文，准确度和速度平衡
+  model: "medium"
+
+  # 语言代码
+  language: "zh"
+
+video:
+  # 视频分辨率
+  resolution: "1920x1080"
+
+  # 帧率
+  fps: 30

@@ -1,0 +1,10 @@
+date,code,side,reason
+2024-01-02,000003.XSHE,buy,rebalance_in
+2024-01-02,000004.XSHE,buy,rebalance_in
+2024-01-02,000005.XSHE,buy,rebalance_in
+2024-01-02,000006.XSHE,buy,rebalance_in
+2024-02-26,000002.XSHE,buy,rebalance_in
+2024-04-15,000002.XSHE,sell,rebalance_out
+2024-04-15,000001.XSHE,buy,rebalance_in
+2024-04-22,000001.XSHE,sell,rebalance_out
+2024-04-22,000002.XSHE,buy,rebalance_in

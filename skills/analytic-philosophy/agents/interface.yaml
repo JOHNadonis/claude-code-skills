@@ -1,0 +1,44 @@
+name: analytic-philosophy
+version: "1.0"
+archetype: scaffold
+language: zh-CN (terms with English annotations)
+
+modes:
+  - id: A
+    name: 论证分析
+    trigger: "分析概念/论证/思想"
+  - id: B
+    name: 学习路径
+    trigger: "系统学习/规划/入门"
+  - id: C
+    name: 论证训练
+    trigger: "练习/做题/思想实验/每日训练"
+  - id: D
+    name: 读书辅助
+    trigger: "读论文/看不懂/提炼结构"
+
+references:
+  - path: references/domain-map.md
+    purpose: "六大分支地图 + 推荐文本序列"
+  - path: references/argument-templates.md
+    purpose: "论证模板库 + 批判评估框架"
+
+boundary:
+  owns:
+    - 分析哲学全域（逻辑/语言/认识论/心灵/伦理/形而上学）
+    - 概念澄清与论证重构
+    - 学习路径规划
+    - 论证训练与思想实验
+    - 哲学文本阅读辅助
+  excludes:
+    - 现象学/解释学/存在主义（非分析传统，交叉时说明后作答）
+    - 中国哲学/印度哲学（独立问题不处理，交叉时说明）
+    - 纯粹考试答题模板（有需要时引导到 philosophy-of-language skill）
+
+near_neighbors:
+  - skill: philosophy-of-language
+    overlap: "语言哲学子域"
+    resolution: "语言哲学深度考试需求 → 建议切换到 philosophy-of-language"
+  - skill: ljg-explain-concept
+    overlap: "哲学概念解析"
+    resolution: "八维探索/org-mode输出 → ljg-explain-concept；分析哲学论证结构 → 本skill"

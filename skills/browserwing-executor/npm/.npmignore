@@ -1,0 +1,9 @@
+# Don't publish binary files (will be downloaded on install)
+bin/browserwing
+bin/browserwing.exe
+
+# Development files
+.git
+.gitignore
+*.log
+node_modules

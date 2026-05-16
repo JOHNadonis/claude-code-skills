@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关于本人无罪的申辩报告 — 苏格拉底</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: #f6f4f2;
+  color: #1f1f1f;
+  line-height: 1.78;
+  font-weight: 400;
+  font-size: 1.02rem;
+  overflow: hidden;
+}
+
+/* ===== DESIGN TOKENS ===== */
+:root {
+  --accent: #900000;
+  --accent2: #c00000;
+  --soft-red: rgba(144, 0, 0, 0.08);
+  --soft-gold: #efe7df;
+  --text: #1f1f1f;
+  --text2: #666666;
+  --border: #d9d9d9;
+  --page-bg: #f6f4f2;
+  --slide-bg: #ffffff;
+  --radius: 18px;
+  --radius-sm: 14px;
+  --radius-pill: 999px;
+  --shadow: 0 16px 40px rgba(0,0,0,0.06);
+}
+
+/* ===== SLIDE ENGINE ===== */
+.deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+.slide {
+  position: absolute; top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  display: none; flex-direction: column;
+  padding: 0;
+  background: var(--page-bg);
+}
+.slide.active { display: flex; }
+.slide-inner {
+  width: min(1120px, 92vw);
+  max-height: 88vh;
+  margin: auto;
+  background: var(--slide-bg);
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2.4rem 3rem 2rem;
+}
+.slide-inner::-webkit-scrollbar { width: 4px; }
+.slide-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* ===== TOP RULE ===== */
+.top-rule {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  border-radius: 26px 26px 0 0;
+}
+
+/* ===== SLIDE NUMBER ===== */
+.slide-number {
+  position: absolute; top: 18px; right: 28px;
+  font-size: 0.82rem; font-weight: 500; color: var(--text2);
+  z-index: 10;
+}
+
+/* ===== EYEBROW ===== */
+.eyebrow {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.82rem; font-weight: 700; color: var(--accent);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 0.6rem;
+}
+.eyebrow::before {
+  content: ''; display: inline-block;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ===== HEADINGS ===== */
+h1 { font-size: 3.2rem; font-weight: 900; line-height: 1.18; color: var(--text); margin-bottom: 0.5rem; }
+h2 { font-size: 2.12rem; font-weight: 800; line-height: 1.28; color: var(--text); margin-bottom: 0.6rem; }
+h3 { font-size: 1.05rem; font-weight: 700; color: var(--accent); margin-bottom: 0.4rem; }
+
+/* ===== CLAIM BOX ===== */
+.claim-box {
+  border-left: 5px solid var(--accent);
+  background: linear-gradient(135deg, var(--soft-red), rgba(144,0,0,0.02));
+  padding: 1.2rem 1.5rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 1rem 0;
+  font-size: 1.15rem; font-weight: 700; line-height: 1.7;
+}
+.claim-box .red { color: var(--accent); }
+
+/* ===== CARD ===== */
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.3rem;
+  background: #fff;
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
+.card-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 0.6rem;
+}
+.card-index {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  font-size: 0.82rem; font-weight: 700; flex-shrink: 0;
+}
+
+/* ===== TAG ===== */
+.tag {
+  display: inline-block;
+  background: var(--soft-gold);
+  color: var(--accent);
+  font-size: 0.75rem; font-weight: 700;
+  padding: 3px 12px;
+  border-radius: var(--radius-pill);
+}
+
+/* ===== STAT ===== */
+.stat {
+  text-align: center; padding: 0.8rem 0.5rem;
+}
+.stat-number {
+  font-size: 2.3rem; font-weight: 900; color: var(--accent);
+  line-height: 1.2;
+}
+.stat-label {
+  font-size: 0.82rem; color: var(--text2); font-weight: 500;
+  margin-top: 2px;
+}
+
+/* ===== WARNING BOX ===== */
+.warning-box {
+  border-left: 5px solid var(--accent2);
+  background: linear-gradient(135deg, rgba(192,0,0,0.06), rgba(192,0,0,0.01));
+  padding: 1rem 1.3rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+.warning-box strong { color: var(--accent); }
+
+/* ===== GRIDS ===== */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 0.8rem 0; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 0.8rem 0; }
+
+/* ===== AGENDA ===== */
+.agenda-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #eee;
+}
+.agenda-item:last-child { border-bottom: none; }
+.agenda-index {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+}
+
+/* ===== TWO COLUMN COMPARE ===== */
+.compare-col {
+  padding: 1rem 1.2rem;
+  border-radius: var(--radius-sm);
+}
+.compare-col.red-side { border-left: 4px solid var(--accent); background: var(--soft-red); }
+.compare-col.gray-side { border-left: 4px solid var(--border); background: #f9f9f9; }
+.compare-col h3 { margin-bottom: 0.5rem; }
+.compare-col ul { padding-left: 1.2rem; }
+.compare-col li { margin-bottom: 0.4rem; font-size: 0.95rem; }
+
+/* ===== FLOW DIAGRAM ===== */
+.flow {
+  display: flex; align-items: center; justify-content: center; gap: 0;
+  margin: 1rem 0; flex-wrap: wrap;
+}
+.flow-step {
+  background: var(--soft-red);
+  color: var(--accent); font-weight: 700;
+  padding: 0.6rem 1.2rem; border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+}
+.flow-arrow {
+  font-size: 1.3rem; color: var(--accent); padding: 0 0.3rem;
+}
+
+/* ===== NUMBERED ARGUMENT ===== */
+.arg-step {
+  display: flex; gap: 12px; align-items: flex-start;
+  margin-bottom: 0.6rem;
+}
+.arg-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 26px; height: 26px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  font-size: 0.75rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+}
+.arg-text { font-size: 0.95rem; }
+
+/* ===== COVER SPECIFICS ===== */
+.cover-meta { display: flex; gap: 1rem; margin: 1rem 0; flex-wrap: wrap; }
+.meta-card {
+  flex: 1; min-width: 200px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 1rem 1.2rem;
+}
+.meta-card h3 { margin-bottom: 0.4rem; }
+.cover-subtitle {
+  font-size: 1.1rem; color: var(--text2); font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+/* ===== BIG QUOTE ===== */
+.big-quote {
+  font-size: 1.8rem; font-weight: 900; color: var(--accent);
+  text-align: center; padding: 1.5rem 1rem;
+  line-height: 1.5;
+}
+.big-quote .greek {
+  display: block; font-size: 1rem; font-weight: 400; color: var(--text2);
+  margin-top: 0.5rem;
+}
+
+/* ===== SUMMARY TABLE ===== */
+.summary-table {
+  width: 100%; border-collapse: collapse; margin: 0.8rem 0;
+  font-size: 0.88rem;
+}
+.summary-table th {
+  background: var(--accent); color: #fff; font-weight: 700;
+  padding: 0.6rem 0.8rem; text-align: left;
+}
+.summary-table td {
+  padding: 0.55rem 0.8rem; border-bottom: 1px solid #eee;
+}
+.summary-table tr:nth-child(even) td { background: #fafafa; }
+.summary-table tr:hover td { background: var(--soft-red); }
+
+/* ===== SPEAKER NOTES ===== */
+.speaker-notes {
+  display: none;
+}
+body.show-notes .speaker-notes {
+  display: block;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #1a1a1a; color: #eee;
+  padding: 1rem 2rem; font-size: 0.88rem;
+  max-height: 25vh; overflow-y: auto;
+  z-index: 1000; line-height: 1.6;
+  border-top: 3px solid var(--accent);
+}
+
+/* ===== VERDICT HIGHLIGHT ===== */
+.verdict-box {
+  background: var(--accent);
+  color: #fff;
+  text-align: center;
+  padding: 2rem;
+  border-radius: var(--radius);
+  margin: 1rem 0;
+}
+.verdict-box .stat-number { color: #fff; font-size: 3rem; }
+.verdict-box .stat-label { color: rgba(255,255,255,0.8); font-size: 1rem; }
+
+/* ===== PROGRESS BAR ===== */
+#progress {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: var(--accent); z-index: 9999;
+  transition: width 0.3s;
+}
+
+/* ===== CONTROLS HINT ===== */
+.controls-hint {
+  position: fixed; bottom: 16px; right: 20px;
+  font-size: 0.72rem; color: var(--text2);
+  background: rgba(255,255,255,0.9);
+  padding: 4px 12px; border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  z-index: 900;
+}
+
+/* ===== TRANSITION DIVIDER ===== */
+.part-divider {
+  text-align: center; padding: 1rem 0;
+  border-top: 2px solid var(--border);
+  margin-top: 1.2rem;
+}
+.part-divider span {
+  display: inline-block;
+  background: var(--soft-gold);
+  color: var(--accent);
+  font-weight: 700; font-size: 0.9rem;
+  padding: 0.4rem 1.4rem;
+  border-radius: var(--radius-pill);
+}
+
+/* ===== PRINT CSS ===== */
+@media print {
+  body { overflow: visible; background: #fff; }
+  .deck { position: static; width: auto; height: auto; overflow: visible; }
+  .slide {
+    display: flex !important; position: static;
+    width: 100%; height: auto; min-height: 0;
+    page-break-after: always; page-break-inside: avoid;
+    margin: 0; padding: 0;
+  }
+  .slide-inner {
+    width: 100%; max-height: none; margin: 0;
+    box-shadow: none; border: 1px solid #ddd;
+    border-radius: 0; padding: 1.5rem 2rem;
+    page-break-inside: avoid;
+  }
+  #progress, .controls-hint { display: none; }
+  .speaker-notes { display: none !important; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 800px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.5rem; }
+  .slide-inner { padding: 1.5rem 1.2rem; }
+  .big-quote { font-size: 1.3rem; }
+  .flow { gap: 0.3rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<div class="deck" id="deck">
+
+<!-- ==================== SLIDE 1: 封面 ==================== -->
+<div class="slide active" data-notes="各位陪审员同志们，本人苏格拉底，今天就控方对本人提出的指控，做一次正式的申辩汇报。请各位耐心听完全部内容后再做判断。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">01 / 21</div>
+  <div class="eyebrow">雅典人民法庭 · 公元前399年</div>
+  <h1>关于本人无罪的<br>申辩报告</h1>
+  <p class="cover-subtitle">汇报人：苏格拉底 &nbsp;|&nbsp; 陪审团：501名雅典公民</p>
+  <div class="cover-meta">
+    <div class="meta-card">
+      <h3>指控事项</h3>
+      <p style="font-size:0.92rem;">1. 腐蚀雅典青年<br>2. 不信城邦诸神<br>3. 引入新的神灵</p>
+    </div>
+    <div class="meta-card">
+      <h3>汇报结构</h3>
+      <div class="agenda-item"><div class="agenda-index">I</div><div><strong>辩护工作汇报</strong><br><span style="color:var(--text2);font-size:0.85rem;">案件背景、旧指控澄清、神谕调查、实地调查、仇恨成因、逐条反驳、社会功能定位、政治立场</span></div></div>
+      <div class="agenda-item"><div class="agenda-index">II</div><div><strong>量刑意见</strong><br><span style="color:var(--text2);font-size:0.85rem;">量刑建议、核心价值主张</span></div></div>
+      <div class="agenda-item"><div class="agenda-index">III</div><div><strong>总结陈词</strong><br><span style="color:var(--text2);font-size:0.85rem;">致控方警告、死亡分析、最后请求</span></div></div>
+    </div>
+  </div>
+</div>
+<div class="speaker-notes">各位陪审员同志们，本人苏格拉底，年七十，第一次站在法庭之上。今天就控方对本人提出的指控，做一次正式的、系统的申辩汇报。本人恳请各位耐心听完全部汇报内容后，再做最终判断。本人不善法庭辞令，只会用日常朴素的语言说话，请各位关注事实本身，而非言辞技巧。</div>
+</div>
+
+<!-- ==================== SLIDE 2: 案件背景 ==================== -->
+<div class="slide" data-notes="首先介绍案件基本情况。本案表面是宗教指控，实质是对本人长期从事哲学审问工作的报复。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">02 / 21</div>
+  <div class="eyebrow">一、案件背景</div>
+  <h2>案件基本情况概述</h2>
+  <div class="claim-box">本案控方三人代表三个利益群体，实质是对本人<span class="red">哲学工作的报复性诉讼</span></div>
+  <div class="grid-3">
+    <div class="card"><div class="stat"><div class="stat-number">70岁</div><div class="stat-label">被告年龄</div></div></div>
+    <div class="card"><div class="stat"><div class="stat-number">501人</div><div class="stat-label">陪审团规模</div></div></div>
+    <div class="card"><div class="stat"><div class="stat-number">0次</div><div class="stat-label">此前涉诉记录</div></div></div>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-header"><div class="card-index">1</div><div class="tag">原告</div></div>
+      <h3>迈勒图斯</h3>
+      <p style="font-size:0.9rem;">代表<strong>诗人群体</strong>。本人曾指出诗人并不真正理解自己所写的内容，引起该群体强烈不满。</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-index">2</div><div class="tag">支持者</div></div>
+      <h3>安尼图斯</h3>
+      <p style="font-size:0.9rem;">代表<strong>工匠与政客群体</strong>。本人揭示其所谓专业知识的局限性，触及其核心利益。</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-index">3</div><div class="tag">支持者</div></div>
+      <h3>吕孔</h3>
+      <p style="font-size:0.9rem;">代表<strong>演说家群体</strong>。本人的审问方式动摇了修辞术的权威地位。</p>
+    </div>
+  </div>
+</div>
+<div class="speaker-notes">首先请允许本人介绍案件基本情况。本人年已七十，平生第一次站在法庭上。控方三人——迈勒图斯、安尼图斯、吕孔——分别代表诗人、工匠政客和演说家三个群体。他们提出的宗教指控只是表面文章，真正的动机是对本人长年从事哲学审问工作的报复。本人此前从未涉及任何诉讼。</div>
+</div>
+
+<!-- ==================== SLIDE 3: 旧指控澄清 ==================== -->
+<div class="slide" data-notes="在回应正式指控之前，必须先澄清长期流传的不实传言。这些传言比正式指控更加危险。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">03 / 21</div>
+  <div class="eyebrow">二、旧指控澄清</div>
+  <h2>关于长期不实指控的澄清</h2>
+  <div class="grid-2">
+    <div class="compare-col red-side">
+      <h3>不实指控内容</h3>
+      <ul>
+        <li>"苏格拉底研究天上地下的事物"——此为<strong>阿那克萨哥拉</strong>的研究领域，与本人无关</li>
+        <li>"苏格拉底收费教授学生"——此为<strong>智者学派</strong>（高尔吉亚、普罗迪库斯等）的做法，本人从未收取分文</li>
+        <li>"苏格拉底能把弱论证变成强论证"——纯属虚构</li>
+      </ul>
+    </div>
+    <div class="compare-col gray-side">
+      <h3>实际情况</h3>
+      <ul>
+        <li>本人从未从事自然科学研究，也无此方面的专长</li>
+        <li>本人从未收取任何教学费用，贫穷状态即为明证</li>
+        <li>本人只是通过提问揭示对话者自身知识的不足，而非传授任何"技术"</li>
+      </ul>
+    </div>
+  </div>
+  <div class="warning-box">
+    <strong>重要背景：</strong>上述不实指控源自阿里斯托芬喜剧<strong>《云》</strong>（公元前423年），已误导公众长达<strong>24年</strong>。这些匿名的"旧控告者"比今天在座的正式控方更加危险，因为陪审员诸位从小就听着这些说法长大，根深蒂固，难以辩驳。
+  </div>
+</div>
+<div class="speaker-notes">在回应今天的正式指控之前，本人必须先处理一个更棘手的问题——长期以来在公众中流传的不实传言。阿里斯托芬在喜剧《云》中把本人塑造成一个研究天文、收费教学的人物，这完全是文学虚构。但这部戏上演了二十四年，在座诸位很多人从小就受其影响。这些匿名的旧控告者比今天的原告更为危险。</div>
+</div>
+
+<!-- ==================== SLIDE 4: 德尔斐神谕调查 ==================== -->
+<div class="slide" data-notes="这是理解本人全部哲学工作的关键。凯瑞丰去德尔斐问神，神说没有人比我更有智慧。我花了大量时间调查此事。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">04 / 21</div>
+  <div class="eyebrow">三、神谕调查</div>
+  <h2>德尔斐神谕调查报告</h2>
+  <p style="margin-bottom:0.8rem;color:var(--text2);">以下是本人哲学工作的起源，请各位务必了解：</p>
+  <div class="arg-step"><div class="arg-num">1</div><div class="arg-text"><strong>事件起因</strong>——本人好友凯瑞丰（已故，其兄弟可作证）前往德尔斐神庙，询问是否有人比苏格拉底更有智慧。</div></div>
+  <div class="arg-step"><div class="arg-num">2</div><div class="arg-text"><strong>神谕回答</strong>——皮提亚女祭司回答：<strong>没有人比苏格拉底更有智慧。</strong></div></div>
+  <div class="arg-step"><div class="arg-num">3</div><div class="arg-text"><strong>本人困惑</strong>——本人深知自己既无大智也无小智，神的回答令本人百思不得其解。但神不会说谎，其中必有深意。</div></div>
+  <div class="arg-step"><div class="arg-num">4</div><div class="arg-text"><strong>启动调查</strong>——本人决定通过系统性走访各类"有智之人"，尝试找出一个确实比本人更有智慧的人，以此理解（或反证）神谕的含义。</div></div>
+  <div class="arg-step"><div class="arg-num">5</div><div class="arg-text"><strong>调查持续多年</strong>——本人依次访问了政客、诗人、工匠三大群体，结果见下页。</div></div>
+  <div class="claim-box">经调查，神谕的真正含义是：<span class="red">承认自己无知的人，比自以为有知的人更有智慧。</span>所谓"苏格拉底最智慧"，不过是因为本人是唯一知道自己不知道的人。</div>
+</div>
+<div class="speaker-notes">这是理解本人全部哲学工作的关键背景。本人好友凯瑞丰——一位热情的人——前往德尔斐神庙问神，是否有人比苏格拉底更有智慧。神回答说没有。我感到极为困惑，因为我自知一无所知。但神不可能说谎。于是我决定进行系统调查，试图找到一个确实比我更有智慧的人来反证神谕。</div>
+</div>
+
+<!-- ==================== SLIDE 5: 实地调查结果 ==================== -->
+<div class="slide" data-notes="经过对三类人群的系统调查，本人发现所谓有智慧的人都存在同一个问题：在自己不懂的领域自以为懂。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">05 / 21</div>
+  <div class="eyebrow">四、实地调查结果</div>
+  <h2>三类人群调查结果报告</h2>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-header"><div class="card-index">01</div><div class="tag">调查对象</div></div>
+      <h3>政客群体</h3>
+      <p style="font-size:0.9rem;"><strong>调查发现：</strong>声誉最高者实际上最缺乏智慧。他们自认为通晓一切，但经本人追问后暴露出对核心问题的无知。</p>
+      <p style="font-size:0.85rem;color:var(--text2);margin-top:0.4rem;"><strong>核心问题：</strong>将政治声望误认为真正的知识</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-index">02</div><div class="tag">调查对象</div></div>
+      <h3>诗人群体</h3>
+      <p style="font-size:0.9rem;"><strong>调查发现：</strong>诗人创作出优秀作品，但无法解释自己的创作。他们靠天赋与灵感，而非知识。</p>
+      <p style="font-size:0.85rem;color:var(--text2);margin-top:0.4rem;"><strong>核心问题：</strong>因创作才能而自认为在其他领域也最有智慧</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-index">03</div><div class="tag">调查对象</div></div>
+      <h3>工匠群体</h3>
+      <p style="font-size:0.9rem;"><strong>调查发现：</strong>工匠确实掌握本人不具备的技能，这一点本人充分肯定。但他们因此自认为在一切大事上都有见识。</p>
+      <p style="font-size:0.85rem;color:var(--text2);margin-top:0.4rem;"><strong>核心问题：</strong>技术专长导致的跨领域自信膨胀</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:1rem;background:var(--soft-red);">
+    <div class="stat" style="padding:0.6rem 0;">
+      <div class="stat-label" style="font-size:1rem;font-weight:700;color:var(--accent);">调查总结论</div>
+      <div style="font-size:1.05rem;margin-top:0.3rem;">三类人群均存在同一通病：<strong style="color:var(--accent);">在自己不懂的领域自以为懂。</strong>而本人的优势仅在于——本人不会在自己不懂的事情上假装懂得。</div>
+    </div>
+  </div>
+</div>
+<div class="speaker-notes">经过对政客、诗人、工匠三个群体的系统性走访调查，本人得出如下结论：他们在各自领域确实有所建树，但无一例外地犯了同一个错误——因为在某一方面有专长，便自认为在所有方面都有智慧。本人的唯一优势，不过是不在自己不懂的事情上假装懂得而已。</div>
+</div>
+
+<!-- ==================== SLIDE 6: 仇恨成因 ==================== -->
+<div class="slide" data-notes="正是这种调查工作，为本人招来了广泛的仇恨。被审问者感到难堪，于是将怒气转向本人。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">06 / 21</div>
+  <div class="eyebrow">五、仇恨成因</div>
+  <h2>公众敌意成因分析</h2>
+  <p style="margin-bottom:1rem;">本人遭受指控的根本原因，可用以下因果链说明：</p>
+  <div class="flow">
+    <div class="flow-step">本人开展哲学审问</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">揭穿对方无知</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">对方当众难堪</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">转为仇恨本人</div>
+    <div class="flow-arrow">&#10132;</div>
+    <div class="flow-step">联合提起控告</div>
+  </div>
+  <div class="warning-box" style="margin-top:1.2rem;">
+    <strong>加剧因素：</strong>一些富家子弟——他们有大量闲暇——喜欢跟随本人，模仿本人的审问方式去盘问他人。被他们盘问的人<strong>不怪这些年轻人，反而把账算到本人头上</strong>，指控"苏格拉底腐蚀青年"。
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>仇恨的本质</h3>
+      <p style="font-size:0.92rem;">并非本人做了什么坏事，而是被审问者<strong>无法接受自己被证明为无知</strong>的事实。攻击本人比承认自己无知要容易得多。</p>
+    </div>
+    <div class="card">
+      <h3>指控的套路</h3>
+      <p style="font-size:0.92rem;">凡是无法在辩论中胜过本人的人，都会搬出一套现成的说辞："<strong>苏格拉底研究天上地下的事、不信神、把弱论证变成强论证</strong>"——因为这是攻击一切哲学家的万能模板。</p>
+    </div>
+  </div>
+</div>
+<div class="speaker-notes">现在各位应该明白本人为何招致如此广泛的仇恨了。这不是因为本人做了什么恶事，而是因为揭穿他人的无知本身就会引发敌意。被审问的人宁可攻击审问者，也不愿承认自己的无知。加上一些年轻人模仿我的做法去盘问他人，被盘问者把账算到我头上——这就是所谓"腐蚀青年"指控的真正来源。</div>
+</div>
+
+<!-- ==================== SLIDE 7: 反驳一 ==================== -->
+<div class="slide" data-notes="现在正式进入对控方指控的逐条反驳。第一项：腐蚀青年。本人使用驯马师类比进行反证。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">07 / 21</div>
+  <div class="eyebrow">六、指控反驳（一）</div>
+  <h2>指控一：腐蚀青年</h2>
+  <div class="claim-box">本人以<span class="red">"驯马师反证法"</span>证明：如果只有本人一人在腐蚀青年，那本指控不合逻辑</div>
+  <div style="margin:1rem 0;">
+    <div class="arg-step"><div class="arg-num">1</div><div class="arg-text"><strong>提问迈勒图斯：</strong>谁能改善青年？——迈勒图斯回答：法律、陪审员、议员、公民大会成员……即所有雅典人。</div></div>
+    <div class="arg-step"><div class="arg-num">2</div><div class="arg-text"><strong>驯马师类比：</strong>以马匹训练为例——只有少数专业驯马师能改善马匹，而大多数人与马接触反而会败坏它们。</div></div>
+    <div class="arg-step"><div class="arg-num">3</div><div class="arg-text"><strong>推论：</strong>如果所有人都能改善青年而只有本人一人在败坏他们，这在逻辑上极不可能。真实情况恰恰相反——少数人有益，多数人有害。</div></div>
+    <div class="arg-step"><div class="arg-num">4</div><div class="arg-text"><strong>进一步追问：</strong>如果本人确实在腐蚀青年，是有意还是无意？若无意，应私下劝告而非起诉；若有意——本人不会故意败坏与自己朝夕相处的人，因为被败坏的人必将反过来伤害本人。</div></div>
+  </div>
+  <div class="card" style="background:var(--soft-red);text-align:center;">
+    <div class="stat">
+      <div class="stat-number" style="font-size:1.6rem;">结论：指控一不成立</div>
+      <div class="stat-label" style="font-size:0.9rem;">控方既无法说明本人如何腐蚀青年，也无法出示任何受害者证词</div>
+    </div>
+  </div>
+</div>
+<div class="speaker-notes">现在正式反驳第一项指控。我问迈勒图斯谁能改善青年，他说除了我以外所有雅典人都能。但这就像说只有一个人会败坏马匹而所有其他人都能训练马匹——事实恰恰相反，只有少数专业驯马师能改善马匹。而且，如果我是故意腐蚀青年，那我岂不是在故意伤害与自己朝夕相处的人？这对我有什么好处？</div>
+</div>
+
+<!-- ==================== SLIDE 8: 反驳二 ==================== -->
+<div class="slide" data-notes="第二项指控：不信城邦诸神。本人通过揭露控方证词中的逻辑矛盾来反驳。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">08 / 21</div>
+  <div class="eyebrow">六、指控反驳（二）</div>
+  <h2>指控二：不信城邦之神</h2>
+  <div class="claim-box">控方自相矛盾——既指控本人<span class="red">"不信神"</span>，又指控本人<span class="red">"引入新的神灵"</span></div>
+  <div style="margin:1rem 0;">
+    <div class="arg-step"><div class="arg-num">1</div><div class="arg-text"><strong>控方主张A：</strong>苏格拉底是彻底的无神论者，完全不信任何神。</div></div>
+    <div class="arg-step"><div class="arg-num">2</div><div class="arg-text"><strong>控方主张B：</strong>苏格拉底引入新的精灵/神灵（daimonia）。</div></div>
+    <div class="arg-step"><div class="arg-num">3</div><div class="arg-text"><strong>逻辑推演：</strong>A与B互相矛盾——一个完全不信神的人怎么可能同时引入新的神灵？这就像说一个人既不相信马的存在，又在从事与马相关的活动。</div></div>
+  </div>
+  <div class="warning-box">
+    <strong>骡子类比：</strong>迈勒图斯，你说有人相信骡子的存在却不相信马和驴的存在，这可能吗？同理，如果本人相信精灵（daimonia）的活动，而精灵是神的后代——<strong>那本人怎么可能不相信神的存在？</strong>这就像相信骡子存在却否认马和驴的存在一样荒谬。
+  </div>
+  <div class="card" style="background:var(--soft-red);text-align:center;">
+    <div class="stat">
+      <div class="stat-number" style="font-size:1.6rem;">结论：指控二自相矛盾</div>
+      <div class="stat-label" style="font-size:0.9rem;">控方是在戏弄法庭，用自相矛盾的指控来考验陪审团的智力</div>
+    </div>
+  </div>
+</div>
+<div class="speaker-notes">第二项指控存在致命的逻辑矛盾。迈勒图斯一方面说我完全不信任何神，另一方面又说我引入了新的神灵。这两个主张不可能同时为真。我用骡子的类比来说明：如果一个人承认精灵的存在，精灵是神的后代，那他怎么可能否认神的存在？这就像相信骡子存在却否认马和驴的存在一样荒谬。</div>
+</div>
+
+<!-- ==================== SLIDE 9: 牛虻职能 ==================== -->
+<div class="slide" data-notes="本人的社会功能定位：神派驻雅典城邦的牛虻。本人以贫穷、全职投入、零报酬为证据。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">09 / 21</div>
+  <div class="eyebrow">七、社会功能定位</div>
+  <h2>牛虻职能说明</h2>
+  <div class="claim-box">本人系神派驻雅典城邦的<span class="red">"牛虻"</span>——负责唤醒、监督与批评。雅典就像一匹高大但因肥胖而行动迟缓的骏马，需要一只牛虻不断叮咬它，使它保持警醒。</div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-header"><div class="card-index">1</div><div class="tag">证据</div></div>
+      <h3>贫穷证据</h3>
+      <p style="font-size:0.9rem;">本人长期处于极度贫困状态。如果本人的动机是谋取私利，为何会让自己沦落至此？一个图谋不轨的人不会主动选择贫穷。</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-index">2</div><div class="tag">证据</div></div>
+      <h3>全职投入</h3>
+      <p style="font-size:0.9rem;">本人放弃一切私人事务，不关心财产、不追求官职，全部精力用于<strong>逐一走访市民</strong>，劝勉他们关注灵魂的卓越而非身外之物。</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-index">3</div><div class="tag">证据</div></div>
+      <h3>零报酬</h3>
+      <p style="font-size:0.9rem;">本人从未向任何人收取费用。任何人都可以来听本人谈话，无论贫富。本人对所有人一视同仁，既不偏向穷人，也不讨好富人。</p>
+    </div>
+  </div>
+  <div class="warning-box">
+    <strong>请注意：</strong>如果你们杀死我，受损的不是我，而是你们自己。你们不容易再找到一个像我这样的人——一个被神赐予城邦的人。而<strong>处死一只牛虻很容易，但此后你们将在昏睡中度过余生</strong>。
+  </div>
+</div>
+<div class="speaker-notes">本人的社会功能可以用一个比喻来说明：雅典城邦如同一匹高大肥硕却因此行动迟缓的骏马，本人就是神派来叮咬它、让它保持清醒的牛虻。证据就是我的贫穷、我对私人事务的忽视、以及从未向任何人收费。杀死我对你们没有好处——处死一只牛虻很容易，但之后你们就再也没人来叫醒了。</div>
+</div>
+
+<!-- ==================== SLIDE 10: 政治立场 ==================== -->
+<div class="slide" data-notes="本人始终坚持正义原则，不论面对民主派还是寡头派的压力。以两个具体事件为证。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">10 / 21</div>
+  <div class="eyebrow">八、政治立场</div>
+  <h2>政治立场与实际行动</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><div class="card-index">案例一</div><div class="tag">民主政体时期</div></div>
+      <h3>阿基努赛将军审判事件</h3>
+      <p style="font-size:0.9rem;">公民大会不经合法程序，要将十位将军集体定罪处死。本人时任轮值主席团成员（Prytaneis），是<strong>唯一一个</strong>投票反对违法审判的人。尽管公众威胁要逮捕和处死本人，本人仍坚持<strong>法律程序正义</strong>，拒绝向暴民压力屈服。</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-index">案例二</div><div class="tag">寡头政体时期</div></div>
+      <h3>莱昂逮捕事件</h3>
+      <p style="font-size:0.9rem;">三十僭主执政期间，命令本人与另外四人前往逮捕萨拉米斯人莱昂，意图将其处死以没收财产。另外四人服从了命令，<strong>本人独自回家</strong>，拒绝参与不义之事。此事本可能让本人丧命，若非僭主政权很快被推翻。</p>
+    </div>
+  </div>
+  <div class="warning-box">
+    <strong>核心原则：</strong>本人不参与任何违背正义的行为，<strong>无论命令来自民主政体还是寡头政体</strong>。正因如此，本人一生避免参与政治——因为一个真正坚持正义的人如果从政，必然会很快被杀。本人只能以私人身份为城邦服务。
+  </div>
+</div>
+<div class="speaker-notes">两个具体事例可以证明本人的政治立场。在民主政体下的将军审判事件中，我是唯一一个坚持合法程序、反对集体定罪的人。在寡头政体下的莱昂事件中，三十僭主命令我去逮捕无辜者，我独自回家拒绝执行。这两件事说明，无论面对什么政权，我都坚持正义原则。也正因如此，我选择不从政——从政的正义之人活不长。</div>
+</div>
+
+<!-- ==================== SLIDE 11: 求饶问题 ==================== -->
+<div class="slide" data-notes="有人会问为什么我不像其他被告那样哭泣求饶、带上妻儿博取同情。本人在此说明原因。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">11 / 21</div>
+  <div class="eyebrow">九、程序合规性声明</div>
+  <h2>关于求饶问题的立场声明</h2>
+  <p style="margin-bottom:1rem;color:var(--text2);">本人不会采用常见的求饶手段（哭泣、携子女上庭、博取同情），理由如下：</p>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-header"><div class="card-index">1</div><div class="tag">理由</div></div>
+      <h3>有损城邦声誉</h3>
+      <p style="font-size:0.9rem;">本人年已七十，若在法庭上做出失态之举，将有损雅典的声誉。外邦人会认为雅典最优秀的公民竟与普通人无异。</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-index">2</div><div class="tag">理由</div></div>
+      <h3>违背陪审员职责</h3>
+      <p style="font-size:0.9rem;">陪审员的职责是<strong>依据法律和事实做出公正判断</strong>，而非被被告的眼泪所动。用情感操纵陪审团是对司法制度的不敬。</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-index">3</div><div class="tag">理由</div></div>
+      <h3>不合本人信仰</h3>
+      <p style="font-size:0.9rem;">本人相信神的存在，而用不正当手段影响司法就是在<strong>教导陪审员不敬神</strong>——这反而坐实了"不信神"的指控。</p>
+    </div>
+  </div>
+  <div class="claim-box" style="margin-top:1rem;">
+    本人将自己的案件完全交付各位陪审员和神明，请各位<span class="red">按照对城邦和各位自身最好的方式</span>做出判决。无论结果如何，本人和各位都不会有遗憾。
+  </div>
+</div>
+<div class="speaker-notes">有人会奇怪我为什么不像其他被告那样哭泣求饶。原因有三：第一，这有损城邦声誉；第二，陪审员的职责是依法判断，不是被眼泪左右；第三，用不正当手段影响司法等于不敬神，反而坐实了对我的指控。我把命运交给各位和神明，按最正义的方式做出判断即可。</div>
+</div>
+
+<!-- ==================== SLIDE 12: 判决结果 ==================== -->
+<div class="slide" data-notes="第一轮投票结果：有罪。但票差很小，如果仅30票改变，本人就会被宣告无罪。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">12 / 21</div>
+  <div class="eyebrow">判决结果</div>
+  <h2>第一轮投票结果</h2>
+  <div class="verdict-box">
+    <div class="stat">
+      <div class="stat-number">有 罪</div>
+      <div class="stat-label">501名陪审员投票结果</div>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card"><div class="stat"><div class="stat-number">约280</div><div class="stat-label">有罪票</div></div></div>
+    <div class="card"><div class="stat"><div class="stat-number">约221</div><div class="stat-label">无罪票</div></div></div>
+    <div class="card"><div class="stat"><div class="stat-number">30票</div><div class="stat-label">如仅此数改变即可无罪</div></div></div>
+  </div>
+  <div class="warning-box">
+    <strong>本人回应：</strong>票差如此之小，令本人颇感意外。本人原以为差距会大得多。如果安尼图斯和吕孔没有加入起诉，迈勒图斯甚至无法获得五分之一的票数——那样他就要被罚款一千德拉克马了。
+  </div>
+  <div class="part-divider"><span>进入 Part II ——量刑意见阶段</span></div>
+</div>
+<div class="speaker-notes">陪审团投票的结果是有罪，但票差出乎我的意料地小——如果仅有三十票改变立场，我就会被宣告无罪。这说明控方的论证远非令人信服。接下来进入量刑阶段，按照雅典法律，被告有权提出自己认为合适的刑罚建议。</div>
+</div>
+
+<!-- ==================== SLIDE 13: 量刑建议 ==================== -->
+<div class="slide" data-notes="按照法律，本人现在需要对自己提出量刑建议。本人认为自己应受到的待遇是：在普里塔尼厄姆用餐。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">13 / 21</div>
+  <div class="eyebrow">十、量刑建议</div>
+  <h2>被告方量刑建议</h2>
+  <div class="claim-box">本人认为自己真正应得的"处罚"是：<span class="red">在普里塔尼厄姆（城邦公餐厅）终身免费用餐</span>——这是雅典给予奥运冠军和城邦英雄的待遇。</div>
+  <p style="margin:0.8rem 0;font-size:0.95rem;">本人比奥运冠军更有资格享此待遇——奥运冠军让你们<strong>感觉</strong>幸福，本人让你们<strong>真正</strong>幸福。且本人一贫如洗，确实需要这顿餐食。</p>
+  <h3 style="margin-top:1rem;">替代方案逐一排除</h3>
+  <div class="grid-2">
+    <div class="card">
+      <h3>监禁 <span class="tag" style="background:#fdecea;color:var(--accent2);">排除</span></h3>
+      <p style="font-size:0.9rem;">在监狱中成为十一人委员会的奴隶？为何要选择确定的恶？</p>
+    </div>
+    <div class="card">
+      <h3>流放 <span class="tag" style="background:#fdecea;color:var(--accent2);">排除</span></h3>
+      <p style="font-size:0.9rem;">如果本城邦都无法容忍本人的谈话，外邦又怎会容忍？本人到哪里都会继续做同样的事。</p>
+    </div>
+    <div class="card">
+      <h3>沉默不言 <span class="tag" style="background:#fdecea;color:var(--accent2);">排除</span></h3>
+      <p style="font-size:0.9rem;">要本人停止哲学探索，等于要本人停止生活。"未经审视的人生不值得过。"</p>
+    </div>
+    <div class="card">
+      <h3>罚款30弥那 <span class="tag" style="background:#e8f5e9;color:#2e7d32;">可接受</span></h3>
+      <p style="font-size:0.9rem;">本人的朋友们——柏拉图、克里托、克里托布洛斯、阿波罗多洛斯——愿意为本人担保，支付<strong>30弥那</strong>罚款。</p>
+    </div>
+  </div>
+</div>
+<div class="speaker-notes">按雅典法律，本人需要提出自己认为合适的量刑建议。我认为对我最公正的"处罚"应该是在城邦公餐厅终身用餐——奥运冠军的待遇。因为我比奥运冠军更有资格。当然，如果必须选择一个惩罚，我排除监禁、流放和沉默——我到了朋友们愿意担保的30弥那罚款。</div>
+</div>
+
+<!-- ==================== SLIDE 14: 核心价值 ==================== -->
+<div class="slide" data-notes="这是本人全部哲学工作的核心主张。未经审视的人生不值得过。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">14 / 21</div>
+  <div class="eyebrow">十一、核心价值观</div>
+  <h2>核心价值主张</h2>
+  <div class="big-quote">
+    "未经审视的人生<br>不值得过"
+    <span class="greek">ὁ δὲ ἀνεξέταστος βίος οὐ βιωτὸς ἀνθρώπῳ</span>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>内涵说明</h3>
+      <p style="font-size:0.92rem;">人之为人的最高价值，不在于财富、声望或权力，而在于<strong>持续不断地审视自己和他人</strong>——追问什么是正义、什么是善、什么是美德。放弃这种审视，等于放弃了人之为人的本质。</p>
+    </div>
+    <div class="card">
+      <h3>实践方式</h3>
+      <p style="font-size:0.92rem;">本人每日在市场、体育馆、街头与人谈话，不传授知识（本人没有知识可传授），而是<strong>通过提问</strong>帮助对方审视自己的信念和假设。这是一种精神助产术——帮助他人自己生出真理。</p>
+    </div>
+  </div>
+  <div class="warning-box">
+    <strong>正是这一信念，</strong>使本人不可能接受"保持沉默换取活命"的交易。因为沉默的苏格拉底已不再是苏格拉底——<strong>不如死。</strong>
+  </div>
+</div>
+<div class="speaker-notes">这是本人全部哲学工作的核心。未经审视的人生不值得过。我不可能为了活命而放弃审视，因为那样的生活不值得过。我每天所做的事情——与人对话、提问、审视——这就是我存在的全部意义。让我停止这些，不如让我去死。</div>
+</div>
+
+<!-- ==================== SLIDE 15: 死刑判决 ==================== -->
+<div class="slide" data-notes="第二轮投票结果：死刑。而且支持死刑的票数比第一轮支持有罪的还多。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">15 / 21</div>
+  <div class="eyebrow">量刑结果</div>
+  <h2>第二轮投票结果</h2>
+  <div class="verdict-box" style="background:linear-gradient(135deg, #900000, #600000);">
+    <div class="stat">
+      <div class="stat-number">死 刑</div>
+      <div class="stat-label">陪审团最终判决</div>
+    </div>
+  </div>
+  <div class="warning-box">
+    <strong>本人观察：</strong>第二轮投票中支持死刑的票数甚至<strong>超过了</strong>第一轮支持有罪的票数。这说明本人在量刑阶段的发言——特别是提议在公餐厅用餐——进一步激怒了部分陪审员。但本人不后悔，因为本人不会为了讨好任何人而说违心的话。
+  </div>
+  <div class="claim-box">
+    如果本人愿意哭泣、哀求、说各种不配本人身份的话，或许可以脱罪。但本人宁愿<span class="red">以自己的方式为自己辩护后死去</span>，也不愿以不义的方式活下来。在战场上和法庭上道理相同——<strong>一个人应当思考如何正义地行动，而非不择手段地逃避死亡。</strong>
+  </div>
+  <div class="part-divider"><span>进入 Part III ——总结陈词</span></div>
+</div>
+<div class="speaker-notes">最终判决是死刑，而且投死刑票的人比投有罪票的还多——说明我在量刑阶段的态度进一步激怒了一些人。但我不后悔。我宁愿以正义的方式为自己辩护后死去，也不愿以卑劣的手段换取生存。在战场上如此，在法庭上也如此。现在进入最后的总结陈词。</div>
+</div>
+
+<!-- ==================== SLIDE 16: 致控方 ==================== -->
+<div class="slide" data-notes="现在本人要对投票判本人有罪的人说一番话——这不是咒骂，而是预言。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">16 / 21</div>
+  <div class="eyebrow">十二、致控方</div>
+  <h2>致投有罪票诸位的警告</h2>
+  <div class="warning-box" style="border-left-width:6px;">
+    <strong>预言：</strong>在本人死后，将有<strong>更多、更年轻</strong>的审问者站出来，他们是本人此前一直在约束的人。他们会更加尖锐地审问你们，而你们会更加恼怒。<br><br>
+    你们以为杀死本人就能逃避审视？<strong>这是不可能的。</strong>逃避审视最可靠的方法不是堵住别人的嘴，而是<strong>让自己变得更好</strong>。
+  </div>
+  <div class="card" style="margin-top:1rem;">
+    <h3>赛跑比喻</h3>
+    <p style="font-size:0.95rem;">本人不是因为<strong>跑不过死亡</strong>而死——死亡跑得慢，谁都跑得过。本人是因为跑不过<strong>邪恶</strong>——邪恶比死亡跑得快。今天，本人被判处死刑（较慢的惩罚），而控方诸位则被<strong>真理</strong>判处了邪恶与不义（较快且更沉重的惩罚）。<strong>双方各领其罚</strong>——这或许是应当的。</p>
+  </div>
+</div>
+<div class="speaker-notes">致判本人有罪的诸位：本人要做一个预言。杀了我之后，审问者不会减少，反而会更多。你们以为杀人能解决问题，但逃避审视的唯一办法是让自己变得更好。记住：我不是跑不过死亡而死——死亡跑得慢。我是跑不过邪恶。你们也各有各的惩罚要领受。</div>
+</div>
+
+<!-- ==================== SLIDE 17: 死亡分析 ==================== -->
+<div class="slide" data-notes="对于投本人无罪票的朋友们，本人想谈谈对死亡的理性分析。代蒙的沉默是一个重要信号。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">17 / 21</div>
+  <div class="eyebrow">十三、死亡分析</div>
+  <h2>关于死亡的理性分析</h2>
+  <div class="card" style="background:var(--soft-gold);margin-bottom:1rem;">
+    <h3>关键证据：代蒙（daimonion）的沉默</h3>
+    <p style="font-size:0.95rem;">本人内心的神圣声音——代蒙——平时在本人即将做错事时总会发出警告。但今天，无论是出门时、上法庭时、还是发言过程中，<strong>代蒙始终保持沉默</strong>。这强烈暗示：<strong>今天发生在本人身上的事并非坏事。</strong></p>
+  </div>
+  <h3 style="margin-bottom:0.6rem;">死亡的两种可能——比较分析</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><div class="card-index">A</div><div class="tag">情景分析</div></div>
+      <h3>完全的虚无</h3>
+      <p style="font-size:0.9rem;">死亡如同<strong>无梦的深睡</strong>——没有任何感知。回想你一生中睡得最沉、完全没有做梦的那一夜，那是何等安宁？如果死亡就是这样永恒的无梦之眠，那它甚至比人生中大多数日夜都<strong>更加美好</strong>。即使是波斯大王也无法指出比无梦之眠更快乐的日子。</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-index">B</div><div class="tag">情景分析</div></div>
+      <h3>灵魂迁往他处</h3>
+      <p style="font-size:0.9rem;">如果死亡是灵魂迁往另一个世界——那里有真正公正的审判者（弥诺斯、拉达曼提斯等），有荷马、赫西俄德、奥德修斯——<strong>那将是何等的福分！</strong>本人将能在冥界继续审问特洛伊战争的英雄们，考察他们的智慧。最妙的是——<strong>冥界的人不会因为提问而判你死刑。</strong></p>
+    </div>
+  </div>
+  <div class="claim-box">两种情况下死亡都不是坏事。因此，<span class="red">对于一个好人而言，无论生死都不会有真正的恶</span>——诸神不会忽略他的事务。</div>
+</div>
+<div class="speaker-notes">对于投无罪票的朋友们，我想理性地分析一下死亡。首先一个重要信号：我的代蒙今天始终沉默，说明今天发生的事不是坏事。死亡要么是彻底的虚无——如无梦之眠，那其实很美好；要么是灵魂去往另一个世界——那里我可以继续审问英雄们的智慧，而且不会因此被判死刑。所以无论哪种情况，死亡对好人而言都不是恶。</div>
+</div>
+
+<!-- ==================== SLIDE 18: 最后请求 ==================== -->
+<div class="slide" data-notes="这是本人最后的请求。关于我的儿子们，请各位像本人审问你们那样审问他们。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">18 / 21</div>
+  <div class="eyebrow">十四、总结陈词</div>
+  <h2>最后请求与嘱托</h2>
+  <p style="margin-bottom:0.8rem;">在离别之前，本人只有一个请求：</p>
+  <div class="claim-box" style="font-size:1.25rem;">
+    当本人的儿子们长大成人后，如果他们追求财富或其他虚浮之物胜于追求美德，请各位<span class="red">像本人审问你们那样审问他们</span>。<br><br>
+    如果他们自以为有了不起其实并没有，请责备他们——就像本人责备你们一样——<span class="red">因为他们不关心应该关心的事，却在无价值的事物上自以为了不起</span>。
+  </div>
+  <div class="grid-3">
+    <div class="card" style="text-align:center;">
+      <h3>对陪审团</h3>
+      <p style="font-size:0.9rem;">本人对判本人有罪的人和判本人无罪的人都不怀恨意。</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <h3>对控方</h3>
+      <p style="font-size:0.9rem;">你们伤害的不是本人。没有人能伤害一个好人。</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <h3>对后世</h3>
+      <p style="font-size:0.9rem;">本人将此案的审判交予神明和时间。</p>
+    </div>
+  </div>
+</div>
+<div class="speaker-notes">在最后，本人只有一个请求：当我的三个儿子长大后，如果他们追求财富胜于美德，请各位像我审问你们那样去审问他们。如果他们自以为了不起却其实平庸，请责备他们。这就是我全部的请求。</div>
+</div>
+
+<!-- ==================== SLIDE 19: 附录 ==================== -->
+<div class="slide" data-notes="以下是本次申辩中所有核心论据的汇总表。">
+<div class="slide-inner">
+  <div class="top-rule"></div>
+  <div class="slide-number">19 / 21</div>
+  <div class="eyebrow">附录</div>
+  <h2>核心论据汇总表</h2>
+  <table class="summary-table">
+    <thead>
+      <tr><th style="width:5%;">序号</th><th style="width:22%;">论题</th><th style="width:38%;">核心论据</th><th style="width:35%;">论证方法</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>旧指控澄清</td><td>本人非自然哲学家，不收费教学</td><td>事实陈述 + 证人可证</td></tr>
+      <tr><td>2</td><td>神谕来源</td><td>德尔斐神谕称无人比本人更有智慧</td><td>历史事实 + 证人（凯瑞丰之兄弟）</td></tr>
+      <tr><td>3</td><td>智慧的含义</td><td>承认无知即最大智慧</td><td>系统调查三类人群后的归纳推理</td></tr>
+      <tr><td>4</td><td>仇恨成因</td><td>揭穿无知导致被审问者报复</td><td>因果分析</td></tr>
+      <tr><td>5</td><td>反驳"腐蚀青年"</td><td>驯马师类比证明不合逻辑</td><td>类比论证 + 反证法</td></tr>
+      <tr><td>6</td><td>反驳"不信神"</td><td>控方主张自相矛盾</td><td>逻辑矛盾证明 + 骡子类比</td></tr>
+      <tr><td>7</td><td>牛虻使命</td><td>本人系神派驻城邦的督察</td><td>贫穷、零报酬、全职投入为证</td></tr>
+      <tr><td>8</td><td>政治清白</td><td>两次冒死坚持正义</td><td>将军审判 + 莱昂事件两个案例</td></tr>
+      <tr><td>9</td><td>拒绝求饶</td><td>正义优先于生存</td><td>职责论证 + 品格论证</td></tr>
+      <tr><td>10</td><td>死亡非恶</td><td>无梦之眠或灵魂迁居均非坏事</td><td>穷举分析（两种可能均利好）</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="speaker-notes">此表汇总了本次申辩中的全部核心论据及论证方法，供各位陪审员回顾参考。</div>
+</div>
+
+<!-- ==================== SLIDE 20: 结语 ==================== -->
+<div class="slide" data-notes="离别的时刻到了。这是苏格拉底最后的话。">
+<div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;min-height:60vh;">
+  <div class="top-rule"></div>
+  <div class="slide-number">20 / 21</div>
+  <div class="eyebrow">结语</div>
+  <div class="big-quote" style="font-size:2.2rem;padding:2rem 1rem;">
+    离别的时刻已经到来。<br>
+    我去赴死，你们去生活。<br>
+    <span style="color:var(--accent);font-weight:900;">哪一个更好，只有神知道。</span>
+    <span class="greek" style="font-size:1.1rem;margin-top:1rem;">
+      ἀλλὰ γὰρ ἤδη ὥρα ἀπιέναι,<br>
+      ἐμοὶ μὲν ἀποθανουμένῳ, ὑμῖν δὲ βιωσομένοις·<br>
+      ὁπότεροι δὲ ἡμῶν ἔρχονται ἐπὶ ἄμεινον πρᾶγμα, ἄδηλον παντὶ πλὴν ἢ τῷ θεῷ.
+    </span>
+  </div>
+  <div style="text-align:center;margin-top:2rem;color:var(--text2);font-size:0.95rem;">
+    <div style="display:inline-block;border-top:2px solid var(--border);padding-top:1rem;">
+      汇报人：苏格拉底 &nbsp;|&nbsp; 雅典人民法庭 &nbsp;|&nbsp; 公元前399年<br>
+      <span style="font-size:0.82rem;">本报告内容基于柏拉图《申辩篇》(Ἀπολογία Σωκράτους) 整理</span>
+    </div>
+  </div>
+</div>
+<div class="speaker-notes">离别的时刻到了。我去赴死，你们去生活。至于哪一个更好，除了神以外，谁也不知道。这是本人最后的话。谢谢各位。</div>
+</div>
+
+<!-- ==================== SLIDE 21: 致谢页 ==================== -->
+<div class="slide" data-notes="感谢各位听完本人的完整汇报。">
+<div class="slide-inner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:60vh;">
+  <div class="top-rule"></div>
+  <div class="slide-number">21 / 21</div>
+  <div style="text-align:center;">
+    <div class="eyebrow" style="justify-content:center;margin-bottom:1rem;">雅典人民法庭 · 公元前399年</div>
+    <h1 style="font-size:2.8rem;margin-bottom:0.5rem;">申辩完毕</h1>
+    <p style="font-size:1.2rem;color:var(--text2);margin-bottom:2rem;">谨呈各位陪审员审阅</p>
+    <div class="grid-3" style="max-width:600px;">
+      <div class="stat">
+        <div class="stat-number">21</div>
+        <div class="stat-label">汇报页数</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">14</div>
+        <div class="stat-label">论证章节</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">10</div>
+        <div class="stat-label">核心论据</div>
+      </div>
+    </div>
+    <div style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border);">
+      <p style="font-size:0.88rem;color:var(--text2);">
+        汇报人：苏格拉底 &nbsp;|&nbsp; 职务：雅典公民、哲学工作者<br>
+        <span style="font-size:0.82rem;">基于柏拉图《申辩篇》整理 · 国企汇报风格呈现</span>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="speaker-notes">感谢各位陪审员听完本人的完整汇报。全部21页，14个论证章节，10条核心论据。本人已尽自己的责任，剩下的交给各位和诸神。</div>
+</div>
+
+</div><!-- end deck -->
+
+<div class="controls-hint">← → 翻页 &nbsp;|&nbsp; N 演讲备注 &nbsp;|&nbsp; F 全屏 &nbsp;|&nbsp; P 打印</div>
+
+<script>
+(function(){
+  const deck = document.getElementById('deck');
+  const slides = deck.querySelectorAll('.slide');
+  const progress = document.getElementById('progress');
+  let current = 0;
+  const total = slides.length;
+
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    progress.style.width = ((current + 1) / total * 100) + '%';
+    // Update hash
+    history.replaceState(null, '', '#' + (current + 1));
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    else if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+    else if (e.key === 'n' || e.key === 'N') { document.body.classList.toggle('show-notes'); }
+    else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+    else if (e.key === 'p' || e.key === 'P') { window.print(); }
+  });
+
+  // Click navigation
+  deck.addEventListener('click', function(e) {
+    const rect = deck.getBoundingClientRect();
+    if (e.clientX > rect.left + rect.width * 0.5) next();
+    else prev();
+  });
+
+  // Touch
+  let touchStartX = 0;
+  deck.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].screenX; });
+  deck.addEventListener('touchend', function(e) {
+    const diff = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(diff) > 50) { diff < 0 ? next() : prev(); }
+  });
+
+  // Hash navigation
+  function readHash() {
+    const h = parseInt(location.hash.replace('#', ''), 10);
+    if (h >= 1 && h <= total) goTo(h - 1);
+  }
+  window.addEventListener('hashchange', readHash);
+  readHash();
+
+  // Init progress
+  progress.style.width = ((current + 1) / total * 100) + '%';
+})();
+</script>
+</body>
+</html>

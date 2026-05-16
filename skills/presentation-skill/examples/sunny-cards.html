@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的申辩 — 苏格拉底</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & BASE ============ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #f5f0e8; font-family: 'Noto Sans SC', sans-serif; color: #2d2d2d; }
+
+/* ============ DESIGN TOKENS ============ */
+:root {
+  --bg: #f5f0e8;
+  --slide-bg: #ffffff;
+  --yellow: #fff8e1;
+  --blue: #e8f4fd;
+  --green: #e8f5e9;
+  --rose: #fce4ec;
+  --purple: #f3e5f5;
+  --orange: #e67e22;
+  --teal: #00897b;
+  --coral: #e74c3c;
+  --accent-blue: #2196f3;
+  --text: #2d2d2d;
+  --text2: #666666;
+  --radius: 16px;
+  --radius-lg: 26px;
+  --shadow: 0px 8px 30px rgba(0,0,0,0.06);
+  --shadow-card: 0px 4px 16px rgba(0,0,0,0.05);
+}
+
+/* ============ SLIDE CONTAINER ============ */
+.deck { width: 100vw; height: 100vh; position: relative; }
+.slide {
+  display: none; position: absolute; inset: 0;
+  padding: 40px 60px;
+  background: var(--bg);
+  overflow-y: auto;
+}
+.slide.active { display: flex; flex-direction: column; }
+.slide-inner {
+  max-width: 1100px; width: 100%; margin: 0 auto;
+  background: var(--slide-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 48px 56px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+
+/* ============ TYPOGRAPHY ============ */
+h1 { font-size: 42px; font-weight: 900; line-height: 1.3; margin-bottom: 16px; }
+h2 { font-size: 32px; font-weight: 900; line-height: 1.3; margin-bottom: 20px; }
+h3 { font-size: 22px; font-weight: 700; line-height: 1.4; margin-bottom: 12px; }
+p, li { font-size: 16px; font-weight: 400; line-height: 1.8; color: var(--text); }
+.secondary { color: var(--text2); }
+.small { font-size: 14px; }
+
+/* ============ CARDS ============ */
+.card {
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+}
+.card-yellow { background: var(--yellow); }
+.card-blue { background: var(--blue); }
+.card-green { background: var(--green); }
+.card-rose { background: var(--rose); }
+.card-purple { background: var(--purple); }
+.card-white { background: #fff; border: 1.5px solid #eee; }
+
+.card-border-left {
+  border-left: 5px solid var(--orange);
+}
+.card-border-coral { border-left-color: var(--coral); }
+.card-border-teal { border-left-color: var(--teal); }
+.card-border-blue { border-left-color: var(--accent-blue); }
+.card-border-purple { border-left-color: #9c27b0; }
+
+/* ============ BADGES / PILLS ============ */
+.badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 700;
+  margin: 4px 4px 4px 0;
+}
+.badge-orange { background: var(--orange); color: #fff; }
+.badge-teal { background: var(--teal); color: #fff; }
+.badge-coral { background: var(--coral); color: #fff; }
+.badge-blue { background: var(--accent-blue); color: #fff; }
+.badge-purple { background: #9c27b0; color: #fff; }
+.badge-outline { background: transparent; border: 2px solid var(--orange); color: var(--orange); }
+.badge-yellow { background: #f9a825; color: #fff; }
+.badge-green { background: #43a047; color: #fff; }
+
+/* ============ QUOTE CARD ============ */
+.quote-card {
+  background: var(--yellow);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin: 16px 0;
+  position: relative;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.8;
+}
+.quote-card::before {
+  content: '❝';
+  font-size: 48px;
+  position: absolute;
+  top: 8px; left: 16px;
+  opacity: 0.25;
+}
+
+/* ============ STAT CARD ============ */
+.stat-card {
+  text-align: center;
+  padding: 20px;
+  border-radius: var(--radius);
+  background: var(--blue);
+}
+.stat-card .num { font-size: 42px; font-weight: 900; color: var(--accent-blue); }
+.stat-card .label { font-size: 14px; color: var(--text2); margin-top: 4px; }
+
+/* ============ FLOW / TIMELINE ============ */
+.flow-step {
+  display: flex; align-items: flex-start; gap: 14px;
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  background: #fff; border-radius: 12px;
+  box-shadow: var(--shadow-card);
+}
+.flow-step .icon { font-size: 28px; flex-shrink: 0; }
+.flow-step .text { font-size: 15px; line-height: 1.7; }
+.flow-arrow { text-align: center; font-size: 22px; color: var(--orange); margin: 4px 0; }
+
+/* ============ GRID HELPERS ============ */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+.flex-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.flex-col { display: flex; flex-direction: column; gap: 12px; }
+.gap-sm { gap: 8px; }
+.gap-lg { gap: 20px; }
+.mt { margin-top: 16px; }
+.mt-lg { margin-top: 28px; }
+.mb { margin-bottom: 16px; }
+.center { text-align: center; }
+.flex1 { flex: 1; }
+
+/* ============ CALLOUT ============ */
+.callout {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  background: var(--green);
+  margin: 12px 0;
+}
+.callout.warning { background: var(--rose); }
+.callout .icon { font-size: 24px; flex-shrink: 0; }
+
+/* ============ SLIDE NUMBER ============ */
+.slide-num {
+  position: fixed; bottom: 20px; right: 32px;
+  font-size: 13px; color: var(--text2);
+  z-index: 100;
+  background: rgba(255,255,255,0.8);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* ============ CONTROLS ============ */
+.controls {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 200;
+  background: rgba(255,255,255,0.9);
+  padding: 8px 16px;
+  border-radius: 30px;
+  box-shadow: var(--shadow);
+}
+.controls button {
+  border: none; background: var(--orange); color: #fff;
+  padding: 8px 18px; border-radius: 20px;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: background 0.2s;
+}
+.controls button:hover { background: #d35400; }
+.controls button.outline {
+  background: transparent; border: 2px solid var(--orange);
+  color: var(--orange);
+}
+.controls button.outline:hover { background: var(--orange); color: #fff; }
+
+/* ============ SPEAKER NOTES TOGGLE ============ */
+.speaker-notes {
+  display: none;
+  margin-top: auto;
+  padding: 16px 20px;
+  background: #f0ebe3;
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  border-top: 2px dashed #ddd;
+}
+.speaker-notes.show { display: block; }
+.speaker-notes::before { content: '🎙 演讲笔记：'; font-weight: 700; color: var(--text); }
+
+/* ============ PROGRESS BAR ============ */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 4px;
+  background: var(--orange);
+  z-index: 300;
+  transition: width 0.3s ease;
+}
+
+/* ============ COVER SPECIAL ============ */
+.cover-emoji { font-size: 80px; display: block; margin-bottom: 12px; }
+.cover-title { font-size: 64px; font-weight: 900; letter-spacing: 4px; }
+.cover-subtitle { font-size: 20px; color: var(--text2); margin-top: 12px; }
+
+/* ============ BIG QUOTE ============ */
+.big-quote {
+  font-size: 30px; font-weight: 900; line-height: 1.6;
+  text-align: center;
+  padding: 32px;
+  background: linear-gradient(135deg, var(--yellow), var(--green));
+  border-radius: 20px;
+  margin: 20px 0;
+}
+
+/* ============ SVG DECORATIONS ============ */
+.deco-columns {
+  position: absolute; bottom: 20px; right: 40px; opacity: 0.08;
+}
+
+/* ============ PRINT ============ */
+@media print {
+  body { overflow: visible; background: #fff; }
+  .deck { height: auto; }
+  .slide { display: flex !important; position: relative; page-break-after: always; height: 100vh; }
+  .slide-inner { box-shadow: none; border: 1px solid #eee; }
+  .controls, .slide-num, .progress-bar { display: none !important; }
+  .speaker-notes { display: block !important; }
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 800px) {
+  .slide { padding: 16px; }
+  .slide-inner { padding: 24px 20px; }
+  h1 { font-size: 28px; }
+  h2 { font-size: 24px; }
+  .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
+  .cover-title { font-size: 36px; }
+  .cover-emoji { font-size: 56px; }
+  .big-quote { font-size: 22px; padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-num" id="slideNum"></div>
+
+<div class="deck" id="deck">
+
+<!-- ==================== SLIDE 1: 封面 ==================== -->
+<div class="slide" data-notes="欢迎各位。今天我以苏格拉底第一人称来讲述这个两千四百年前的法庭故事。这不仅是一次辩护，更是西方哲学史上最重要的时刻之一。">
+  <div class="slide-inner" style="justify-content: center; align-items: center; text-align: center; position: relative;">
+    <svg class="deco-columns" width="200" height="180" viewBox="0 0 200 180">
+      <line x1="30" y1="20" x2="30" y2="160" stroke="#2d2d2d" stroke-width="6" stroke-linecap="round"/>
+      <line x1="70" y1="20" x2="70" y2="160" stroke="#2d2d2d" stroke-width="6" stroke-linecap="round"/>
+      <line x1="110" y1="20" x2="110" y2="160" stroke="#2d2d2d" stroke-width="6" stroke-linecap="round"/>
+      <line x1="150" y1="20" x2="150" y2="160" stroke="#2d2d2d" stroke-width="6" stroke-linecap="round"/>
+      <line x1="10" y1="16" x2="170" y2="16" stroke="#2d2d2d" stroke-width="4" stroke-linecap="round"/>
+      <path d="M10 16 Q90 0 170 16" stroke="#2d2d2d" stroke-width="3" fill="none"/>
+      <line x1="10" y1="164" x2="170" y2="164" stroke="#2d2d2d" stroke-width="6" stroke-linecap="round"/>
+    </svg>
+    <span class="cover-emoji">🏛️</span>
+    <div class="cover-title">我的申辩</div>
+    <div class="cover-subtitle">苏格拉底 · 雅典人民法庭 · 公元前399年</div>
+    <div class="flex-row mt-lg" style="justify-content:center;">
+      <span class="badge badge-orange">👴 70岁</span>
+      <span class="badge badge-teal">⚖️ 第一次上法庭</span>
+      <span class="badge badge-blue">👥 501名陪审员</span>
+      <span class="badge badge-coral">⏱ 限时申辩</span>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 2: 今天的故事 ==================== -->
+<div class="slide" data-notes="先让大家了解今天的结构。整个申辩分三部分，对应雅典法庭的三个阶段。指控看起来吓人，但逻辑漏洞百出。">
+  <div class="slide-inner">
+    <h2>📋 今天的故事</h2>
+    <div class="grid2 mt">
+      <div>
+        <h3>三幕结构</h3>
+        <div class="card card-yellow">
+          <strong>Part I</strong> 🛡️ 我的辩护<br>
+          <span class="small secondary">回应指控，讲述真相</span>
+        </div>
+        <div class="card card-blue">
+          <strong>Part II</strong> ⚖️ 你们要怎么罚我<br>
+          <span class="small secondary">量刑辩论</span>
+        </div>
+        <div class="card card-purple">
+          <strong>Part III</strong> 🕊️ 最后几句话<br>
+          <span class="small secondary">临终遗言</span>
+        </div>
+      </div>
+      <div>
+        <h3>🚨 指控内容</h3>
+        <div class="card card-rose card-border-left card-border-coral">
+          <strong>指控 ①</strong><br>
+          <span style="font-size:24px;">😈</span> 腐蚀青年<br>
+          <span class="small secondary">"带坏雅典的年轻人"</span>
+        </div>
+        <div class="card card-rose card-border-left card-border-coral">
+          <strong>指控 ②</strong><br>
+          <span style="font-size:24px;">🚫</span> 不信城邦之神<br>
+          <span class="small secondary">"引入新的神灵"</span>
+        </div>
+        <div class="callout warning mt">
+          <span class="icon">⚠️</span>
+          <div><strong>原告：</strong>美勒托斯（诗人）、安尼托斯（政客）、莱孔（修辞家）</div>
+        </div>
+      </div>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 3: 我的开场白 ==================== -->
+<div class="slide" data-notes="苏格拉底开场就用反讽——说自己不会说话，实际上是高级修辞策略。这种'不修辞的修辞'贯穿全文。">
+  <div class="slide-inner">
+    <h2>🎭 我的开场白</h2>
+    <div class="quote-card">
+      雅典的公民们，我的控告者说得天花乱坠——但几乎没说过一句真话。
+    </div>
+    <div class="card card-blue mt">
+      <p>😤 他们最无耻的说法是让你们提防我的"雄辩"——拜托，<strong>我连法庭话术都不会！</strong></p>
+    </div>
+    <div class="card card-green">
+      <p>🤷 除非"雄辩"就是"说真话"，那我认了。</p>
+    </div>
+    <div class="callout mt">
+      <span class="icon">💡</span>
+      <div>
+        <strong>苏格拉底的策略</strong><br>
+        用"不会说话"来赢得信任。越说自己不懂修辞，越让人觉得他说的是真话。<br>
+        <span class="badge badge-teal mt">反讽大师</span>
+        <span class="badge badge-orange">以退为进</span>
+      </div>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 4: 看不见的敌人 vs 看得见的敌人 ==================== -->
+<div class="slide" data-notes="苏格拉底区分了两类敌人。看不见的敌人更危险，因为多年谣言已经深入人心。阿里斯托芬的喜剧《云》把他丑化成空谈自然哲学的骗子。">
+  <div class="slide-inner">
+    <h2>👻 看不见的敌人 vs 看得见的敌人</h2>
+    <div class="grid2 mt">
+      <div class="card card-purple card-border-left card-border-purple" style="min-height: 220px;">
+        <h3>👻 看不见的敌人</h3>
+        <p>🎭 阿里斯托芬的《云》把我演成怪人——在天上走路、研究虫子</p>
+        <p class="mt">📢 多年积累的谣言，从你们小时候就开始了</p>
+        <div class="quote-card" style="font-size:15px; padding: 14px 18px; margin-top: 12px;">
+          我只能与影子搏斗——连对手的名字都叫不出来。
+        </div>
+        <span class="badge badge-coral mt">更危险</span>
+      </div>
+      <div class="card card-blue card-border-left card-border-blue" style="min-height: 220px;">
+        <h3>👁️ 看得见的敌人</h3>
+        <div class="flex-col gap-sm mt">
+          <div class="card card-white">🪶 <strong>美勒托斯</strong> — 诗人<br><span class="small secondary">代表被我得罪的诗人们</span></div>
+          <div class="card card-white">🏛️ <strong>安尼托斯</strong> — 政客<br><span class="small secondary">代表被我得罪的政客们</span></div>
+          <div class="card card-white">📜 <strong>莱孔</strong> — 修辞家<br><span class="small secondary">代表被我得罪的演说家们</span></div>
+        </div>
+        <span class="badge badge-blue mt">面对面的对手</span>
+      </div>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 5: 德尔斐神谕 ==================== -->
+<div class="slide" data-notes="这是整个申辩的转折点。苏格拉底用神谕来解释他为什么到处找人辩论——不是为了炫耀，而是为了验证神的话。">
+  <div class="slide-inner">
+    <h2>🏛️ 德尔斐神谕</h2>
+    <div class="flex-col mt">
+      <div class="flow-step">
+        <span class="icon">🏃</span>
+        <div class="text">好友<strong>凯瑞丰</strong>跑去德尔斐神庙——这家伙做什么都冲动</div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <span class="icon">🙋</span>
+        <div class="text">问女祭司：<strong>"有没有人比苏格拉底更聪明？"</strong></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background: var(--yellow);">
+        <span class="icon">🔮</span>
+        <div class="text"><strong style="font-size:18px;">神谕："没有。"</strong></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <span class="icon">😱</span>
+        <div class="text">我的反应：<strong>"这不可能！我明明什么都不知道！"</strong></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background: var(--green);">
+        <span class="icon">🔍</span>
+        <div class="text">我的决定：去找一个比我聪明的人来<strong>反驳神谕</strong></div>
+      </div>
+    </div>
+    <div class="callout mt">
+      <span class="icon">🤔</span>
+      <div>但神不会说谎——所以一定是我理解错了。让我去调查调查。</div>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 6: 我的调查报告 ==================== -->
+<div class="slide" data-notes="苏格拉底依次拜访三类人。每次都发现同一个规律：他们在自己的领域确实有能力，但都犯了同一个错——以为自己无所不知。">
+  <div class="slide-inner">
+    <h2>🔍 我的调查报告</h2>
+    <div class="grid3 mt">
+      <div class="card card-blue">
+        <div style="font-size:36px; text-align:center;">🏛️</div>
+        <h3 class="center">政客</h3>
+        <p>自以为有智慧，其实一无所知。</p>
+        <div class="callout" style="background:#d4edfc; margin-top:12px; padding:10px 14px;">
+          <div class="small">我比他强一点——至少<strong>我知道自己不知道</strong>。</div>
+        </div>
+        <div class="center mt"><span class="badge badge-blue">自知之明 +1</span></div>
+      </div>
+      <div class="card card-yellow">
+        <div style="font-size:36px; text-align:center;">🪶</div>
+        <h3 class="center">诗人</h3>
+        <p>写得好但解释不了自己的作品。靠灵感不靠智慧。</p>
+        <div class="callout" style="background:#fff0c4; margin-top:12px; padding:10px 14px;">
+          <div class="small">因为会写诗就以为<strong>什么都懂</strong>。</div>
+        </div>
+        <div class="center mt"><span class="badge badge-yellow">灵感 ≠ 智慧</span></div>
+      </div>
+      <div class="card card-green">
+        <div style="font-size:36px; text-align:center;">🔨</div>
+        <h3 class="center">工匠</h3>
+        <p>手艺确实好——我承认。但也因为手艺好就以为自己是万事通。</p>
+        <div class="callout" style="background:#c8e6c9; margin-top:12px; padding:10px 14px;">
+          <div class="small"><strong>技术好 ≠ 全知</strong></div>
+        </div>
+        <div class="center mt"><span class="badge badge-green">专长陷阱</span></div>
+      </div>
+    </div>
+    <div class="card card-rose mt center" style="padding:16px;">
+      <span style="font-size:20px;">📊</span> 调查结论 → <strong>"名声越大的人，智慧越少"</strong>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 7: 神谕的真相 ==================== -->
+<div class="slide" data-notes="这是苏格拉底哲学的核心——苏格拉底式无知。他不是说自己什么都不知道，而是说他知道人类智慧的局限性。">
+  <div class="slide-inner" style="align-items: center;">
+    <h2>🦉 神谕的真相</h2>
+    <div style="font-size:72px; margin: 8px 0;">🦉</div>
+    <div class="big-quote">
+      只有神有真正的智慧。<br>人类的智慧微不足道。<br>最聪明的人是像我这样——<br><strong>知道自己其实什么都不知道的人。</strong>
+    </div>
+    <div class="flex-row mt" style="justify-content:center;">
+      <span class="badge badge-orange">① 神用我做例证</span>
+      <span class="badge badge-teal">② 真智慧属于神</span>
+      <span class="badge badge-blue">③ 我只比别人多一点自知之明</span>
+    </div>
+    <div class="card card-rose mt center">
+      💰 <strong>代价：赤贫。</strong> 我忙着替神干活，完全无暇谋生。
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 8: 为什么你们恨我 ==================== -->
+<div class="slide" data-notes="苏格拉底分析了自己不受欢迎的原因。被他揭穿的人恼羞成怒，加上年轻人模仿他到处质问长辈，让情况雪上加霜。">
+  <div class="slide-inner">
+    <h2>😡 为什么你们恨我</h2>
+    <div class="card card-yellow mt">
+      <p>😤 每次我揭穿一个人，他就恨我。他们说不出我到底做了什么坏事，就搬出那些<strong>老套指控</strong>：</p>
+      <div class="flex-row mt gap-sm">
+        <span class="badge badge-coral">"研究天上的东西"</span>
+        <span class="badge badge-coral">"研究地下的东西"</span>
+        <span class="badge badge-coral">"不信神"</span>
+        <span class="badge badge-coral">"颠倒黑白"</span>
+      </div>
+    </div>
+    <div class="card card-blue mt">
+      <p>👦 更糟的是——<strong>你们的孩子开始模仿我</strong>去审问人。</p>
+      <p>然后那些被审问的人把气撒到我头上：</p>
+      <p style="font-style:italic; color: var(--coral);">"都是苏格拉底教坏的！"</p>
+    </div>
+    <div class="callout warning mt">
+      <span class="icon">🚨</span>
+      <div>
+        <strong>这就是今天这场审判的真正原因。</strong><br>
+        不是什么"腐蚀青年"或"不敬神"——而是<strong>面子挂不住</strong>。
+      </div>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 9: 法庭交锋：驯马师陷阱 ==================== -->
+<div class="slide" data-notes="这是苏格拉底式反诘法的经典展示。他用马的类比让美勒托斯的指控不攻自破——不可能所有人都能改善青年而只有一个人在腐蚀。">
+  <div class="slide-inner">
+    <h2>🐴 法庭交锋：驯马师陷阱</h2>
+    <div class="flex-col mt">
+      <div class="flow-step" style="background: var(--blue);">
+        <span class="icon">1️⃣</span>
+        <div class="text">我问美勒托斯：<strong>谁是青年的改善者？</strong></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background: var(--rose);">
+        <span class="icon">2️⃣</span>
+        <div class="text">他答：<strong>所有雅典人！</strong>只有我一个人在腐蚀！</div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background: var(--yellow);">
+        <span class="icon">3️⃣</span>
+        <div class="text">我的反击：那<strong>马</strong>呢？是所有人都能训好马，还是只有<strong>专业驯马师</strong>？</div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background: var(--green);">
+        <span class="icon">4️⃣</span>
+        <div class="text">答案：当然是<strong>少数专家</strong>。</div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="background: var(--yellow); border: 2px solid var(--orange);">
+        <span class="icon">5️⃣</span>
+        <div class="text"><strong>结论：一个人腐蚀、所有人改善？荒谬！</strong></div>
+      </div>
+    </div>
+    <div class="callout mt">
+      <span class="icon">🎯</span>
+      <div>而且如果我腐蚀了身边的人，他们反过来会伤害我——<strong>我为什么要害自己？</strong>如果是无意的，应该私下教育我而不是告上法庭。</div>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 10: 逻辑陷阱：不信神？ ==================== -->
+<div class="slide" data-notes="苏格拉底用严密的逻辑推理让美勒托斯自相矛盾。控告书本身就承认他信某种神灵，却又说他不信——这是逻辑上的不可能。">
+  <div class="slide-inner">
+    <h2>🪤 逻辑陷阱：不信神？</h2>
+    <div class="card card-blue mt">
+      <h3>逻辑推演链</h3>
+      <div class="flex-col mt gap-sm">
+        <div class="card card-white" style="padding:12px 16px;">📜 控告书说我<strong>"信奉神灵之事"</strong></div>
+        <div class="flow-arrow">↓</div>
+        <div class="card card-white" style="padding:12px 16px;">🤔 能信神灵之事而不信精灵？→ <strong>不能</strong></div>
+        <div class="flow-arrow">↓</div>
+        <div class="card card-white" style="padding:12px 16px;">✨ 精灵 = 神 或 <strong>神的后代</strong></div>
+        <div class="flow-arrow">↓</div>
+        <div class="card card-yellow" style="padding:12px 16px; border: 2px solid var(--coral);">
+          💥 所以你说我不信神，又说我信神 → <strong>自相矛盾！</strong>
+        </div>
+      </div>
+    </div>
+    <div class="card card-green mt">
+      <span style="font-size:28px;">🫏</span>
+      <p class="mt"><strong>苏格拉底的类比：</strong>"这就像说骡子存在，但马和驴不存在——有这种道理吗？"</p>
+    </div>
+    <div class="card card-rose mt center">
+      <strong>裁决：</strong>"美勒托斯，你找不到真正的罪名来告我。"
+      <span class="badge badge-coral" style="margin-left:8px;">指控破产</span>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 11: 我是一只牛虻 ==================== -->
+<div class="slide" data-notes="牛虻比喻是《申辩》中最著名的段落之一。苏格拉底将自己定位为城邦的觉醒者——不是敌人，而是最忠诚的服务者。">
+  <div class="slide-inner" style="align-items: center;">
+    <h2>🐝 我是一只牛虻</h2>
+    <div style="font-size:72px; margin: 8px 0;">🐝</div>
+    <div class="big-quote" style="background: linear-gradient(135deg, var(--yellow), var(--blue));">
+      雅典是一匹高贵但懒惰的骏马。<br>
+      我是神派来叮它的<strong>牛虻</strong>。
+    </div>
+    <div class="grid2 mt">
+      <div class="card card-rose">
+        <p>😴 你们可以一巴掌拍死我，然后继续睡大觉——</p>
+        <p class="mt"><strong>除非神再派一只来。</strong></p>
+      </div>
+      <div class="card card-green">
+        <p>💰 不信？看看我的穷就知道了。</p>
+        <p class="mt"><strong>谁会为了自讨苦吃而放弃一切？</strong></p>
+        <p class="small secondary mt">我没有从任何人那里收过一分钱。</p>
+      </div>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 12: 我的两次抗命 ==================== -->
+<div class="slide" data-notes="这两个故事展示了苏格拉底的一致性——无论当权者是民主还是暴政，他都坚持正义，哪怕冒生命危险。">
+  <div class="slide-inner">
+    <h2>⚔️ 我的两次抗命</h2>
+    <div class="grid2 mt-lg">
+      <div class="card card-blue card-border-left card-border-blue" style="min-height:200px;">
+        <span class="badge badge-blue">🏛️ 民主政体下</span>
+        <span class="badge badge-outline" style="border-color:var(--accent-blue); color:var(--accent-blue);">406 BC</span>
+        <h3 class="mt">阿吉纽西将军审判案</h3>
+        <p>他们要违法集体审判十位将军。</p>
+        <p class="mt"><strong>我是执政团唯一的反对者。</strong></p>
+        <p class="mt" style="color:var(--coral);">被威胁逮捕也不改口。</p>
+      </div>
+      <div class="card card-rose card-border-left card-border-coral" style="min-height:200px;">
+        <span class="badge badge-coral">👑 暴政下</span>
+        <span class="badge badge-outline" style="border-color:var(--coral); color:var(--coral);">404 BC</span>
+        <h3 class="mt">三十僭主的命令</h3>
+        <p>让我和另外四个人去抓萨拉米斯人莱昂回来处死。</p>
+        <p class="mt">其他四个人去了。<strong>我？我回家了。</strong></p>
+        <p class="mt" style="color:var(--coral);">差点因此送命。</p>
+      </div>
+    </div>
+    <div class="card card-yellow mt center" style="padding:16px;">
+      ⚖️ <strong>无论民主还是暴政，我只听正义的。</strong>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 13: 我不会求饶 ==================== -->
+<div class="slide" data-notes="苏格拉底拒绝用感情戏码来博取同情。这在当时的雅典法庭非常罕见——大多数被告都会带家人来哭。">
+  <div class="slide-inner">
+    <h2>😤 我不会求饶</h2>
+    <div class="card card-yellow mt">
+      <p style="font-size:18px;">👨‍👦‍👦 我有三个儿子。但我<strong>不会</strong>把他们带来哭给你们看。</p>
+    </div>
+    <h3 class="mt-lg">为什么？三个理由：</h3>
+    <div class="grid3 mt">
+      <div class="card card-rose" style="text-align:center;">
+        <div style="font-size:36px;">① 😳</div>
+        <p class="mt"><strong>丢人</strong></p>
+        <p class="small secondary">一个七十岁的人，跪在那里嚎哭？不体面。</p>
+      </div>
+      <div class="card card-blue" style="text-align:center;">
+        <div style="font-size:36px;">② 🏛️</div>
+        <p class="mt"><strong>丢雅典的人</strong></p>
+        <p class="small secondary">外邦人会说："雅典所谓的贤者也不过如此。"</p>
+      </div>
+      <div class="card card-purple" style="text-align:center;">
+        <div style="font-size:36px;">③ ⚖️</div>
+        <p class="mt"><strong>丢你们的人</strong></p>
+        <p class="small secondary">你们宣誓依法审判。让我哭着求你们违背誓言？而我自己正因"不虔诚"受审？</p>
+      </div>
+    </div>
+    <div class="callout mt">
+      <span class="icon">🎯</span>
+      <div>如果我靠哭来说服你们——那恰好证明了我在教你们<strong>不敬神</strong>。</div>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 14: 判决：有罪 ==================== -->
+<div class="slide" data-notes="501人投票，大约280对221。仅30票之差。苏格拉底自己也注意到了——如果翻转30票就无罪了。这为第二阶段的量刑辩论做了铺垫。">
+  <div class="slide-inner" style="justify-content: center; align-items: center; text-align: center;">
+    <span class="badge badge-coral" style="font-size:16px; padding: 8px 24px;">Part I 结束</span>
+    <h1 class="mt-lg" style="font-size:56px; color: var(--coral);">⚖️ 判决：有罪</h1>
+    <div class="grid3 mt-lg" style="max-width:600px;">
+      <div class="stat-card" style="background: var(--rose);">
+        <div class="num" style="color:var(--coral);">~280</div>
+        <div class="label">有罪票</div>
+      </div>
+      <div class="stat-card" style="background: var(--green);">
+        <div class="num" style="color:#43a047;">~221</div>
+        <div class="label">无罪票</div>
+      </div>
+      <div class="stat-card" style="background: var(--yellow);">
+        <div class="num" style="color:var(--orange);">~30</div>
+        <div class="label">票差</div>
+      </div>
+    </div>
+    <div class="card card-yellow mt-lg" style="max-width:600px;">
+      <p>🤔 如果只翻转 <strong>30票</strong>，我就自由了。</p>
+      <p class="small secondary mt">有趣的是——如果没有安尼托斯和莱孔加入，美勒托斯连五分之一的票都拿不到，还得交罚款。</p>
+    </div>
+    <div class="mt-lg">
+      <span class="badge badge-blue" style="font-size:16px; padding: 8px 24px;">进入 Part II → 量刑辩论</span>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 15: 我该受什么"罚" ==================== -->
+<div class="slide" data-notes="量刑阶段，苏格拉底的建议震惊了所有人——他要求的是奖赏而不是惩罚。在普里坦内翁免费用餐是雅典最高荣誉之一。">
+  <div class="slide-inner">
+    <h2>🍽️ 我该受什么"罚"</h2>
+    <div class="card card-yellow mt">
+      <p style="font-size:18px;">🏆 我是你们的恩人。我建议：<strong>在普里坦内翁公共食堂免费用餐</strong>——比奥林匹亚冠军更有资格！</p>
+      <p class="small secondary mt">他们给你短暂的快乐，我给你真正的幸福。而且——他们不缺钱，我缺。</p>
+    </div>
+    <h3 class="mt-lg">我拒绝的"选项"：</h3>
+    <div class="grid4 mt">
+      <div class="card card-rose center">
+        <div style="font-size:28px;">❌</div>
+        <p><strong>死刑</strong></p>
+        <p class="small secondary">我不知道死亡是好是坏</p>
+      </div>
+      <div class="card card-rose center">
+        <div style="font-size:28px;">❌</div>
+        <p><strong>监禁</strong></p>
+        <p class="small secondary">做监狱的奴隶？</p>
+      </div>
+      <div class="card card-rose center">
+        <div style="font-size:28px;">❌</div>
+        <p><strong>流放</strong></p>
+        <p class="small secondary">别处也容不下我</p>
+      </div>
+      <div class="card card-rose center">
+        <div style="font-size:28px;">❌</div>
+        <p><strong>沉默</strong></p>
+        <p class="small secondary">那不叫活着</p>
+      </div>
+    </div>
+    <div class="card card-green mt center">
+      <p>💰 <strong>最终提议：30弥那罚款</strong>（柏拉图、克里托等朋友们担保）</p>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 16: 未经审视的人生 ==================== -->
+<div class="slide" data-notes="这是西方哲学史上最著名的格言之一。苏格拉底用它来解释为什么他不可能选择沉默——对他来说，不思考等于不活着。">
+  <div class="slide-inner" style="justify-content: center; align-items: center; text-align: center;">
+    <div style="font-size:56px; margin-bottom:16px;">💡</div>
+    <div style="font-size:40px; font-weight:900; line-height:1.5; max-width:800px;">
+      未经审视的人生<br>不值得过。
+    </div>
+    <div class="mt" style="font-size:16px; color: var(--text2); font-style:italic; letter-spacing: 1px;">
+      ὁ δὲ ἀνεξέταστος βίος οὐ βιωτὸς ἀνθρώπῳ
+    </div>
+    <div class="card card-yellow mt-lg" style="max-width:700px; text-align:left;">
+      <p>🗣️ 每天谈论美德、审视自己和他人——<strong>这是人最大的善</strong>。</p>
+      <p class="mt">让我闭嘴？不可能。这就像让鱼离开水。</p>
+    </div>
+    <div class="flex-row mt-lg" style="justify-content:center;">
+      <span class="badge badge-orange" style="font-size:14px; padding:6px 16px;">哲学史最强金句</span>
+      <span class="badge badge-teal" style="font-size:14px; padding:6px 16px;">2400年后仍在引用</span>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 17: 判决：死刑 ==================== -->
+<div class="slide" data-notes="第二次投票，支持死刑的人反而比第一次判有罪的更多。苏格拉底的'傲慢'量刑建议激怒了很多本来同情他的陪审员。">
+  <div class="slide-inner" style="justify-content: center; align-items: center; text-align: center;">
+    <span class="badge badge-coral" style="font-size:16px; padding: 8px 24px;">Part II 结束</span>
+    <h1 class="mt-lg" style="font-size:64px; color: var(--coral);">☠️ 判决：死刑</h1>
+    <div class="card card-rose mt-lg" style="max-width:600px;">
+      <p>第二次投票中，判死刑的票数比判有罪时<strong>反而更多</strong>。</p>
+      <p class="small secondary mt">我的"免费用餐"建议显然惹恼了一些人。但我不后悔。</p>
+    </div>
+    <div class="mt-lg">
+      <span class="badge badge-purple" style="font-size:16px; padding: 8px 24px;">进入 Part III → 最后的话</span>
+    </div>
+    <svg width="120" height="3" class="mt-lg"><line x1="0" y1="1.5" x2="120" y2="1.5" stroke="var(--coral)" stroke-width="2" stroke-dasharray="6,4"/></svg>
+    <p class="secondary mt" style="font-size:14px;">方式：饮下毒芹汁（因等候宗教节日推迟约30天执行）</p>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 18: 致判我死刑的人 ==================== -->
+<div class="slide" data-notes="苏格拉底的最后演说分两部分——先对投票判他死刑的人说，再对投无罪票的人说。这一页是前者，语气从容但带有预言的力量。">
+  <div class="slide-inner">
+    <h2>🏃 致判我死刑的人</h2>
+    <div class="big-quote" style="font-size:24px;">
+      我宁愿以我的方式说话而死，<br>也不愿以你们的方式说话而活。
+    </div>
+    <div class="grid2 mt">
+      <div class="card card-blue card-border-left card-border-blue">
+        <h3>🏃 赛跑比喻</h3>
+        <p><strong>不义</strong>比死亡跑得更快。</p>
+        <p class="mt">死亡追上了我这个老头——这不难。</p>
+        <p class="mt" style="color:var(--coral);"><strong>但不义追上了你们——这才可怕。</strong></p>
+      </div>
+      <div class="card card-rose card-border-left card-border-coral">
+        <h3>🔮 预言</h3>
+        <p>我死后，<strong>更多更年轻的人</strong>会来质问你们。</p>
+        <p class="mt">杀人堵不住嘴。</p>
+        <p class="mt" style="color:var(--teal);"><strong>改善自己吧——这才是唯一的出路。</strong></p>
+      </div>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 19: 论死亡 ==================== -->
+<div class="slide" data-notes="苏格拉底对死亡的两种可能性的分析是整部《申辩》最温柔的部分。他用逻辑把恐惧化解为好奇——无论哪种情况，死亡都不是坏事。">
+  <div class="slide-inner">
+    <h2>💤 论死亡</h2>
+    <div class="callout mt">
+      <span class="icon">🤫</span>
+      <div>我的<strong>神灵之声</strong>今天全程沉默——它通常会阻止我做错事。所以今天发生的一切，<strong>一定是件好事</strong>。</div>
+    </div>
+    <h3 class="mt-lg">死亡的两种可能：</h3>
+    <div class="grid2 mt">
+      <div class="card card-blue" style="min-height:200px;">
+        <div style="font-size:42px; text-align:center;">😴</div>
+        <h3 class="center">无梦之眠</h3>
+        <p>永恒不过是一个安详的夜晚。</p>
+        <div class="quote-card" style="font-size:14px; padding:12px 16px; margin-top:12px;">
+          波斯大王数遍自己的一生，都找不出几个这样无梦的好觉。
+        </div>
+        <div class="center mt"><span class="badge badge-blue">赚了</span></div>
+      </div>
+      <div class="card card-yellow" style="min-height:200px;">
+        <div style="font-size:42px; text-align:center;">✨</div>
+        <h3 class="center">灵魂迁徙</h3>
+        <p>去另一个世界——遇见<strong>荷马</strong>！<strong>赫西俄德</strong>！<strong>奥德修斯</strong>！</p>
+        <p class="mt">还能继续提问——</p>
+        <p style="color:var(--teal);"><strong>最棒的是，那边不会因为提问就判死刑。</strong></p>
+        <div class="center mt"><span class="badge badge-yellow">更赚了</span></div>
+      </div>
+    </div>
+    <div class="card card-green mt center">
+      <strong>结论：无论哪种情况，死亡都不是坏事。</strong> 所以，请别替我悲伤。
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 20: 最后的话 ==================== -->
+<div class="slide" data-notes="苏格拉底的最后遗言。他没有绝望，没有愤怒，只是平静地托付了自己的孩子。最后那句'哪一个更好，只有神知道'是完美的收束。">
+  <div class="slide-inner" style="align-items: center;">
+    <h2>🕊️ 最后的话</h2>
+    <div class="big-quote" style="font-size:24px; background: linear-gradient(135deg, var(--green), var(--blue));">
+      好人无论生死<br>都不会遭受真正的恶。<br>神不会忽视他的事。
+    </div>
+    <div class="card card-yellow mt" style="max-width:700px;">
+      <p>🙏 <strong>我的最后请求：</strong></p>
+      <p class="mt">等我儿子长大了，如果他们追逐金钱而忽视美德，如果他们自以为了不起——</p>
+      <p class="mt" style="color:var(--orange);"><strong>请像我折磨你们一样折磨他们。</strong></p>
+    </div>
+    <div class="mt-lg" style="max-width:700px;">
+      <div style="font-size:28px; font-weight:900; line-height:1.8; text-align:center; padding: 24px; background: linear-gradient(135deg, var(--yellow), var(--rose)); border-radius: 20px;">
+        离别的时刻已经到来。<br>
+        我去赴死，你们去生活。<br>
+        <span style="color:var(--teal);">哪一个更好，只有神知道。</span>
+      </div>
+    </div>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 21: 谢谢 ==================== -->
+<div class="slide" data-notes="感谢大家的聆听。苏格拉底的申辩是人类思想史上最动人的文献之一。两千四百年后的今天，他的问题依然值得我们每个人思考。">
+  <div class="slide-inner" style="justify-content: center; align-items: center; text-align: center;">
+    <div style="font-size:72px; margin-bottom:16px;">🙏</div>
+    <h1 style="font-size:48px;">谢谢</h1>
+    <p class="secondary mt" style="font-size:18px;">Thank You</p>
+    <svg width="80" height="3" class="mt"><line x1="0" y1="1.5" x2="80" y2="1.5" stroke="var(--orange)" stroke-width="2"/></svg>
+    <div class="quote-card mt-lg" style="max-width:600px; text-align:left; font-size:16px;">
+      我知道我一无所知。<br>
+      <span class="small secondary" style="font-style:italic;">— 苏格拉底 (c. 470–399 BC)</span>
+    </div>
+    <div class="flex-row mt-lg" style="justify-content:center;">
+      <span class="badge badge-orange">📖 柏拉图记录</span>
+      <span class="badge badge-teal">🏛️ 雅典 399 BC</span>
+      <span class="badge badge-blue">🦉 哲学永恒</span>
+    </div>
+    <p class="small secondary mt-lg">按 N 查看演讲笔记 · 按 ←→ 或点击按钮翻页 · 按 F 全屏</p>
+    <div class="speaker-notes"></div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- ============ CONTROLS ============ -->
+<div class="controls">
+  <button class="outline" onclick="goTo(0)" title="第一页">⏮</button>
+  <button onclick="prev()" title="上一页">← 上一页</button>
+  <button onclick="next()" title="下一页">下一页 →</button>
+  <button class="outline" onclick="goTo(totalSlides-1)" title="最后一页">⏭</button>
+  <button class="outline" onclick="toggleNotes()" title="演讲笔记 (N)">🎙</button>
+  <button class="outline" onclick="toggleFullscreen()" title="全屏 (F)">⛶</button>
+</div>
+
+<script>
+// ============ SLIDE ENGINE ============
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let current = 0;
+let notesVisible = false;
+
+function showSlide(n) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(n, totalSlides - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = (current + 1) + ' / ' + totalSlides;
+  document.getElementById('progressBar').style.width = ((current + 1) / totalSlides * 100) + '%';
+  // Update hash
+  history.replaceState(null, '', '#' + (current + 1));
+}
+
+function next() { showSlide(current + 1); }
+function prev() { showSlide(current - 1); }
+function goTo(n) { showSlide(n); }
+
+function toggleNotes() {
+  notesVisible = !notesVisible;
+  document.querySelectorAll('.speaker-notes').forEach(n => {
+    n.classList.toggle('show', notesVisible);
+  });
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+// Populate speaker notes from data attribute
+slides.forEach(slide => {
+  const note = slide.getAttribute('data-notes');
+  const noteEl = slide.querySelector('.speaker-notes');
+  if (note && noteEl) {
+    noteEl.textContent = note;
+    // Re-add the ::before pseudo via keeping the element
+  }
+});
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  switch(e.key) {
+    case 'ArrowRight': case 'ArrowDown': case ' ': case 'PageDown':
+      e.preventDefault(); next(); break;
+    case 'ArrowLeft': case 'ArrowUp': case 'PageUp':
+      e.preventDefault(); prev(); break;
+    case 'Home': e.preventDefault(); goTo(0); break;
+    case 'End': e.preventDefault(); goTo(totalSlides - 1); break;
+    case 'n': case 'N': toggleNotes(); break;
+    case 'f': case 'F': if(!e.ctrlKey && !e.metaKey) toggleFullscreen(); break;
+  }
+});
+
+// Touch / swipe
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+document.addEventListener('touchend', e => {
+  const diff = e.changedTouches[0].screenX - touchStartX;
+  if (Math.abs(diff) > 50) { diff < 0 ? next() : prev(); }
+});
+
+// Hash navigation
+function initFromHash() {
+  const hash = parseInt(location.hash.replace('#', ''));
+  if (hash >= 1 && hash <= totalSlides) { showSlide(hash - 1); }
+  else { showSlide(0); }
+}
+initFromHash();
+</script>
+</body>
+</html>

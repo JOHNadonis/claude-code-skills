@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 强力新材 最新股价 量比 BOLL布林线 换手率
+数据文件路径: workspace/MX_FinData/MX_FinData_132661be.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_132661be_description.txt
+数据行数: 6
+表数量: 3
+Sheet 列表: 强力新材(300429.SZ)的BOLL布林线、量比, 强力新材(300429.SZ)当前的最新价、换手率, 强力新材(300429.SZ)的收盘价、换手率

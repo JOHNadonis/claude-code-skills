@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>苏格拉底申辩篇 — 5种风格PPT在线演示</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Noto Sans SC', sans-serif; background: #0f1f18; color: #f0ead6; min-height: 100vh; }
+  .hero { text-align: center; padding: 80px 20px 40px; }
+  .hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 16px; }
+  .hero p { font-size: 1.1rem; opacity: 0.7; max-width: 600px; margin: 0 auto 32px; line-height: 1.8; }
+  .badge { display: inline-block; background: #C44536; color: #fff; padding: 6px 16px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; }
+  .grid { max-width: 1100px; margin: 0 auto; padding: 40px 20px 80px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  .card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; text-decoration: none; color: inherit; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  .card-preview { height: 200px; position: relative; overflow: hidden; }
+  .card-preview iframe { width: 1920px; height: 1080px; border: none; transform: scale(0.18); transform-origin: 0 0; pointer-events: none; }
+  .card-body { padding: 20px; }
+  .card-body h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+  .card-body p { font-size: 0.9rem; opacity: 0.6; line-height: 1.6; }
+  .card-tags { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .tag { padding: 3px 10px; border-radius: 999px; font-size: 0.75rem; background: rgba(255,255,255,0.1); }
+  .footer { text-align: center; padding: 40px 20px; opacity: 0.4; font-size: 0.85rem; }
+  .footer a { color: #C44536; text-decoration: none; }
+</style>
+</head>
+<body>
+  <div class="hero">
+    <h1>苏格拉底的申辩篇<br>5种风格 PPT 在线演示</h1>
+    <p>点击任意卡片，即可在浏览器中播放完整幻灯片。支持键盘翻页、全屏演示、自动播放、演讲者备注和PDF导出。</p>
+    <span class="badge">基于 awesome-design-md · 已开源</span>
+  </div>
+  <div class="grid">
+    <a class="card" href="greek-academy.html" target="_blank">
+      <div class="card-preview"><iframe src="greek-academy.html" loading="lazy"></iframe></div>
+      <div class="card-body">
+        <h3>🏛️ 古希腊学院风</h3>
+        <p>大理石纹理、希腊回纹边框、月桂冠SVG、Playfair Display 衬线体</p>
+        <div class="card-tags"><span class="tag">学术演讲</span><span class="tag">历史主题</span><span class="tag">21页</span></div>
+      </div>
+    </a>
+    <a class="card" href="sunny-cards.html" target="_blank">
+      <div class="card-preview"><iframe src="sunny-cards.html" loading="lazy"></iframe></div>
+      <div class="card-body">
+        <h3>☀️ 阳光明媚 · 卡片风</h3>
+        <p>暖米色底、彩色圆角卡片、emoji图标装饰、Noto Sans SC</p>
+        <div class="card-tags"><span class="tag">课堂分享</span><span class="tag">团队培训</span><span class="tag">21页</span></div>
+      </div>
+    </a>
+    <a class="card" href="state-enterprise.html" target="_blank">
+      <div class="card-preview"><iframe src="state-enterprise.html" loading="lazy"></iframe></div>
+      <div class="card-body">
+        <h3>🏢 国企汇报风</h3>
+        <p>深红渐变、编号红圈面板、统计卡片、warning-box、正式严肃</p>
+        <div class="card-tags"><span class="tag">述职报告</span><span class="tag">政府项目</span><span class="tag">21页</span></div>
+      </div>
+    </a>
+    <a class="card" href="ted-talk.html" target="_blank">
+      <div class="card-preview"><iframe src="ted-talk.html" loading="lazy"></iframe></div>
+      <div class="card-body">
+        <h3>🎤 TED 演讲风</h3>
+        <p>黑底聚光灯、巨大冲击数字、一页一观点、戏剧性揭示</p>
+        <div class="card-tags"><span class="tag">公开演讲</span><span class="tag">思想传播</span><span class="tag">21页</span></div>
+      </div>
+    </a>
+    <a class="card" href="chinese-ink.html" target="_blank">
+      <div class="card-preview"><iframe src="chinese-ink.html" loading="lazy"></iframe></div>
+      <div class="card-body">
+        <h3>🎨 水墨中国风</h3>
+        <p>宣纸底、墨山水SVG、朱红印章、竖排文字、半文言语气</p>
+        <div class="card-tags"><span class="tag">文化主题</span><span class="tag">国风场景</span><span class="tag">20页</span></div>
+      </div>
+    </a>
+  </div>
+  <div class="footer">
+    <p>设计系统基于 <a href="https://github.com/VoltAgent/awesome-design-md" target="_blank">VoltAgent/awesome-design-md</a> · 由 <a href="https://github.com/OrangeViolin/01fish-assistant" target="_blank">01fish</a> 制作</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 高澜股份 300499 最新股价 技术面 BOLL布林线 上轨 中轨 下轨
+数据文件路径: workspace/MX_FinData/MX_FinData_b3e65ada.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_b3e65ada_description.txt
+数据行数: 4
+表数量: 2
+Sheet 列表: 高澜股份(300499.SZ)的BOLL布林线UP、BOLL布, 高澜股份(300499.SZ)的收盘价

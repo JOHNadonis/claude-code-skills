@@ -1,0 +1,29 @@
+{
+  "result_id": "batch_dividend_lowvol_quality_batch_20260502_224330",
+  "strategy_id": "batch_dividend_lowvol_quality",
+  "platform": "local_csv",
+  "engine": "local_csv_simple",
+  "created_at": "2026-05-02 22:43:30",
+  "spec_hash": "sha256:3a7997172573f7a3161d060e3b27b8acbb9a396e8bea62627c62cfb35fa9a7a5",
+  "data_hash": "sha256:2213a5587248e0fecf0be987de4a9af6816bac2f8016e658e9f3f2116dfe3b86",
+  "metrics": {
+    "total_return": 0.361126,
+    "annual_return": 1.285397,
+    "annual_volatility": 0.038319,
+    "sharpe": 21.624245,
+    "max_drawdown": -0.001298,
+    "win_rate": 0.925532,
+    "turnover": 1.0,
+    "rebalance_count": 5,
+    "average_holdings": 6.0
+  },
+  "artifacts": {
+    "equity_curve_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/batch_dividend_lowvol_quality_batch_20260502_224330/equity_curve.csv",
+    "positions_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/batch_dividend_lowvol_quality_batch_20260502_224330/positions.csv",
+    "trades_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/batch_dividend_lowvol_quality_batch_20260502_224330/trades.csv"
+  },
+  "warnings": [
+    "Sharpe 异常高，优先检查样本、未来函数、合成数据或成交假设。",
+    "年化收益异常高，不能作为实盘依据，必须用真实数据和样本外复核。"
+  ]
+}

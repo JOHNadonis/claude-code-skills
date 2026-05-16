@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的申辩 — 苏格拉底 · 水墨中国风</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ========== RESET & BASE ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --rice-paper: #f7f3eb;
+  --rice-paper-text: #f0ead6;
+  --ink-black: #1a1a18;
+  --vermillion: #c23b22;
+  --indigo: #2c4a6e;
+  --gold: #b8860b;
+  --diluted-ink: #6b6355;
+  --font-display: 'Noto Serif SC', 'Songti SC', serif;
+  --font-body: 'Noto Sans SC', 'PingFang SC', sans-serif;
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--ink-black);
+  color: var(--ink-black);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========== PAPER TEXTURE ========== */
+.paper-texture::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.paper-texture-dark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ========== SLIDE ENGINE ========== */
+.slide-deck {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.slide {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0; left: 0;
+  display: none;
+  overflow: hidden;
+  padding: 60px 80px;
+}
+
+.slide.active { display: flex; }
+
+.slide.light {
+  background: var(--rice-paper);
+  color: var(--ink-black);
+}
+
+.slide.dark {
+  background: var(--ink-black);
+  color: var(--rice-paper-text);
+}
+
+.slide.vermillion-bg {
+  background: var(--vermillion);
+  color: var(--rice-paper-text);
+}
+
+/* Ink wash effect on dark slides */
+.slide.dark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(44,74,110,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(26,26,24,0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(194,59,34,0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.slide > * { position: relative; z-index: 2; }
+
+/* ========== TYPOGRAPHY ========== */
+.display-text {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+}
+
+.display-xl {
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.display-xxl {
+  font-family: var(--font-display);
+  font-size: 120px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.body-text {
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.9;
+  color: var(--ink-black);
+}
+
+.body-text.on-dark { color: var(--rice-paper-text); }
+
+.diluted { color: var(--diluted-ink); }
+.vermillion { color: var(--vermillion); }
+.gold-text { color: var(--gold); }
+.indigo-text { color: var(--indigo); }
+
+.spaced-chars { letter-spacing: 0.4em; }
+
+/* ========== VERTICAL TEXT ========== */
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-family: var(--font-display);
+}
+
+.vertical-sidebar {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 0.3em;
+  opacity: 0.3;
+  z-index: 2;
+}
+
+.vertical-sidebar.left {
+  right: auto;
+  left: 40px;
+}
+
+.vertical-sidebar.on-dark { color: var(--rice-paper-text); }
+
+/* ========== SVG COMPONENTS ========== */
+
+/* Seal stamp */
+.seal-stamp {
+  position: absolute;
+  bottom: 50px;
+  right: 60px;
+  z-index: 10;
+}
+
+/* Ink mountains */
+.ink-mountains {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.ink-mountains.higher { opacity: 0.25; }
+
+/* Enso circle */
+.enso-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========== BRUSH STROKE DIVIDER ========== */
+.brush-divider {
+  width: 200px;
+  height: 8px;
+  margin: 20px 0;
+}
+
+.brush-divider-long {
+  width: 400px;
+  height: 6px;
+  margin: 24px 0;
+}
+
+/* ========== HANGING SCROLL ========== */
+.hanging-scroll {
+  background: rgba(247,243,235,0.06);
+  border: 1px solid rgba(240,234,214,0.1);
+  border-radius: 3px;
+  padding: 32px 28px;
+  position: relative;
+}
+
+.hanging-scroll::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12px;
+  right: 12px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--vermillion), var(--vermillion), transparent);
+  border-radius: 2px;
+}
+
+.hanging-scroll.on-light {
+  background: rgba(26,26,24,0.03);
+  border: 1px solid rgba(26,26,24,0.08);
+}
+
+.hanging-scroll.on-light::before {
+  background: linear-gradient(90deg, transparent, var(--vermillion), var(--vermillion), transparent);
+}
+
+/* ========== CARDS ========== */
+.ink-card {
+  background: rgba(247,243,235,0.05);
+  border: 1px solid rgba(240,234,214,0.08);
+  border-radius: 3px;
+  padding: 28px 24px;
+  position: relative;
+}
+
+.ink-card.on-light {
+  background: rgba(26,26,24,0.02);
+  border: 1px solid rgba(26,26,24,0.08);
+  box-shadow: 0 2px 12px rgba(26,26,24,0.04);
+}
+
+.ink-card .card-label {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* ========== INK SPLASH ========== */
+.ink-splash {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(26,26,24,0.06) 0%, rgba(26,26,24,0.02) 30%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ink-splash.dark-splash {
+  background: radial-gradient(ellipse at center, rgba(240,234,214,0.04) 0%, rgba(240,234,214,0.01) 30%, transparent 70%);
+}
+
+/* ========== QUOTE BLOCK ========== */
+.quote-block {
+  border-left: 3px solid var(--vermillion);
+  padding-left: 24px;
+  margin: 16px 0;
+}
+
+/* ========== DOT MARKERS ========== */
+.seal-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: var(--vermillion);
+  border-radius: 1px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* ========== LOGIC FLOW ========== */
+.logic-flow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-family: var(--font-display);
+  font-size: 18px;
+}
+
+.logic-flow .arrow { opacity: 0.4; }
+
+/* ========== NAVIGATION ========== */
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(128,128,128,0.15);
+  z-index: 1000;
+}
+
+.nav-progress {
+  height: 100%;
+  background: var(--vermillion);
+  transition: width 0.4s ease;
+}
+
+.slide-counter {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(128,128,128,0.5);
+  z-index: 1000;
+}
+
+/* ========== SPEAKER NOTES ========== */
+.speaker-notes {
+  display: none;
+}
+
+.show-notes .speaker-notes {
+  display: block;
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  max-height: 180px;
+  overflow-y: auto;
+  background: rgba(26,26,24,0.92);
+  color: var(--rice-paper-text);
+  padding: 20px 28px;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.8;
+  z-index: 999;
+  backdrop-filter: blur(8px);
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes brushIn {
+  from { transform: scaleX(0); transform-origin: left; }
+  to { transform: scaleX(1); transform-origin: left; }
+}
+
+.slide.active .anim-fade { animation: fadeIn 0.8s ease both; }
+.slide.active .anim-up { animation: fadeInUp 0.7s ease both; }
+.slide.active .anim-up-d1 { animation: fadeInUp 0.7s ease 0.15s both; }
+.slide.active .anim-up-d2 { animation: fadeInUp 0.7s ease 0.3s both; }
+.slide.active .anim-up-d3 { animation: fadeInUp 0.7s ease 0.45s both; }
+.slide.active .anim-up-d4 { animation: fadeInUp 0.7s ease 0.6s both; }
+.slide.active .anim-up-d5 { animation: fadeInUp 0.7s ease 0.75s both; }
+
+/* ========== PRINT CSS ========== */
+@media print {
+  body { overflow: visible; background: white; }
+  .slide {
+    display: flex !important;
+    position: relative !important;
+    page-break-after: always;
+    height: auto;
+    min-height: 100vh;
+  }
+  .nav-bar, .nav-progress, .slide-counter { display: none !important; }
+  .speaker-notes { display: none !important; }
+  .ink-mountains { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+
+/* ========== LAYOUT HELPERS ========== */
+.flex-col { display: flex; flex-direction: column; }
+.flex-row { display: flex; flex-direction: row; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-1 { flex: 1; }
+.gap-16 { gap: 16px; }
+.gap-24 { gap: 24px; }
+.gap-32 { gap: 32px; }
+.gap-40 { gap: 40px; }
+.gap-48 { gap: 48px; }
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.text-center { text-align: center; }
+.relative { position: relative; }
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mt-32 { margin-top: 32px; }
+.mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+.ml-auto { margin-left: auto; }
+</style>
+</head>
+<body>
+
+<!-- ========== SVG DEFINITIONS ========== -->
+<svg style="position:absolute;width:0;height:0" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <!-- Seal Stamp -->
+  <symbol id="seal-stamp" viewBox="0 0 80 80">
+    <rect x="2" y="2" width="76" height="76" rx="2" fill="none" stroke="#c23b22" stroke-width="3"/>
+    <rect x="6" y="6" width="68" height="68" rx="1" fill="#c23b22" opacity="0.9"/>
+    <text x="40" y="30" text-anchor="middle" fill="#f0ead6" font-family="Noto Serif SC, serif" font-size="16" font-weight="700">苏格拉底</text>
+    <text x="40" y="52" text-anchor="middle" fill="#f0ead6" font-family="Noto Serif SC, serif" font-size="16" font-weight="700">之印</text>
+    <!-- Border decoration -->
+    <line x1="14" y1="10" x2="66" y2="10" stroke="#f0ead6" stroke-width="0.5" opacity="0.4"/>
+    <line x1="14" y1="70" x2="66" y2="70" stroke="#f0ead6" stroke-width="0.5" opacity="0.4"/>
+  </symbol>
+
+  <!-- Ink Mountains -->
+  <symbol id="ink-mountains-1" viewBox="0 0 1920 300">
+    <path d="M0 300 L0 220 Q120 180 200 200 Q300 140 420 180 Q500 120 600 160 Q720 80 840 140 Q920 100 1000 130 Q1100 60 1200 110 Q1320 50 1440 100 Q1520 70 1600 120 Q1700 90 1800 140 Q1880 120 1920 150 L1920 300 Z" fill="currentColor" opacity="0.4"/>
+    <path d="M0 300 L0 250 Q180 220 300 240 Q420 200 540 230 Q660 180 780 220 Q900 160 1020 200 Q1140 170 1260 210 Q1380 180 1500 220 Q1620 190 1740 230 Q1840 210 1920 240 L1920 300 Z" fill="currentColor" opacity="0.6"/>
+    <path d="M0 300 L0 270 Q240 250 480 265 Q720 240 960 260 Q1200 245 1440 270 Q1680 255 1920 275 L1920 300 Z" fill="currentColor" opacity="0.8"/>
+  </symbol>
+
+  <!-- Brush Stroke -->
+  <symbol id="brush-stroke" viewBox="0 0 200 8">
+    <path d="M0 4 Q10 1 30 3 Q50 6 80 4 Q110 1 140 3 Q160 6 180 4 Q195 2 200 4" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.6"/>
+    <path d="M20 4 Q60 7 100 4 Q140 1 180 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.3"/>
+  </symbol>
+
+  <!-- Brush Stroke Long -->
+  <symbol id="brush-stroke-long" viewBox="0 0 400 6">
+    <path d="M0 3 Q20 0.5 60 2.5 Q100 5 160 3 Q220 0.5 280 3 Q340 5.5 380 3 Q395 1.5 400 3" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+  </symbol>
+
+  <!-- Enso Circle -->
+  <symbol id="enso" viewBox="0 0 200 200">
+    <path d="M100 15 Q170 15 180 80 Q190 150 120 185 Q50 195 20 130 Q5 80 40 35 Q65 15 95 15" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.7"/>
+    <path d="M95 15 Q93 14 90 16" stroke="currentColor" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.5"/>
+  </symbol>
+
+  <!-- Bamboo -->
+  <symbol id="bamboo" viewBox="0 0 60 300">
+    <line x1="30" y1="0" x2="30" y2="300" stroke="currentColor" stroke-width="2" opacity="0.15"/>
+    <line x1="30" y1="60" x2="30" y2="62" stroke="currentColor" stroke-width="5" opacity="0.2"/>
+    <line x1="30" y1="130" x2="30" y2="132" stroke="currentColor" stroke-width="5" opacity="0.2"/>
+    <line x1="30" y1="200" x2="30" y2="202" stroke="currentColor" stroke-width="5" opacity="0.2"/>
+    <!-- leaves -->
+    <path d="M30 55 Q45 35 55 20" stroke="currentColor" stroke-width="1" fill="none" opacity="0.12"/>
+    <path d="M30 55 Q48 40 60 30" stroke="currentColor" stroke-width="1" fill="none" opacity="0.1"/>
+    <path d="M30 125 Q15 105 5 90" stroke="currentColor" stroke-width="1" fill="none" opacity="0.12"/>
+    <path d="M30 125 Q12 110 2 95" stroke="currentColor" stroke-width="1" fill="none" opacity="0.1"/>
+    <path d="M30 195 Q45 175 55 160" stroke="currentColor" stroke-width="1" fill="none" opacity="0.12"/>
+  </symbol>
+
+  <!-- Plum Blossom -->
+  <symbol id="plum-blossom" viewBox="0 0 40 40">
+    <circle cx="20" cy="12" r="5" fill="currentColor" opacity="0.12"/>
+    <circle cx="12" cy="22" r="5" fill="currentColor" opacity="0.1"/>
+    <circle cx="28" cy="22" r="5" fill="currentColor" opacity="0.1"/>
+    <circle cx="15" cy="32" r="4" fill="currentColor" opacity="0.08"/>
+    <circle cx="25" cy="32" r="4" fill="currentColor" opacity="0.08"/>
+    <circle cx="20" cy="22" r="2" fill="var(--vermillion)" opacity="0.2"/>
+  </symbol>
+
+  <!-- Horse (ink style) -->
+  <symbol id="horse" viewBox="0 0 200 160">
+    <path d="M40 120 Q30 90 50 70 Q55 55 50 40 Q52 30 60 25 Q65 20 70 25 Q72 35 68 45 Q75 50 85 55 Q100 50 120 55 Q140 50 155 60 Q165 65 170 80 Q175 95 170 110 Q168 120 160 125" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/>
+    <path d="M85 55 Q80 75 75 95 Q72 110 70 125" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.4"/>
+    <path d="M120 55 Q125 75 130 95 Q132 110 135 125" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.4"/>
+    <path d="M155 60 Q160 75 155 90 Q152 105 150 125" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.4"/>
+    <!-- tail -->
+    <path d="M40 120 Q25 110 15 130 Q10 140 20 145" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.3"/>
+    <!-- mane -->
+    <path d="M60 25 Q55 15 60 10" stroke="currentColor" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.3"/>
+    <path d="M65 22 Q60 12 63 7" stroke="currentColor" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.25"/>
+  </symbol>
+
+  <!-- Gadfly -->
+  <symbol id="gadfly" viewBox="0 0 80 60">
+    <ellipse cx="40" cy="35" rx="12" ry="8" fill="currentColor" opacity="0.3"/>
+    <ellipse cx="40" cy="28" rx="6" ry="5" fill="currentColor" opacity="0.35"/>
+    <!-- wings -->
+    <ellipse cx="25" cy="25" rx="14" ry="6" fill="currentColor" opacity="0.1" transform="rotate(-20 25 25)"/>
+    <ellipse cx="55" cy="25" rx="14" ry="6" fill="currentColor" opacity="0.1" transform="rotate(20 55 25)"/>
+    <!-- legs -->
+    <line x1="35" y1="42" x2="30" y2="52" stroke="currentColor" stroke-width="0.8" opacity="0.2"/>
+    <line x1="40" y1="43" x2="40" y2="54" stroke="currentColor" stroke-width="0.8" opacity="0.2"/>
+    <line x1="45" y1="42" x2="50" y2="52" stroke="currentColor" stroke-width="0.8" opacity="0.2"/>
+  </symbol>
+</defs>
+</svg>
+
+<div class="slide-deck" id="deck">
+
+<!-- ==================== SLIDE 1: 封面 ==================== -->
+<div class="slide dark active paper-texture-dark" data-slide="1" style="flex-direction:column;align-items:center;justify-content:center;">
+  <!-- Vertical sidebar right -->
+  <div class="vertical-sidebar on-dark" style="font-size:28px;letter-spacing:0.5em;opacity:0.25;right:50px;">申辩篇</div>
+  <!-- Bamboo left -->
+  <svg style="position:absolute;left:30px;top:0;height:100%;width:60px;color:var(--rice-paper-text)"><use href="#bamboo"/></svg>
+
+  <div class="text-center anim-up" style="z-index:2;">
+    <div class="display-xxl spaced-chars" style="color:var(--rice-paper-text);margin-bottom:32px;">我 的 申 辩</div>
+    <svg class="brush-divider-long anim-up-d1" style="color:var(--rice-paper-text);margin:0 auto 28px;"><use href="#brush-stroke-long"/></svg>
+    <div class="anim-up-d2" style="font-family:var(--font-display);font-size:22px;color:var(--rice-paper-text);letter-spacing:0.3em;opacity:0.7;">苏格拉底 · 致雅典公民法庭</div>
+    <div class="anim-up-d3 mt-16" style="font-family:var(--font-body);font-size:15px;color:var(--diluted-ink);letter-spacing:0.2em;">公元前三九九年 · 吾年七十</div>
+  </div>
+
+  <!-- Ink mountains -->
+  <svg class="ink-mountains" style="color:var(--rice-paper-text);opacity:0.12;height:200px;"><use href="#ink-mountains-1"/></svg>
+
+  <!-- Seal stamp -->
+  <svg class="seal-stamp anim-up-d4" width="70" height="70"><use href="#seal-stamp"/></svg>
+
+  <div class="speaker-notes">
+    【演讲备注】以沉默开场，环顾四方。缓缓开口，如老者回忆往事。这是一个七十岁老人一生中唯一一次走进法庭——他来赴的不是审判，是命运。声音低沉，有岁月的重量。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 2: 开场 ==================== -->
+<div class="slide light paper-texture" data-slide="2" style="flex-direction:column;justify-content:center;padding:60px 120px;">
+  <div class="vertical-sidebar" style="opacity:0.12;font-size:18px;">开场白</div>
+
+  <svg class="brush-divider anim-up" style="color:var(--ink-black);"><use href="#brush-stroke"/></svg>
+
+  <div class="quote-block anim-up-d1 mt-24" style="max-width:900px;">
+    <p class="body-text" style="font-family:var(--font-display);font-size:22px;line-height:2;">雅典的公民们——我的控告者说得天花乱坠，却几乎没说过一句真话。</p>
+  </div>
+
+  <p class="body-text anim-up-d2 mt-24" style="max-width:860px;font-size:18px;line-height:2;">他们最可笑的说法是让你们提防我的"雄辩"。我连法庭话术都不会。除非"雄辩"就是"说真话"——那我承认。</p>
+
+  <p class="body-text anim-up-d3 mt-24" style="max-width:860px;font-size:18px;line-height:2;color:var(--diluted-ink);">吾年七十，初登法庭。请以待客之道，容我以素语道真言。</p>
+
+  <!-- Ink splash -->
+  <div class="ink-splash" style="right:-50px;top:60px;width:400px;height:400px;"></div>
+  <div class="ink-splash" style="left:-80px;bottom:40px;width:250px;height:250px;"></div>
+
+  <div class="speaker-notes">
+    【演讲备注】语调平静，近乎自嘲。苏格拉底从一开始就在拆解修辞——他说自己不善言辞，实则这正是最精妙的修辞。停顿让听者思考：什么是真正的雄辩？真话本身即雄辩。七十年来第一次站在这里，老者的谦卑与锋芒并存。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 3: 明暗之敌 ==================== -->
+<div class="slide light paper-texture" data-slide="3" style="flex-direction:column;justify-content:center;padding:60px 100px;">
+  <div class="display-text anim-up" style="font-size:36px;margin-bottom:40px;">明暗之敌</div>
+
+  <div class="flex-row gap-40 w-full anim-up-d1" style="max-width:1100px;">
+    <!-- 暗敌 scroll -->
+    <div class="hanging-scroll on-light flex-1">
+      <span class="card-label" style="font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--indigo);letter-spacing:0.15em;display:block;margin-bottom:16px;">暗 敌</span>
+      <p class="body-text" style="font-size:16px;line-height:2;">二十四年来的流言蜚语。阿里斯托芬的《云》。从你们年幼时便已根深蒂固。</p>
+      <p class="body-text mt-16" style="font-size:17px;line-height:2;font-family:var(--font-display);color:var(--indigo);">我今日所战者，非三人——<br>乃影也。</p>
+    </div>
+    <!-- 明敌 scroll -->
+    <div class="hanging-scroll on-light flex-1">
+      <span class="card-label" style="font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--vermillion);letter-spacing:0.15em;display:block;margin-bottom:16px;">明 敌</span>
+      <p class="body-text" style="font-size:16px;line-height:2;">美勒托斯代表诗人，安尼托斯代表工匠与政客，莱孔代表修辞家。</p>
+      <p class="body-text mt-16" style="font-size:17px;line-height:2;font-family:var(--font-display);color:var(--vermillion);">三人者，三怒也。</p>
+    </div>
+  </div>
+
+  <!-- Plum blossom decorations -->
+  <svg style="position:absolute;right:80px;top:80px;width:60px;height:60px;color:var(--ink-black);"><use href="#plum-blossom"/></svg>
+
+  <div class="speaker-notes">
+    【演讲备注】此处分辨敌之明暗，是苏格拉底的战略眼光。暗敌比明敌更可怕——二十四年的偏见已成为雅典人的潜意识。他在对抗的不是三个人，而是整座城的无形之墙。声调在说"乃影也"时低沉下来，有千钧之力。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 4: 神谕 ==================== -->
+<div class="slide dark paper-texture-dark" data-slide="4" style="flex-direction:column;align-items:center;justify-content:center;">
+  <!-- Enso circle background -->
+  <svg class="anim-fade" style="position:absolute;width:420px;height:420px;color:var(--rice-paper-text);opacity:0.12;"><use href="#enso"/></svg>
+
+  <div style="max-width:700px;text-align:center;z-index:2;">
+    <div class="display-text anim-up" style="font-size:32px;color:var(--rice-paper-text);margin-bottom:36px;">神 谕</div>
+
+    <p class="body-text on-dark anim-up-d1" style="font-size:18px;line-height:2.2;">吾友凯瑞丰，性急之人，往德尔斐问神：</p>
+    <p class="body-text on-dark anim-up-d2 mt-8" style="font-family:var(--font-display);font-size:20px;line-height:2;">天下有比苏格拉底更智慧的人否？</p>
+
+    <div class="anim-up-d3 mt-32" style="font-family:var(--font-display);font-size:48px;color:var(--gold);letter-spacing:0.3em;">神曰：无</div>
+
+    <p class="body-text on-dark anim-up-d4 mt-32" style="font-size:17px;line-height:2.2;opacity:0.8;">我闻之大惑。我明明一无所知——但神不妄言。<br>于是我决心以行求证，遍访智者，以驳神谕。</p>
+
+    <p class="anim-up-d5 mt-24" style="font-family:var(--font-display);font-size:19px;color:var(--vermillion);letter-spacing:0.1em;">此一念，改吾一生。</p>
+  </div>
+
+  <div class="speaker-notes">
+    【演讲备注】这是全篇的转折枢纽。苏格拉底并非狂妄自认智慧——他困惑，他质疑，他用行动去验证。"神曰：无"三字要重读，如雷贯耳。而后的叙述语调转为平静的回忆，一个老人在回望改变命运的那一刻。最后一句如棒喝。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 5: 问道三途 ==================== -->
+<div class="slide light paper-texture" data-slide="5" style="flex-direction:column;justify-content:center;padding:60px 80px;">
+  <div class="display-text anim-up" style="font-size:32px;margin-bottom:40px;">问道三途</div>
+
+  <div class="flex-row gap-32 w-full anim-up-d1" style="max-width:1200px;">
+    <!-- Card 1 -->
+    <div class="ink-card on-light flex-1">
+      <div style="font-size:28px;margin-bottom:8px;">🏛</div>
+      <span class="card-label" style="font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--indigo);letter-spacing:0.1em;display:block;margin-bottom:12px;">问政客</span>
+      <p class="body-text" style="font-size:15px;line-height:1.9;">名高者愚甚。彼不知而自以为知；吾不知亦不自以为知——一线之差，吾胜之。</p>
+    </div>
+    <!-- Card 2 -->
+    <div class="ink-card on-light flex-1">
+      <div style="font-size:28px;margin-bottom:8px;">🪶</div>
+      <span class="card-label" style="font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--indigo);letter-spacing:0.1em;display:block;margin-bottom:12px;">问诗人</span>
+      <p class="body-text" style="font-size:15px;line-height:1.9;">以神来之笔写诗，却不解其意。如巫如卜，言美而不知所云。更以诗才自诩全知。</p>
+    </div>
+    <!-- Card 3 -->
+    <div class="ink-card on-light flex-1">
+      <div style="font-size:28px;margin-bottom:8px;">🔨</div>
+      <span class="card-label" style="font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--indigo);letter-spacing:0.1em;display:block;margin-bottom:12px;">问工匠</span>
+      <p class="body-text" style="font-size:15px;line-height:1.9;">技艺确实精湛——此吾所不及。然亦因技而骄，以为万事皆通。</p>
+    </div>
+  </div>
+
+  <!-- Brush line bottom -->
+  <svg class="brush-divider-long anim-up-d2 mt-32" style="color:var(--ink-black);"><use href="#brush-stroke-long"/></svg>
+
+  <div class="speaker-notes">
+    【演讲备注】三类人，三种愚——政客的自大、诗人的无知、工匠的越界。苏格拉底的发现惊人地一致：每个人都在自己不懂的领域自以为懂。语调从好奇转向无奈，他本想证明神错了，却一路证明神是对的。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 6: 神谕之真义 ==================== -->
+<div class="slide dark paper-texture-dark" data-slide="6" style="flex-direction:column;justify-content:center;padding:60px 140px 60px 100px;">
+  <!-- Large vertical sidebar -->
+  <div class="vertical-sidebar left on-dark anim-fade" style="font-size:64px;letter-spacing:0.8em;opacity:0.08;left:40px;">知无知</div>
+
+  <div style="max-width:800px;margin-left:60px;">
+    <!-- Central hanging scroll quote -->
+    <div class="hanging-scroll anim-up" style="margin-bottom:36px;">
+      <p class="body-text on-dark" style="font-family:var(--font-display);font-size:20px;line-height:2.2;">唯神为真智。人之智，微乎其微。神以我为喻——知己无知者，乃人中最智也。</p>
+    </div>
+
+    <!-- Three points -->
+    <div class="flex-col gap-16 anim-up-d2">
+      <div class="flex-row gap-16" style="align-items:center;">
+        <span class="seal-dot"></span>
+        <span class="body-text on-dark" style="font-size:17px;">以我为镜——非赞我，乃示人</span>
+      </div>
+      <div class="flex-row gap-16" style="align-items:center;">
+        <span class="seal-dot"></span>
+        <span class="body-text on-dark" style="font-size:17px;">真智属神——人不过近之而已</span>
+      </div>
+      <div class="flex-row gap-16" style="align-items:center;">
+        <span class="seal-dot"></span>
+        <span class="body-text on-dark" style="font-size:17px;">自知无知，始为智——此苏格拉底悖论之核</span>
+      </div>
+    </div>
+
+    <p class="body-text on-dark anim-up-d3 mt-32" style="font-size:15px;opacity:0.6;">为践此命，吾弃万事，甘居赤贫。</p>
+  </div>
+
+  <div class="speaker-notes">
+    【演讲备注】这是苏格拉底哲学最核心的命题。"知无知"三字如禅宗公案，需留白让听者自悟。三个要点层层递进：神谕不是夸我，而是用我做教材；真正的智慧不属于人；唯有承认无知才能接近智慧。最后一句轻描淡写——赤贫，是他为真理付出的代价。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 7: 怨从何来 ==================== -->
+<div class="slide light paper-texture" data-slide="7" style="flex-direction:column;justify-content:center;padding:60px 120px;">
+  <div class="display-text anim-up" style="font-size:32px;margin-bottom:32px;">怨从何来</div>
+
+  <div class="quote-block anim-up-d1" style="max-width:860px;">
+    <p class="body-text" style="font-size:18px;line-height:2.2;">每揭一人之伪，即增一人之怨。彼不怨己，反怨我曰：<span style="font-family:var(--font-display);color:var(--vermillion);">"此苏格拉底者，误人子弟之徒也！"</span></p>
+  </div>
+
+  <p class="body-text anim-up-d2 mt-24" style="font-size:17px;line-height:2;max-width:820px;">更有甚者——汝家子弟效我审人，使怨者愈众。</p>
+
+  <!-- Ink splash -->
+  <div class="ink-splash" style="right:100px;top:120px;width:350px;height:350px;"></div>
+
+  <!-- Warning scroll -->
+  <div class="hanging-scroll on-light anim-up-d3 mt-40" style="max-width:600px;">
+    <p class="body-text" style="font-family:var(--font-display);font-size:18px;line-height:2;color:var(--vermillion);text-align:center;">此三人之诉，实众怨之合也。</p>
+  </div>
+
+  <div class="speaker-notes">
+    【演讲备注】苏格拉底揭示了控告的真相——不是三个人的怨恨，而是整个被戳穿的虚荣群体的报复。年轻人模仿他质问长辈，长辈们把怒火归咎于他。这是先知永恒的宿命：说真话的人成为真话的替罪羊。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 8: 庭辩：驯马之问 ==================== -->
+<div class="slide light paper-texture" data-slide="8" style="flex-direction:column;justify-content:center;padding:60px 100px;">
+  <div class="display-text anim-up" style="font-size:30px;margin-bottom:32px;">庭辩：驯马之问</div>
+
+  <!-- Horse SVG -->
+  <svg class="anim-fade" style="position:absolute;right:80px;top:50%;transform:translateY(-50%);width:200px;height:160px;color:var(--ink-black);opacity:0.5;"><use href="#horse"/></svg>
+
+  <div style="max-width:780px;">
+    <!-- Dialogue -->
+    <div class="anim-up-d1 mb-24" style="border-bottom:1px solid rgba(26,26,24,0.08);padding-bottom:20px;">
+      <p class="body-text" style="font-size:16px;"><span style="color:var(--indigo);font-weight:700;">我问：</span>"若我为害，谁为益？"</p>
+      <p class="body-text mt-8" style="font-size:16px;"><span style="color:var(--vermillion);font-weight:700;">美勒托斯：</span>"全雅典皆益，独汝为害！"</p>
+    </div>
+    <div class="anim-up-d2 mb-24" style="border-bottom:1px solid rgba(26,26,24,0.08);padding-bottom:20px;">
+      <p class="body-text" style="font-size:16px;"><span style="color:var(--indigo);font-weight:700;">我问：</span>"马亦如此乎？一驯马师善之，众人皆善之乎？"</p>
+      <p class="body-text mt-8" style="font-size:16px;"><span style="color:var(--vermillion);font-weight:700;">美勒托斯：</span>"非也，唯驯马师能善之。"</p>
+    </div>
+    <div class="anim-up-d3">
+      <p class="body-text" style="font-family:var(--font-display);font-size:18px;line-height:2;color:var(--ink-black);">然则一人害众人善，岂非悖论？</p>
+    </div>
+  </div>
+
+  <!-- Seal stamp -->
+  <svg class="seal-stamp anim-up-d4" width="60" height="60"><use href="#seal-stamp"/></svg>
+
+  <div class="speaker-notes">
+    【演讲备注】经典的苏格拉底式诘问！他用驯马的类比让美勒托斯自相矛盾：既然驯马需要专家，教育难道不需要？怎么可能全城都是教育专家，只有一个人在害人？对话要演出节奏感，美勒托斯的回答越来越慌，苏格拉底的追问越来越锐利。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 9: 庭辩：骡子之论 ==================== -->
+<div class="slide dark paper-texture-dark" data-slide="9" style="flex-direction:column;justify-content:center;padding:60px 120px;">
+  <div class="display-text anim-up" style="font-size:30px;color:var(--rice-paper-text);margin-bottom:32px;">庭辩：骡子之论</div>
+
+  <p class="body-text on-dark anim-up-d1" style="font-size:18px;line-height:2;max-width:800px;">控书称我"信奉神灵之事"，又称我"不信神"。</p>
+
+  <!-- Logic flow -->
+  <div class="logic-flow anim-up-d2 mt-32" style="color:var(--rice-paper-text);">
+    <span style="background:rgba(240,234,214,0.08);padding:8px 16px;border-radius:3px;">信神灵之事</span>
+    <span class="arrow">→</span>
+    <span style="background:rgba(240,234,214,0.08);padding:8px 16px;border-radius:3px;">必信精灵</span>
+    <span class="arrow">→</span>
+    <span style="background:rgba(240,234,214,0.08);padding:8px 16px;border-radius:3px;">精灵乃神之属</span>
+    <span class="arrow">→</span>
+    <span style="background:rgba(194,59,34,0.2);padding:8px 16px;border-radius:3px;border:1px solid var(--vermillion);">既信又不信？</span>
+  </div>
+
+  <div class="hanging-scroll anim-up-d3 mt-40" style="max-width:700px;">
+    <p class="body-text on-dark" style="font-family:var(--font-display);font-size:20px;line-height:2;text-align:center;">此犹言：骡子存在，而马驴不存在。<br><span style="color:var(--vermillion);">美勒托斯，汝之控书，戏言耳。</span></p>
+  </div>
+
+  <div class="speaker-notes">
+    【演讲备注】这是苏格拉底的逻辑绝杀。他用最简单的三段论拆解控诉的荒谬：你说我信鬼神之事却不信神？那就像说骡子存在但马和驴不存在。逻辑链要一步步展开，让听者自己得出结论。最后的评语轻蔑而精准——"戏言耳"，杀人不用刀。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 10: 牛虻 ==================== -->
+<div class="slide light paper-texture" data-slide="10" style="flex-direction:column;justify-content:center;padding:60px 120px;">
+  <div class="display-text anim-up" style="font-size:36px;color:var(--vermillion);margin-bottom:36px;">牛 虻</div>
+
+  <!-- Gadfly SVG -->
+  <svg class="anim-fade" style="position:absolute;right:120px;top:100px;width:120px;height:90px;color:var(--ink-black);"><use href="#gadfly"/></svg>
+
+  <div class="hanging-scroll on-light anim-up-d1" style="max-width:800px;">
+    <p class="body-text" style="font-family:var(--font-display);font-size:19px;line-height:2.2;">
+      雅典者，骏马也——高贵而怠惰。<br>
+      吾者，牛虻也——神遣之以叮咬而唤醒之。<br>
+      <span style="color:var(--vermillion);">汝杀吾，则继续沉睡。<br>除非神再遣一虻。</span>
+    </p>
+  </div>
+
+  <p class="body-text anim-up-d2 mt-32" style="font-size:17px;line-height:2;max-width:760px;color:var(--diluted-ink);">吾之贫穷，即吾之证。非受神遣者，谁甘自苦如此？</p>
+
+  <!-- Ink splash accent -->
+  <div class="ink-splash" style="left:-60px;bottom:80px;width:300px;height:300px;background:radial-gradient(ellipse at center, rgba(194,59,34,0.04) 0%, transparent 60%);"></div>
+
+  <div class="speaker-notes">
+    【演讲备注】牛虻之喻是苏格拉底最著名的自我定位。他不是为了惹恼城邦，而是为了唤醒它。这段话的力量在于：他把自己的死和城邦的沉睡联系在一起。杀了牛虻，骏马就在舒适中堕落。声调坦然，没有求饶，只有冷静的警告。贫穷是他的证据——谁会为了找人麻烦而甘愿一贫如洗？
+  </div>
+</div>
+
+<!-- ==================== SLIDE 11: 两次不从 ==================== -->
+<div class="slide light paper-texture" data-slide="11" style="flex-direction:column;justify-content:center;padding:60px 100px;">
+  <div class="display-text anim-up" style="font-size:32px;margin-bottom:40px;">两次不从</div>
+
+  <div class="flex-row gap-40 w-full anim-up-d1" style="max-width:1100px;">
+    <!-- Story 1 -->
+    <div class="hanging-scroll on-light flex-1">
+      <span class="card-label" style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--indigo);letter-spacing:0.1em;display:block;margin-bottom:16px;">民主之世 · 前406年</span>
+      <p class="body-text" style="font-size:16px;line-height:2;">将军审判，违法集审。吾为执政团唯一反对者。虽以死胁之，不改其志。</p>
+    </div>
+    <!-- Story 2 -->
+    <div class="hanging-scroll on-light flex-1">
+      <span class="card-label" style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--vermillion);letter-spacing:0.1em;display:block;margin-bottom:16px;">暴政之世 · 前404年</span>
+      <p class="body-text" style="font-size:16px;line-height:2;">三十僭主令吾捕人赴死。余四人往，吾独归。若僭主不覆，吾今不在矣。</p>
+    </div>
+  </div>
+
+  <!-- Bottom banner -->
+  <div class="anim-up-d2 mt-48 text-center" style="width:100%;">
+    <svg class="brush-divider-long" style="color:var(--ink-black);margin:0 auto 16px;"><use href="#brush-stroke-long"/></svg>
+    <p style="font-family:var(--font-display);font-size:20px;letter-spacing:0.15em;color:var(--ink-black);">无论何世，吾只从正义。</p>
+  </div>
+
+  <div class="speaker-notes">
+    【演讲备注】两个故事，两种政体，同一个苏格拉底。民主时代他违抗多数暴政，暴政时代他违抗少数暴政。他不是反对哪种制度——他只忠于正义本身。"吾独归"四字极其震撼：四个人去执行不义之命，他转身走了。这种勇气超越了制度之争。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 12: 不泣不求 ==================== -->
+<div class="slide dark paper-texture-dark" data-slide="12" style="flex-direction:column;justify-content:center;padding:60px 120px;">
+  <div class="display-text anim-up" style="font-size:32px;color:var(--rice-paper-text);margin-bottom:24px;">不泣不求</div>
+
+  <p class="body-text on-dark anim-up-d1 mt-8" style="font-size:18px;line-height:2;max-width:800px;">吾有三子。然不携来泣于庭前。</p>
+
+  <div class="flex-row gap-32 mt-40 anim-up-d2" style="max-width:900px;">
+    <div class="ink-card flex-1">
+      <div style="font-family:var(--font-display);font-size:28px;color:var(--vermillion);text-align:center;margin-bottom:12px;">耻</div>
+      <p class="body-text on-dark" style="font-size:15px;line-height:1.9;text-align:center;">七十之年，何颜为此</p>
+    </div>
+    <div class="ink-card flex-1">
+      <div style="font-family:var(--font-display);font-size:28px;color:var(--vermillion);text-align:center;margin-bottom:12px;">辱</div>
+      <p class="body-text on-dark" style="font-size:15px;line-height:1.9;text-align:center;">使雅典为天下笑</p>
+    </div>
+    <div class="ink-card flex-1">
+      <div style="font-family:var(--font-display);font-size:28px;color:var(--vermillion);text-align:center;margin-bottom:12px;">悖</div>
+      <p class="body-text on-dark" style="font-size:15px;line-height:1.9;text-align:center;">汝等誓以法裁，非以情施。<br>吾以"不虔"受审，岂可逼汝违誓？</p>
+    </div>
+  </div>
+
+  <div class="speaker-notes">
+    【演讲备注】古希腊法庭常见被告携妻儿哭泣求情。苏格拉底拒绝这么做，理由极其锐利：耻——一个七十岁的哲学家哭着求饶？辱——让雅典显得像个靠眼泪判案的地方？悖——你们发过誓依法裁决，我若煽情，就是在逼你们违背誓言。这是尊严的最高形式。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 13: 判：有罪 ==================== -->
+<div class="slide vermillion-bg paper-texture-dark" data-slide="13" style="flex-direction:column;align-items:center;justify-content:center;">
+  <div class="anim-up text-center">
+    <div class="display-xxl" style="color:var(--rice-paper-text);font-size:140px;letter-spacing:0.2em;">有罪</div>
+  </div>
+
+  <p class="anim-up-d2 mt-32" style="font-family:var(--font-display);font-size:24px;color:rgba(240,234,214,0.7);letter-spacing:0.1em;">三十票之差。</p>
+
+  <!-- Ink splash accent -->
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 70%, rgba(26,26,24,0.15) 0%, transparent 50%);pointer-events:none;z-index:1;"></div>
+
+  <div class="speaker-notes">
+    【演讲备注】全场静默。仅两个字，如当头棒喝。五百零一人投票，二百八十对二百二十一。三十票之差——如此微弱的多数，定一个人的罪。这页要停留足够长，让沉默说话。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 14: 何以罚我 ==================== -->
+<div class="slide light paper-texture" data-slide="14" style="flex-direction:column;justify-content:center;padding:60px 120px;">
+  <div class="display-text anim-up" style="font-size:30px;margin-bottom:28px;">何以罚我</div>
+
+  <div class="quote-block anim-up-d1" style="max-width:860px;">
+    <p class="body-text" style="font-size:18px;line-height:2.2;">吾为城邦之恩人。当何报之？<span style="font-family:var(--font-display);color:var(--gold);font-weight:700;">在公堂免费用餐</span>——如奥林匹亚冠军然。</p>
+  </div>
+
+  <p class="body-text anim-up-d2 mt-16" style="font-size:16px;line-height:2;max-width:800px;color:var(--diluted-ink);">盖冠军予汝幸福之幻，吾予汝幸福之实。</p>
+
+  <!-- Four rejections -->
+  <div class="flex-row gap-24 mt-40 anim-up-d3" style="max-width:1000px;">
+    <div class="ink-card on-light flex-1 text-center">
+      <div style="font-family:var(--font-display);font-size:22px;margin-bottom:8px;">死</div>
+      <p class="body-text" style="font-size:14px;color:var(--diluted-ink);">未知善恶</p>
+    </div>
+    <div class="ink-card on-light flex-1 text-center">
+      <div style="font-family:var(--font-display);font-size:22px;margin-bottom:8px;">囚</div>
+      <p class="body-text" style="font-size:14px;color:var(--diluted-ink);">沦为奴隶</p>
+    </div>
+    <div class="ink-card on-light flex-1 text-center">
+      <div style="font-family:var(--font-display);font-size:22px;margin-bottom:8px;">逐</div>
+      <p class="body-text" style="font-size:14px;color:var(--diluted-ink);">何处不被追随</p>
+    </div>
+    <div class="ink-card on-light flex-1 text-center">
+      <div style="font-family:var(--font-display);font-size:22px;margin-bottom:8px;">默</div>
+      <p class="body-text" style="font-size:14px;color:var(--vermillion);">违神命</p>
+    </div>
+  </div>
+
+  <div class="speaker-notes">
+    【演讲备注】这是苏格拉底最惊世骇俗的时刻：被判有罪后，按雅典法律他可以自提处罚。他提出——在公堂免费用餐！这不是挑衅，而是逻辑：如果他真的对城邦有贡献，理应受到奖赏。四种刑罚一一拒绝，每一种都不可接受。死——未知不可畏；囚——不如死；逐——到哪都一样；沉默——等于放弃使命。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 15: 千古一言 ==================== -->
+<div class="slide dark paper-texture-dark" data-slide="15" style="flex-direction:column;align-items:center;justify-content:center;">
+  <!-- Enso -->
+  <svg class="anim-fade" style="position:absolute;width:500px;height:500px;color:var(--gold);opacity:0.08;"><use href="#enso"/></svg>
+
+  <div class="text-center" style="z-index:2;max-width:700px;">
+    <!-- Vertical large text -->
+    <div class="anim-up" style="writing-mode:vertical-rl;font-family:var(--font-display);font-size:52px;font-weight:900;color:var(--gold);letter-spacing:0.4em;line-height:1.8;margin:0 auto 32px;display:inline-block;">未经审视的人生不值得过</div>
+  </div>
+
+  <p class="anim-up-d2 mt-16" style="font-family:var(--font-body);font-size:14px;color:var(--diluted-ink);letter-spacing:0.05em;text-align:center;">ὁ δὲ ἀνεξέταστος βίος οὐ βιωτὸς ἀνθρώπῳ</p>
+
+  <div class="anim-up-d3 mt-40" style="max-width:600px;text-align:center;">
+    <p class="body-text on-dark" style="font-size:17px;line-height:2.2;">日省吾身，论德辩善——此人生之至善也。<br><span style="color:var(--vermillion);">令我噤声？断不可能。</span></p>
+  </div>
+
+  <!-- Seal stamp -->
+  <svg class="seal-stamp anim-up-d4" width="65" height="65"><use href="#seal-stamp"/></svg>
+
+  <div class="speaker-notes">
+    【演讲备注】整场申辩的核心，两千四百年来最有力量的一句话。竖排大字金色呈现，如同刻碑。希腊语原文轻轻呈现，提醒我们这句话穿越了语言和时间。苏格拉底不是在辩护——他在宣告一种生存方式。沉默等于死亡，不是肉体的死亡，而是灵魂的。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 16: 判：死刑 ==================== -->
+<div class="slide dark paper-texture-dark" data-slide="16" style="flex-direction:column;align-items:center;justify-content:center;">
+  <div class="anim-up text-center">
+    <div class="display-xxl" style="color:var(--rice-paper-text);font-size:160px;letter-spacing:0.3em;">死刑</div>
+  </div>
+
+  <!-- Ink mountains -->
+  <svg class="ink-mountains" style="color:var(--rice-paper-text);opacity:0.1;height:220px;"><use href="#ink-mountains-1"/></svg>
+
+  <div class="speaker-notes">
+    【演讲备注】比"有罪"更沉重的沉默。两个字填满整个空间。山水在底部若隐若现——大地沉默，天命已定。不需要多说一个字。停留，呼吸，让死亡的重量降临。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 17: 致判我死者 ==================== -->
+<div class="slide light paper-texture" data-slide="17" style="flex-direction:column;justify-content:center;padding:60px 120px;">
+  <div class="display-text anim-up" style="font-size:30px;margin-bottom:32px;">致判我死者</div>
+
+  <div class="quote-block anim-up-d1" style="max-width:860px;">
+    <p style="font-family:var(--font-display);font-size:22px;line-height:2;color:var(--ink-black);">吾宁以吾道而死，不以汝道而生。</p>
+  </div>
+
+  <div class="ink-card on-light anim-up-d2 mt-32" style="max-width:800px;">
+    <span class="card-label" style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--indigo);letter-spacing:0.1em;display:block;margin-bottom:12px;">赛跑之喻</span>
+    <p class="body-text" style="font-size:16px;line-height:2;">避死不难，避不义难——不义快于死。死追及吾，不义追及汝。</p>
+  </div>
+
+  <p class="body-text anim-up-d3 mt-32" style="font-size:17px;line-height:2;max-width:800px;">吾死之后，更多更年轻的质问者将至。<span style="color:var(--vermillion);font-family:var(--font-display);">杀人不能塞批评之口——唯改过能免之。</span></p>
+
+  <div class="speaker-notes">
+    【演讲备注】死刑宣判后，苏格拉底没有崩溃，而是从容地对判他死刑的人说出了最冷静的预言。赛跑的比喻精妙绝伦：你们逃避不义比我逃避死亡更难，因为不义跑得比死亡更快。最后的警告如谶语：杀了我只会引来更多质问者。历史证明他是对的——他的死催生了整个西方哲学传统。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 18: 论死 ==================== -->
+<div class="slide dark paper-texture-dark" data-slide="18" style="flex-direction:column;justify-content:center;padding:60px 120px;">
+  <div class="display-text anim-up" style="font-size:30px;color:var(--rice-paper-text);margin-bottom:24px;">论 死</div>
+
+  <p class="body-text on-dark anim-up-d1" style="font-size:17px;line-height:2;max-width:800px;opacity:0.7;">吾之代蒙今日全程沉默——此吉兆也。</p>
+
+  <div class="flex-row gap-40 mt-40 anim-up-d2" style="max-width:1000px;">
+    <!-- Path 1 -->
+    <div class="hanging-scroll flex-1">
+      <span class="card-label" style="font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--indigo);letter-spacing:0.1em;display:block;margin-bottom:16px;">其一 · 无梦之眠</span>
+      <p class="body-text on-dark" style="font-size:16px;line-height:2;">若死即永眠——选汝一生中最安之夜，波斯王亦寥寥可数。</p>
+      <p class="body-text on-dark mt-12" style="font-size:16px;line-height:2;color:var(--gold);">永恒若一夜好眠，何惧之有？</p>
+    </div>
+    <!-- Path 2 -->
+    <div class="hanging-scroll flex-1">
+      <span class="card-label" style="font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--gold);letter-spacing:0.1em;display:block;margin-bottom:16px;">其二 · 灵魂远行</span>
+      <p class="body-text on-dark" style="font-size:16px;line-height:2;">若死后至彼世——可见荷马、赫西俄德！可继续问道！</p>
+      <p class="body-text on-dark mt-12" style="font-size:16px;line-height:2;color:var(--gold);">且彼处不以问道罪人。</p>
+    </div>
+  </div>
+
+  <div class="speaker-notes">
+    【演讲备注】面对死亡，苏格拉底展现了哲学家最高的境界——用逻辑化解恐惧。两条路都不坏：如果死是永眠，那是最好的睡眠；如果死后有来世，那他终于可以和荷马对话，而且不会因为提问被处死。"代蒙沉默"是关键细节——苏格拉底的内心之声在他即将做坏事时会发出警告，今天全程没有发声，说明赴死并非坏事。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 19: 最后的话 ==================== -->
+<div class="slide dark paper-texture-dark" data-slide="19" style="flex-direction:column;justify-content:center;padding:60px 120px;">
+  <div class="display-text anim-up" style="font-size:30px;color:var(--gold);margin-bottom:36px;">最后的话</div>
+
+  <p class="body-text on-dark anim-up-d1" style="font-size:18px;line-height:2.2;max-width:800px;">善人无论生死，不受真恶。神不弃之。</p>
+
+  <div class="quote-block anim-up-d2 mt-32" style="max-width:800px;border-left-color:var(--gold);">
+    <p class="body-text on-dark" style="font-size:17px;line-height:2.2;">吾之遗请：待吾子长大，若逐利忘德，若妄自尊大——请如吾之折磨汝，折磨彼等。</p>
+  </div>
+
+  <!-- Final golden line -->
+  <div class="anim-up-d3 mt-48 text-center" style="width:100%;">
+    <p style="font-family:var(--font-display);font-size:32px;font-weight:900;color:var(--gold);line-height:1.8;letter-spacing:0.1em;">
+      行矣。吾赴死，汝赴生。<br>孰善孰恶，唯神知之。
+    </p>
+  </div>
+
+  <!-- Ink mountains -->
+  <svg class="ink-mountains" style="color:var(--rice-paper-text);opacity:0.08;height:180px;"><use href="#ink-mountains-1"/></svg>
+
+  <!-- Seal stamp -->
+  <svg class="seal-stamp anim-up-d4" width="65" height="65"><use href="#seal-stamp"/></svg>
+
+  <div class="speaker-notes">
+    【演讲备注】全篇最后的话语，每一个字都是永恒。"善人不受真恶"——这是苏格拉底终极的信仰。遗请不是为自己，而是为儿子——请像我折磨你们一样折磨他们，让他们追求德性而非财富。最后两句金字必须慢读，如告别，如遗言，如千古不灭的回声。"唯神知之"——把最终的判断交给超越人世的存在，这是最大的谦卑，也是最大的骄傲。
+  </div>
+</div>
+
+<!-- ==================== SLIDE 20: 尾页 ==================== -->
+<div class="slide dark paper-texture-dark" data-slide="20" style="flex-direction:column;align-items:center;justify-content:center;">
+  <!-- Bamboo right -->
+  <svg style="position:absolute;right:50px;top:0;height:100%;width:60px;color:var(--rice-paper-text);"><use href="#bamboo"/></svg>
+
+  <div class="text-center anim-up" style="z-index:2;">
+    <p style="font-family:var(--font-display);font-size:28px;color:var(--rice-paper-text);letter-spacing:0.3em;opacity:0.8;">苏格拉底的申辩</p>
+    <svg class="brush-divider anim-up-d1" style="color:var(--rice-paper-text);margin:24px auto;"><use href="#brush-stroke"/></svg>
+    <p class="anim-up-d2" style="font-family:var(--font-body);font-size:16px;color:var(--diluted-ink);letter-spacing:0.15em;">柏拉图记述</p>
+    <p class="anim-up-d3 mt-24" style="font-family:var(--font-body);font-size:13px;color:var(--diluted-ink);opacity:0.5;">公元前三九九年 · 雅典</p>
+  </div>
+
+  <!-- Plum blossom decorations -->
+  <svg style="position:absolute;left:80px;top:120px;width:50px;height:50px;color:var(--rice-paper-text);"><use href="#plum-blossom"/></svg>
+  <svg style="position:absolute;left:120px;bottom:200px;width:35px;height:35px;color:var(--rice-paper-text);"><use href="#plum-blossom"/></svg>
+
+  <!-- Ink mountains -->
+  <svg class="ink-mountains higher" style="color:var(--rice-paper-text);height:160px;"><use href="#ink-mountains-1"/></svg>
+
+  <!-- Seal -->
+  <svg class="seal-stamp anim-up-d3" width="70" height="70"><use href="#seal-stamp"/></svg>
+
+  <div class="speaker-notes">
+    【演讲备注】万语千言归于沉寂。如水墨画留白——最后一页不需要多余的文字。柏拉图记述了这一切，两千四百年后我们依然在聆听。这就是哲学的力量——肉体消亡，思想永存。
+  </div>
+</div>
+
+</div><!-- /slide-deck -->
+
+<!-- ========== NAVIGATION ========== -->
+<div class="nav-bar"><div class="nav-progress" id="navProgress"></div></div>
+<div class="slide-counter" id="slideCounter"></div>
+
+<!-- ========== SLIDE ENGINE JS ========== -->
+<script>
+(function() {
+  'use strict';
+
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+  let isAnimating = false;
+
+  const navProgress = document.getElementById('navProgress');
+  const slideCounter = document.getElementById('slideCounter');
+
+  function updateUI() {
+    navProgress.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+    slideCounter.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+
+    // Adapt counter color
+    const active = slides[currentSlide];
+    if (active.classList.contains('dark') || active.classList.contains('vermillion-bg')) {
+      slideCounter.style.color = 'rgba(240,234,214,0.35)';
+    } else {
+      slideCounter.style.color = 'rgba(26,26,24,0.3)';
+    }
+  }
+
+  function goToSlide(n) {
+    if (n < 0 || n >= totalSlides || n === currentSlide || isAnimating) return;
+    isAnimating = true;
+
+    slides[currentSlide].classList.remove('active');
+    slides[currentSlide].style.display = 'none';
+    currentSlide = n;
+    slides[currentSlide].style.display = 'flex';
+
+    // Trigger reflow for animations
+    void slides[currentSlide].offsetWidth;
+    slides[currentSlide].classList.add('active');
+
+    updateUI();
+    setTimeout(() => { isAnimating = false; }, 500);
+  }
+
+  function next() { goToSlide(currentSlide + 1); }
+  function prev() { goToSlide(currentSlide - 1); }
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    switch(e.key) {
+      case 'ArrowRight': case 'ArrowDown': case ' ': case 'PageDown':
+        e.preventDefault(); next(); break;
+      case 'ArrowLeft': case 'ArrowUp': case 'PageUp':
+        e.preventDefault(); prev(); break;
+      case 'Home':
+        e.preventDefault(); goToSlide(0); break;
+      case 'End':
+        e.preventDefault(); goToSlide(totalSlides - 1); break;
+      case 'n':
+        document.body.classList.toggle('show-notes'); break;
+      case 'f':
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(()=>{});
+        } else {
+          document.exitFullscreen();
+        }
+        break;
+    }
+  });
+
+  // Click navigation
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('.speaker-notes')) return;
+    const x = e.clientX / window.innerWidth;
+    if (x > 0.5) next(); else prev();
+  });
+
+  // Touch
+  let touchStartX = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) {
+      if (dx < 0) next(); else prev();
+    }
+  }, { passive: true });
+
+  // Mouse wheel
+  let wheelTimeout;
+  document.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    clearTimeout(wheelTimeout);
+    wheelTimeout = setTimeout(() => {
+      if (e.deltaY > 0) next(); else prev();
+    }, 80);
+  }, { passive: false });
+
+  // Hash navigation
+  function handleHash() {
+    const hash = parseInt(location.hash.replace('#', ''));
+    if (hash >= 1 && hash <= totalSlides) {
+      goToSlide(hash - 1);
+    }
+  }
+  window.addEventListener('hashchange', handleHash);
+
+  // Init
+  slides.forEach((s, i) => {
+    if (i !== 0) { s.style.display = 'none'; s.classList.remove('active'); }
+  });
+  handleHash();
+  updateUI();
+})();
+</script>
+
+</body>
+</html>

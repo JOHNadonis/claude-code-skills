@@ -1,0 +1,251 @@
+package models
+
+import (
+	"encoding/json"
+	"time"
+)
+
+// DownloadedFile 下载的文件信息
+type DownloadedFile struct {
+	FileName     string    `json:"file_name"`     // 文件名
+	FilePath     string    `json:"file_path"`     // 完整文件路径
+	URL          string    `json:"url"`           // 下载URL
+	MimeType     string    `json:"mime_type"`     // MIME类型
+	Size         int64     `json:"size"`          // 文件大小（字节）
+	DownloadTime time.Time `json:"download_time"` // 下载时间
+}
+
+// ScriptAction 脚本操作步骤（v2 - 支持语义与自愈，向后兼容）
+type ScriptAction struct {
+	// =========================
+	// 原有字段（保持不变）
+	// =========================
+	Type      string            `json:"type"`      // click, input, select, navigate, wait, sleep, extract_text, extract_attribute, extract_html, execute_js, upload_file, scroll, keyboard, open_tab, switch_tab, switch_active_tab, ai_control
+	Timestamp int64             `json:"timestamp"` // 时间戳（毫秒）
+	Selector  string            `json:"selector"`  // CSS选择器
+	XPath     string            `json:"xpath"`     // XPath选择器（更可靠）
+	Value     string            `json:"value"`     // 输入值或选择值
+	URL       string            `json:"url"`       // 导航URL
+	Duration  int               `json:"duration"`  // 延迟时长（毫秒，用于 sleep 类型）
+	X         int               `json:"x"`         // 鼠标X坐标
+	Y         int               `json:"y"`         // 鼠标Y坐标
+	Text      string            `json:"text"`      // 元素文本内容
+	TagName   string            `json:"tag_name"`  // 元素标签名
+	Attrs     map[string]string `json:"attrs"`     // 元素属性
+
+	// 键盘事件相关字段
+	Key string `json:"key,omitempty"` // 键盘按键（用于 keyboard 类型，如 "ctrl+c", "enter"）
+
+	// 数据抓取相关字段
+	ExtractType   string `json:"extract_type,omitempty"`   // text, attribute, html
+	AttributeName string `json:"attribute_name,omitempty"` // 抓取的属性名
+	JSCode        string `json:"js_code,omitempty"`        // JS 代码
+	VariableName  string `json:"variable_name,omitempty"`  // 变量名
+	ExtractedData string `json:"extracted_data,omitempty"` // 回放时填充
+
+	// 文件上传相关字段
+	FilePaths   []string `json:"file_paths,omitempty"`
+	FileNames   []string `json:"file_names,omitempty"`
+	Description string   `json:"description,omitempty"` // 人类可读描述
+	Multiple    bool     `json:"multiple,omitempty"`
+	Accept      string   `json:"accept,omitempty"`
+	Remark      string   `json:"remark,omitempty"` // 操作备注
+
+	// 滚动相关字段
+	ScrollX int `json:"scroll_x,omitempty"`
+	ScrollY int `json:"scroll_y,omitempty"`
+	
+	// XHR请求相关字段（用于 capture_xhr 类型）
+	Method string `json:"method,omitempty"` // HTTP方法: GET, POST, PUT, DELETE等
+	Status int    `json:"status,omitempty"` // HTTP状态码
+	XHRID  string `json:"xhr_id,omitempty"` // XHR请求唯一标识符
+
+	// 截图相关字段（用于 screenshot 类型）
+	ScreenshotMode   string `json:"screenshot_mode,omitempty"`   // viewport, fullpage, region
+	ScreenshotWidth  int    `json:"screenshot_width,omitempty"`  // 截图区域宽度（region模式）
+	ScreenshotHeight int    `json:"screenshot_height,omitempty"` // 截图区域高度（region模式）
+
+	// AI控制相关字段（用于 ai_control 类型）
+	AIControlPrompt      string `json:"ai_control_prompt,omitempty"`       // AI控制的提示词
+	AIControlXPath       string `json:"ai_control_xpath,omitempty"`        // 可选的元素XPath（用于提示词上下文）
+	AIControlLLMConfigID string `json:"ai_control_llm_config_id,omitempty"` // AI控制使用的LLM配置ID（为空则使用默认）
+
+	Condition *ActionCondition `json:"condition,omitempty"`
+
+	// =========================
+	// 新增字段（v2，自愈核心）
+	// =========================
+
+	// ① 操作意图（结构化，而不是自由文本）
+	Intent *ActionIntent `json:"intent,omitempty"`
+
+	// ② Accessibility 语义信息（最重要）
+	Accessibility *AccessibilityInfo `json:"accessibility,omitempty"`
+
+	// ③ 上下文锚点（用于消歧 & 自愈）
+	Context *ActionContext `json:"context,omitempty"`
+
+	// ④ 录制证据（debug / 自愈评分用）
+	Evidence *ActionEvidence `json:"evidence,omitempty"`
+}
+
+func (a *ScriptAction) CopyWithoutSemanticInfo() *ScriptAction {
+	return &ScriptAction{
+		Type:             a.Type,
+		Timestamp:        a.Timestamp,
+		Selector:         a.Selector,
+		XPath:            a.XPath,
+		Value:            a.Value,
+		URL:              a.URL,
+		Duration:         a.Duration,
+		X:                a.X,
+		Y:                a.Y,
+		Text:             a.Text,
+		TagName:          a.TagName,
+		Attrs:            a.Attrs,
+		Key:              a.Key,
+		ExtractType:      a.ExtractType,
+		AttributeName:    a.AttributeName,
+		JSCode:           a.JSCode,
+		VariableName:     a.VariableName,
+		ExtractedData:    a.ExtractedData,
+		FilePaths:        a.FilePaths,
+		FileNames:        a.FileNames,
+		Description:      a.Description,
+		Multiple:         a.Multiple,
+		Accept:           a.Accept,
+		Remark:           a.Remark,
+		ScrollX:          a.ScrollX,
+		ScrollY:          a.ScrollY,
+		Method:           a.Method,
+		Status:           a.Status,
+		XHRID:            a.XHRID,
+		ScreenshotMode:       a.ScreenshotMode,
+		ScreenshotWidth:      a.ScreenshotWidth,
+		ScreenshotHeight:     a.ScreenshotHeight,
+		AIControlPrompt:      a.AIControlPrompt,
+		AIControlXPath:       a.AIControlXPath,
+		AIControlLLMConfigID: a.AIControlLLMConfigID,
+		Condition:            a.Condition,
+	}
+}
+
+// ActionCondition 操作执行条件
+type ActionCondition struct {
+	Variable string `json:"variable"`          // 变量名
+	Operator string `json:"operator"`          // 操作符: =, !=, >, <, >=, <=, in, not_in, exists, not_exists
+	Value    string `json:"value"`             // 比较值
+	Enabled  bool   `json:"enabled,omitempty"` // 是否启用条件（默认false）
+}
+
+type ActionIntent struct {
+	Verb   string `json:"verb,omitempty"`   // click, input, select, submit
+	Object string `json:"object,omitempty"` // login button, email input
+}
+
+type AccessibilityInfo struct {
+	Role  string `json:"role,omitempty"`  // button, textbox, link
+	Name  string `json:"name,omitempty"`  // Sign In, Email
+	Value string `json:"value,omitempty"` // 输入框当前值（可选）
+}
+
+type ActionContext struct {
+	NearbyText   []string `json:"nearby_text,omitempty"`   // 附近可见文本
+	AncestorTags []string `json:"ancestor_tags,omitempty"` // form, section
+	FormHint     string   `json:"form_hint,omitempty"`     // login, search
+}
+
+type ActionEvidence struct {
+	BackendDOMNodeID int64   `json:"backend_dom_node_id,omitempty"`
+	AXNodeID         string  `json:"ax_node_id,omitempty"`
+	Confidence       float64 `json:"confidence,omitempty"` // 录制时匹配置信度
+}
+
+// Script 自动化脚本
+type Script struct {
+	ID          string         `json:"id"`
+	Name        string         `json:"name"`
+	Description string         `json:"description"`
+	URL         string         `json:"url"`     // 起始URL
+	Actions     []ScriptAction `json:"actions"` // 操作步骤
+	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+	Tags        []string       `json:"tags"`        // 标签
+	Group       string         `json:"group"`       // 分组
+	Duration    int64          `json:"duration"`    // 录制时长（毫秒）
+	CanPublish  bool           `json:"can_publish"` // 是否可作为发布器使用
+	CanFetch    bool           `json:"can_fetch"`   // 是否可作为抓取器使用
+
+	// 下载文件信息
+	DownloadedFiles []DownloadedFile `json:"downloaded_files,omitempty"` // 录制过程中下载的文件列表
+
+	// MCP 相关字段
+	IsMCPCommand          bool                   `json:"is_mcp_command"`          // 是否作为 MCP 命令对外提供
+	MCPCommandName        string                 `json:"mcp_command_name"`        // MCP 命令名称（如 "execute_script"）
+	MCPCommandDescription string                 `json:"mcp_command_description"` // MCP 命令描述
+	MCPInputSchema        map[string]interface{} `json:"mcp_input_schema"`        // MCP 命令输入参数 schema（JSON Schema 格式）
+
+	// 预设变量（可以在脚本中使用 ${变量名} 引用，也可以在外部调用时传入覆盖）
+	Variables map[string]string `json:"variables,omitempty"` // 预设变量，key 为变量名，value 为默认值
+}
+
+func (s *Script) GetActionsWithoutSemanticInfo() []ScriptAction {
+	actions := make([]ScriptAction, len(s.Actions))
+	for i, action := range s.Actions {
+		actions[i] = *action.CopyWithoutSemanticInfo()
+	}
+	return actions
+}
+
+func (s *Script) GetActionsWithoutSemanticInfoJSON() string {
+	actionsJSON, err := json.Marshal(s.GetActionsWithoutSemanticInfo())
+	if err != nil {
+		return ""
+	}
+	return string(actionsJSON)
+}
+
+func (s *Script) Copy() *Script {
+	actions := make([]ScriptAction, len(s.Actions))
+	copy(actions, s.Actions)
+
+	downloadedFiles := make([]DownloadedFile, len(s.DownloadedFiles))
+	copy(downloadedFiles, s.DownloadedFiles)
+
+	tags := make([]string, len(s.Tags))
+	copy(tags, s.Tags)
+
+	variables := make(map[string]string)
+	for k, v := range s.Variables {
+		variables[k] = v
+	}
+
+	return &Script{
+		ID:                    s.ID,
+		Name:                  s.Name,
+		Description:           s.Description,
+		URL:                   s.URL,
+		Actions:               actions,
+		CreatedAt:             s.CreatedAt,
+		UpdatedAt:             s.UpdatedAt,
+		Tags:                  tags,
+		Group:                 s.Group,
+		Duration:              s.Duration,
+		CanPublish:            s.CanPublish,
+		CanFetch:              s.CanFetch,
+		DownloadedFiles:       downloadedFiles,
+		IsMCPCommand:          s.IsMCPCommand,
+		MCPCommandName:        s.MCPCommandName,
+		MCPCommandDescription: s.MCPCommandDescription,
+		MCPInputSchema:        s.MCPInputSchema,
+		Variables:             variables,
+	}
+}
+
+// PlayResult 脚本回放结果
+type PlayResult struct {
+	Success       bool                   `json:"success"`        // 是否成功
+	Message       string                 `json:"message"`        // 结果消息
+	ExtractedData map[string]interface{} `json:"extracted_data"` // 抓取到的数据，key 为变量名或 action 索引
+	Errors        []string               `json:"errors"`         // 错误信息列表
+}

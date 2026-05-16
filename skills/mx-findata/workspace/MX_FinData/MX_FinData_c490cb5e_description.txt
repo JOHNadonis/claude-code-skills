@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 英唐智控 近30日最高价 近30日最低价
+数据文件路径: workspace/MX_FinData/MX_FinData_c490cb5e.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_c490cb5e_description.txt
+数据行数: 4
+表数量: 1
+Sheet 列表: 英唐智控(300131.SZ)的区间最高价、区间最高价日等

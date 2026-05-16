@@ -1,0 +1,82 @@
+import z from "zod";
+import { parseMeta } from "../../utils/parse_meta.ts";
+import { createCommand } from "../factory.ts";
+import {
+  fetchSelectedCollectionsByActivityV1ResultSchema,
+  fetchSelectedCollectionsByHashtagV1Parameters,
+} from "../schema.ts";
+
+const meta = parseMeta(
+  z.object({
+    name: z.string(),
+    title: z.string(),
+    description: z.string(),
+  }),
+  import.meta,
+);
+
+export const getHashtagCollections = createCommand(
+  {
+    name: meta.name,
+    title: meta.title,
+    description: meta.description,
+    inputSchema: fetchSelectedCollectionsByHashtagV1Parameters,
+    outputSchema: fetchSelectedCollectionsByActivityV1ResultSchema,
+  },
+  async (
+    {
+      hashtag,
+      page_index = 0,
+      page_size = 20,
+      sort_by = "highlight_mark_time",
+    },
+    { log, apis },
+  ) => {
+    log.debug(
+      "get_hashtag_collections: hashtag: %s, page_index: %d, page_size: %d, sort_by: %s",
+      hashtag,
+      page_index,
+      page_size,
+      sort_by,
+    );
+
+    // 通过hashtag获取对应的activity_uuid
+    const hashtagResult = await apis.hashtag.fetchHashtag(hashtag);
+    const activityDetail = hashtagResult?.activity_detail;
+    const activity_uuid = activityDetail?.uuid;
+
+    if (!activity_uuid) {
+      throw new Error(`Hashtag "${hashtag}" 未关联任何活动空间`);
+    }
+
+    log.debug(
+      "get_hashtag_collections: Resolved hashtag %s to activity_uuid %s",
+      hashtag,
+      activity_uuid,
+    );
+
+    const result = await apis.activity.fetchSelectedCollections(activity_uuid, {
+      page_index,
+      page_size,
+      sort_by,
+    });
+
+    // 转换API返回结果为工具输出格式
+    const simplifiedList = (result.list || []).map((collection) => ({
+      uuid: collection.storyId,
+      name: collection.name,
+      coverUrl: collection.coverUrl,
+      creator_name: collection.user_nick_name,
+      likeCount: collection.likeCount,
+      sameStyleCount: collection.sameStyleCount,
+      ctime: collection.ctime,
+    }));
+
+    return {
+      total: result.total,
+      page_index: result.page_index,
+      page_size: result.page_size,
+      list: simplifiedList,
+    };
+  },
+);

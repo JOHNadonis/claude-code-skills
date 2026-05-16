@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 上证指数 深证成指 创业板指 最新价 涨跌幅 成交额
+数据文件路径: /Users/whc/.claude/skills/mx-finance-data/miaoxiang/mx_finance_data/mx_finance_data_c848a3d6.xlsx
+描述文件路径: /Users/whc/.claude/skills/mx-finance-data/miaoxiang/mx_finance_data/mx_finance_data_c848a3d6_description.txt
+数据行数: 13
+表数量: 4
+Sheet 列表: 上证指数(000001.SH)的成交量、收盘价等, 深证成指(399001.SZ)的成交量、收盘价等, 创业板指(399006.SZ)的成交量、收盘价等, 上证指数(000001.SH)等当前的最新价、涨跌幅等

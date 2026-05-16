@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 中钨高新 000657 PE PB PS 行业平均PE 近3年PE区间 最新股价 涨跌幅
+数据文件路径: workspace/MX_FinData/MX_FinData_e51959ea.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_e51959ea_description.txt
+数据行数: 9
+表数量: 4
+Sheet 列表: 中钨高新(000657.SZ)的市净率(PB)、市销率(PS), 中钨高新(000657.SZ)当前的所属行业板块、最新价等, 中钨高新(000657.SZ)的区间市盈率PE(TTM)平均值, 中钨高新(000657.SZ)的收盘价、涨跌幅

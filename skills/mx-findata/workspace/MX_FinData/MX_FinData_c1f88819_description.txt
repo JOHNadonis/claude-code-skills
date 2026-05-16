@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 通鼎互联002491 BOLL上轨 BOLL中轨 BOLL下轨
+数据文件路径: workspace/MX_FinData/MX_FinData_c1f88819.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_c1f88819_description.txt
+数据行数: 3
+表数量: 1
+Sheet 列表: 通鼎互联(002491.SZ)的BOLL布林线UP、BOLL布

@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 高澜股份300499 BOLL布林线UP BOLL布林线LOW RSI 5日均线 10日均线 20日均线 近期收盘价 涨跌幅 成交量
+数据文件路径: workspace/MX_FinData/MX_FinData_b6349aa7.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_b6349aa7_description.txt
+数据行数: 9
+表数量: 2
+Sheet 列表: 高澜股份(300499.SZ)的BOLL布林线UP、5日MA简, 高澜股份(300499.SZ)的成交量、涨跌幅等

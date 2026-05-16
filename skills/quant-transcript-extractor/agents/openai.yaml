@@ -1,0 +1,4 @@
+interface:
+  display_name: "Quant Transcript Extractor"
+  short_description: "Extract actionable quant knowledge from course/forum transcripts"
+  default_prompt: "Extract entries, exits, risk controls, invalidation conditions, and convert them into backtest-ready rules."

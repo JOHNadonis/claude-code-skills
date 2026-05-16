@@ -1,0 +1,153 @@
+{
+  "meta": {
+    "strategy_id": "demo_smallcap_v1",
+    "name": "小市值质量增强",
+    "template": "smallcap_momentum_quality",
+    "created_at": "2026-05-02 12:59:18",
+    "updated_at": "2026-05-02 12:59:59",
+    "market": "A_SHARE",
+    "frequency": "daily",
+    "description": "小市值+动量+质量过滤，寻找资金抱团的小盘弹性"
+  },
+  "hypothesis": "小市值+动量+质量过滤，寻找资金抱团的小盘弹性",
+  "universe": {
+    "base": "A_SHARE",
+    "exclude_st": true,
+    "exclude_suspended": true,
+    "exclude_new_stock_days": 180,
+    "exclude_limit_up_down": true,
+    "min_amount": 100000000
+  },
+  "date_range": {
+    "start": "2018-01-01",
+    "end": "2025-12-31",
+    "train_start": "2018-01-01",
+    "train_end": "2021-12-31",
+    "validation_start": "2022-01-01",
+    "validation_end": "2023-12-31",
+    "test_start": "2024-01-01",
+    "test_end": "2025-12-31"
+  },
+  "signals": [
+    {
+      "name": "small_market_cap",
+      "type": "market_cap",
+      "direction": "negative",
+      "weight": 0.3
+    },
+    {
+      "name": "momentum_60d",
+      "type": "price_momentum",
+      "window": 60,
+      "direction": "positive",
+      "weight": 0.25
+    },
+    {
+      "name": "momentum_20d",
+      "type": "price_momentum",
+      "window": 20,
+      "direction": "positive",
+      "weight": 0.15
+    },
+    {
+      "name": "volatility_20d",
+      "type": "realized_volatility",
+      "window": 20,
+      "direction": "negative",
+      "weight": 0.15
+    },
+    {
+      "name": "liquidity_20d",
+      "type": "amount_mean",
+      "window": 20,
+      "direction": "positive",
+      "weight": 0.15
+    }
+  ],
+  "entry_rules": [],
+  "exit_rules": [],
+  "portfolio": {
+    "selection_method": "top_rank",
+    "top_n": 20,
+    "max_position_weight": 0.05,
+    "rebalance_frequency": "monthly",
+    "cash_buffer": 0.02
+  },
+  "risk": {
+    "max_drawdown_stop": 0.25,
+    "single_stock_stop_loss": 0.12,
+    "benchmark": "000300.XSHG",
+    "constraints": [
+      "T+1",
+      "limit up/down",
+      "suspension",
+      "transaction cost",
+      "slippage"
+    ]
+  },
+  "cost": {
+    "commission_rate": 0.0003,
+    "stamp_tax_rate": 0.001,
+    "slippage_bps": 5
+  },
+  "backtest": {
+    "engine": "local_csv_simple",
+    "initial_cash": 1000000,
+    "execution_price": "next_open",
+    "record_trades": true
+  },
+  "research_controls": {
+    "forbid_future_data": true,
+    "walk_forward_required": true,
+    "min_test_years": 2,
+    "max_parameter_trials": 30,
+    "random_seed": 42
+  },
+  "notes": {
+    "suitable_for": [
+      "小资金",
+      "低频轮动",
+      "进攻型组合"
+    ],
+    "risk_notes": [
+      "小票流动性和滑点会吞掉收益",
+      "监管风格切换时可能失效",
+      "财务雷要硬过滤"
+    ]
+  },
+  "results": [
+    {
+      "result_id": "demo_smallcap_v1_20260502_125959",
+      "strategy_id": "demo_smallcap_v1",
+      "platform": "local_csv",
+      "engine": "local_csv_simple",
+      "created_at": "2026-05-02 12:59:59",
+      "spec_hash": "sha256:e1b4928ac02ee49d77d3fbd4e522aa730386ed493c1f679316e41ed3c604755d",
+      "data_hash": "sha256:2213a5587248e0fecf0be987de4a9af6816bac2f8016e658e9f3f2116dfe3b86",
+      "metrics": {
+        "total_return": 0.365448,
+        "annual_return": 1.304904,
+        "annual_volatility": 0.038714,
+        "sharpe": 21.624245,
+        "max_drawdown": -0.001311,
+        "win_rate": 0.925532,
+        "turnover": 1.0,
+        "rebalance_count": 5,
+        "average_holdings": 6.0
+      },
+      "artifacts": {
+        "equity_curve_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/demo_smallcap_v1_20260502_125959/equity_curve.csv",
+        "positions_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/demo_smallcap_v1_20260502_125959/positions.csv",
+        "trades_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/demo_smallcap_v1_20260502_125959/trades.csv"
+      },
+      "warnings": []
+    }
+  ],
+  "versions": [
+    {
+      "version": 1,
+      "time": "2026-05-02 12:59:18",
+      "change": "Initial strategy spec frozen from template."
+    }
+  ]
+}

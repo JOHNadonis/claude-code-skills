@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的申辩 — 苏格拉底 | TED演讲风</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+/* ========== RESET & BASE ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-dark: #1a1a1a;
+  --bg-red: #c0392b;
+  --accent: #e62b1e;
+  --text-white: #ffffff;
+  --text-dark: #1a1a1a;
+  --warm-white: #f5f5f5;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html, body {
+  font-family: var(--font);
+  background: var(--bg-dark);
+  color: var(--text-white);
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+/* ========== SLIDE ENGINE ========== */
+.deck {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 100px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  overflow: hidden;
+}
+
+.slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.slide.bg-dark {
+  background: var(--bg-dark);
+}
+
+.slide.bg-red {
+  background: var(--bg-red);
+}
+
+.slide.bg-spotlight {
+  background: radial-gradient(ellipse at 50% 40%, #2a2a2a 0%, #1a1a1a 50%, #0d0d0d 100%);
+}
+
+.slide.bg-spotlight-intense {
+  background: radial-gradient(ellipse at 50% 45%, #333 0%, #1a1a1a 40%, #0a0a0a 100%);
+}
+
+/* ========== TYPOGRAPHY ========== */
+.display-huge {
+  font-size: clamp(48px, 7vw, 120px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.display-large {
+  font-size: clamp(36px, 5vw, 72px);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.display-medium {
+  font-size: clamp(28px, 3.5vw, 56px);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.body-text {
+  font-size: clamp(16px, 1.8vw, 24px);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.body-large {
+  font-size: clamp(18px, 2.2vw, 32px);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.small-text {
+  font-size: clamp(12px, 1.2vw, 18px);
+  font-weight: 300;
+  line-height: 1.5;
+  opacity: 0.6;
+}
+
+.stat-number {
+  font-size: clamp(80px, 12vw, 180px);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--accent);
+}
+
+/* ========== DECORATIVE ========== */
+.red-underline {
+  border-bottom: 4px solid var(--accent);
+  padding-bottom: 4px;
+  display: inline;
+}
+
+.red-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: var(--accent);
+}
+
+.red-bar-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: var(--accent);
+}
+
+.red-quote {
+  color: var(--accent);
+  font-size: 1.5em;
+  font-weight: 900;
+  vertical-align: top;
+  line-height: 0.8;
+}
+
+.divider {
+  width: 80px;
+  height: 4px;
+  background: var(--accent);
+  margin: 24px 0;
+}
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.max-w { max-width: 900px; }
+.max-w-wide { max-width: 1100px; }
+.mt-sm { margin-top: 16px; }
+.mt-md { margin-top: 32px; }
+.mt-lg { margin-top: 48px; }
+.mb-sm { margin-bottom: 16px; }
+.mb-md { margin-bottom: 32px; }
+.op-50 { opacity: 0.5; }
+.op-70 { opacity: 0.7; }
+
+/* Animated elements */
+.slide .fade-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.slide.active .fade-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide.active .fade-item:nth-child(1) { transition-delay: 0.1s; }
+.slide.active .fade-item:nth-child(2) { transition-delay: 0.3s; }
+.slide.active .fade-item:nth-child(3) { transition-delay: 0.5s; }
+.slide.active .fade-item:nth-child(4) { transition-delay: 0.7s; }
+.slide.active .fade-item:nth-child(5) { transition-delay: 0.9s; }
+.slide.active .fade-item:nth-child(6) { transition-delay: 1.1s; }
+
+/* Three-column stats */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.stat-card {
+  text-align: center;
+  padding: 30px 20px;
+  border-left: 3px solid var(--accent);
+}
+
+.stat-card .label {
+  font-size: clamp(20px, 2.5vw, 36px);
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--accent);
+}
+
+.stat-card .desc {
+  font-size: clamp(14px, 1.5vw, 20px);
+  font-weight: 300;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+/* Two-column split */
+.split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.split-card {
+  padding: 30px;
+  border-top: 4px solid var(--accent);
+}
+
+.split-card h3 {
+  font-size: clamp(18px, 2vw, 28px);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.split-card p {
+  font-size: clamp(14px, 1.5vw, 20px);
+  font-weight: 300;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+/* SVG icons */
+.icon-container {
+  margin-bottom: 30px;
+}
+
+.icon-container svg {
+  width: 80px;
+  height: 80px;
+  stroke: var(--text-white);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-container.large svg {
+  width: 120px;
+  height: 120px;
+}
+
+/* ========== NAV ========== */
+.nav {
+  position: fixed;
+  bottom: 24px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 100;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.nav:hover { opacity: 1; }
+
+.nav button {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.nav button:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.slide-counter {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.6);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Progress bar */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--accent);
+  transition: width 0.4s ease;
+  z-index: 200;
+}
+
+/* Speaker notes toggle */
+.notes-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.95);
+  color: rgba(255,255,255,0.8);
+  padding: 20px 40px;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.6;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: 150;
+  border-top: 2px solid var(--accent);
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
+.notes-panel.visible {
+  transform: translateY(0);
+}
+
+.notes-panel .notes-title {
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ========== PRINT CSS ========== */
+@media print {
+  .deck { height: auto; overflow: visible; }
+  .slide {
+    position: relative !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    page-break-after: always;
+    page-break-inside: avoid;
+    height: 100vh;
+    min-height: 100vh;
+  }
+  .nav, .progress-bar, .notes-panel { display: none !important; }
+  @page {
+    size: 16in 9in landscape;
+    margin: 0;
+  }
+}
+
+/* ========== 16:9 ASPECT RATIO ========== */
+@media (max-aspect-ratio: 16/9) {
+  .slide { padding: 40px 60px; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck" id="deck">
+
+<!-- ==================== SLIDE 1: 封面 ==================== -->
+<div class="slide bg-spotlight active" data-notes="（深呼吸）欢迎各位。我是苏格拉底。一个石匠的儿子，一个助产士的儿子。今天，我要在这里做我人生中最后一次演讲。不是因为我选择了这个舞台——而是因为501个人把我推到了这里。">
+  <div class="text-center max-w">
+    <div class="fade-item small-text mb-md" style="letter-spacing:0.3em; text-transform:uppercase;">A Final Talk</div>
+    <div class="fade-item display-huge mb-md">我的申辩</div>
+    <div class="fade-item divider" style="margin:24px auto;"></div>
+    <div class="fade-item body-large op-70">苏格拉底 &nbsp;|&nbsp; 雅典 · 公元前399年</div>
+    <div class="fade-item small-text mt-md" style="opacity:0.4; font-style:italic;">"一个70岁老人的最后演讲"</div>
+  </div>
+  <div class="red-bar"></div>
+</div>
+
+<!-- ==================== SLIDE 2: Hook ==================== -->
+<div class="slide bg-dark" data-notes="开场要一击命中。不要解释背景，不要铺垫。直接说出最戏剧性的事实：我从来没上过法庭，但今天要决定我的生死。让观众的心跳漏一拍。">
+  <div class="text-center max-w">
+    <div class="fade-item display-large" style="margin-bottom:48px;">今天，我第一次走进法庭。</div>
+    <div class="fade-item body-large op-70">我70岁了。从未打过官司。<br>但今天，<span class="red-underline">501个人要决定我的生死</span>。</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 3: The accusation ==================== -->
+<div class="slide bg-dark" data-notes="两项指控听起来很严重，但我要告诉你们真正的原因——不是什么腐蚀青年、不信神。真正的原因是：我让太多有权势的人在公众面前丢了脸。权力最怕的不是反抗，是被揭穿。">
+  <div class="text-center max-w">
+    <div class="fade-item stat-number mb-sm">2</div>
+    <div class="fade-item display-medium mb-md">两项指控</div>
+    <div class="fade-item" style="display:flex; gap:60px; justify-content:center; margin-bottom:40px;">
+      <div class="body-large" style="border-left:3px solid var(--accent); padding-left:20px;">① 腐蚀青年</div>
+      <div class="body-large" style="border-left:3px solid var(--accent); padding-left:20px;">② 不信城邦之神</div>
+    </div>
+    <div class="fade-item body-text op-70" style="font-style:italic;">但真正的原因？<span class="red-underline">我说了太多真话。</span></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 4: The invisible enemy ==================== -->
+<div class="slide bg-dark" data-notes="阿里斯托芬在《云》里把我写成了一个在天上研究云彩的疯老头。整个雅典都在笑。24年了，谣言比真相跑得快一万倍。今天我对抗的不是三个原告，而是整个城市24年的偏见。这才是最可怕的敌人。">
+  <div class="text-center max-w">
+    <div class="fade-item icon-container">
+      <!-- Theater mask SVG -->
+      <svg viewBox="0 0 80 80">
+        <circle cx="40" cy="38" r="26" />
+        <circle cx="30" cy="32" r="5" />
+        <circle cx="50" cy="32" r="5" />
+        <path d="M30 48 Q40 56 50 48" />
+        <path d="M14 28 Q20 12 40 10 Q60 12 66 28" stroke-width="2" />
+      </svg>
+    </div>
+    <div class="fade-item body-large mb-md">24年前，一个喜剧作家把我写成了小丑。</div>
+    <div class="fade-item body-large mb-md op-70">从那以后，谣言从未停止。</div>
+    <div class="fade-item body-large" style="color:var(--accent);">今天我不是在和三个人战斗——<br>我是在和<span class="red-underline">影子</span>战斗。</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 5: The oracle ==================== -->
+<div class="slide bg-red" data-notes="（语气变得神秘、庄重）凯勒丰——我最好的朋友，一个热情到有点疯的人——他跑去德尔斐问阿波罗神。神的回答改变了一切。我不敢相信。我，苏格拉底，一个光脚走在雅典街头的老头，怎么可能是最有智慧的人？但神不会说谎。所以我决定去找出这句话的真正含义。">
+  <div class="text-center max-w">
+    <div class="fade-item body-large mb-md" style="opacity:0.9;">有一天，我最好的朋友跑去问神：</div>
+    <div class="fade-item body-large mb-md" style="font-style:italic; opacity:0.85;">"有没有人比苏格拉底更聪明？"</div>
+    <div class="fade-item" style="height:40px;"></div>
+    <div class="fade-item display-large mb-md">神说：没有。</div>
+    <div class="fade-item divider" style="margin:24px auto;"></div>
+    <div class="fade-item body-large op-70" style="font-style:italic;">这句话改变了我的一生。</div>
+  </div>
+  <div class="red-bar-top" style="background:rgba(255,255,255,0.2);"></div>
+</div>
+
+<!-- ==================== SLIDE 6: My mission ==================== -->
+<div class="slide bg-dark" data-notes="（加速，充满能量）我不信。真的不信。所以我做了一件在当时看来很合理但后来证明很危险的事——我决定证明神是错的。我去找了雅典最有名望的人。政客、诗人、工匠。我和他们对话。我问问题。结果呢？">
+  <div class="text-center max-w">
+    <div class="fade-item display-medium mb-md">我不相信。</div>
+    <div class="fade-item body-large mb-md op-70">所以我决定证明神是错的。</div>
+    <div class="fade-item body-large mb-md">我去找了最有权势的人、<br>最有才华的人、最有技术的人。</div>
+    <div class="fade-item" style="height:30px;"></div>
+    <div class="fade-item display-medium" style="color:var(--accent);">结果——</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 7: What I found ==================== -->
+<div class="slide bg-dark" data-notes="（摇头，带着悲伤的幽默）政客们什么都不懂但觉得自己什么都懂。诗人写出了伟大的作品却解释不了自己在写什么——他们靠灵感，不靠理解。工匠确实有真本事，但因为擅长一件事就觉得自己擅长所有事。规律太明显了：名声越大，越不愿意承认自己的无知。">
+  <div class="text-center max-w-wide">
+    <div class="fade-item stat-grid">
+      <div class="stat-card">
+        <div class="label">政客</div>
+        <div class="desc">自以为无所不知<br><span style="color:var(--accent);">→ 实际一无所知</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="label">诗人</div>
+        <div class="desc">靠灵感写作<br><span style="color:var(--accent);">→ 解释不了自己的作品</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="label">工匠</div>
+        <div class="desc">手艺精湛<br><span style="color:var(--accent);">→ 但以为自己什么都懂</span></div>
+      </div>
+    </div>
+    <div class="fade-item mt-lg display-medium" style="font-style:italic; opacity:0.7;">名声越大，智慧越少。</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 8: The paradox ==================== -->
+<div class="slide bg-spotlight-intense" data-notes="（停顿很长。让这句话悬在空中。）这就是一切的核心。我不是因为知道的多才被神说最有智慧——而是因为我是唯一一个知道自己不知道的人。这听起来像悖论，但这是人类最深刻的真理之一。所有的傲慢、所有的暴政，都始于一个人确信自己绝对正确。">
+  <div class="text-center max-w">
+    <div class="fade-item display-large" style="line-height:1.2;">
+      <span class="red-quote">"</span>我唯一知道的，<br>就是我一无所知。<span class="red-quote">"</span>
+    </div>
+    <div class="fade-item body-large mt-lg op-70" style="max-width:700px; margin:40px auto 0;">
+      这就是为什么神说我最有智慧。<br>不是因为我知道得多——<br>而是因为<span class="red-underline">只有我知道自己不知道</span>。
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 9: Why they hate me ==================== -->
+<div class="slide bg-dark" data-notes="（语气逐渐加重，像在数罪状一样，但数的是别人的仇恨）每一次揭穿，就多一个敌人。然后年轻人开始模仿我——他们去质问长辈，质问权威。长辈们怒了。但他们不怪自己无知，他们怪我。'苏格拉底腐蚀了我的孩子！'——不，是你的无知暴露了。">
+  <div class="text-left max-w" style="padding-left:10%;">
+    <div class="fade-item body-large mb-md" style="border-left:3px solid var(--accent); padding-left:24px;">每次我揭穿一个人——</div>
+    <div class="fade-item body-large mb-md" style="border-left:3px solid var(--accent); padding-left:24px; color:var(--accent);">他就恨我。</div>
+    <div class="fade-item body-large mb-md" style="border-left:3px solid var(--accent); padding-left:24px;">然后你们的孩子开始学我。</div>
+    <div class="fade-item body-large" style="border-left:3px solid var(--accent); padding-left:24px; color:var(--accent);">然后更多人恨我。</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 10: The horse trainer ==================== -->
+<div class="slide bg-dark" data-notes="（转向讽刺，轻松的语气）美勒托斯站在这里说全雅典都在教育青年，只有我一个人在腐蚀。我就问了一个简单的问题——马。养马的人都知道，不是随便谁都能训好马的，只有专业的驯马师可以。大多数人碰马反而会毁了马。人难道比马简单？一个人腐蚀全城改善——这不荒谬吗？">
+  <div class="text-center max-w">
+    <div class="fade-item icon-container">
+      <!-- Horse SVG -->
+      <svg viewBox="0 0 80 80">
+        <path d="M15 55 L20 35 Q25 20 35 18 L40 10 L42 18 Q50 16 55 22 L60 20 L58 28 Q65 35 63 45 L65 55" />
+        <line x1="25" y1="55" x2="22" y2="72" />
+        <line x1="35" y1="55" x2="33" y2="72" />
+        <line x1="52" y1="55" x2="50" y2="72" />
+        <line x1="60" y1="55" x2="58" y2="72" />
+        <circle cx="52" cy="24" r="2" fill="white" />
+      </svg>
+    </div>
+    <div class="fade-item body-large mb-md">美勒托斯说整个雅典都在改善青年，只有我在腐蚀。</div>
+    <div class="fade-item body-text mb-md op-70">我问他：马呢？<br>是所有人都能训好马，还是只有专业驯马师？</div>
+    <div class="fade-item body-text mb-md op-50">他答不上来了。</div>
+    <div class="fade-item body-large" style="color:var(--accent); font-weight:700;">一个人腐蚀，全城改善？荒谬。</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 11: The logic trap ==================== -->
+<div class="slide bg-dark" data-notes="（像律师一样锐利）美勒托斯在控告书里亲手写的：苏格拉底信奉'神灵之事'。同时又控告我不信神。你不能同时说一个人信神灵的事又不信神——这就像说骡子存在但马和驴不存在。逻辑上完全不成立。这不是审判，这是一场闹剧。">
+  <div class="text-center max-w">
+    <div class="fade-item body-large mb-md">你的控告书说我<span class="red-underline">"信奉神灵之事"</span>。</div>
+    <div class="fade-item body-large mb-md">同时又说我<span class="red-underline">不信神</span>。</div>
+    <div class="fade-item body-text mb-md op-70" style="font-style:italic;">美勒托斯，这就像说——<br>骡子存在，但马和驴不存在。</div>
+    <div class="fade-item display-medium mt-md" style="color:var(--accent);">自相矛盾。</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 12: The gadfly ==================== -->
+<div class="slide bg-red" data-notes="（声音变得庄严，像在宣读使命）这是我最重要的比喻。雅典是一匹好马——高贵、强壮、但因为太大太舒服而变得迟钝懒惰。神派我来当一只牛虻——不停地叮它，让它保持清醒。你们当然可以一巴掌拍死我。但之后呢？你们会继续沉睡。神不会再轻易派来第二只牛虻了。">
+  <div class="text-center max-w">
+    <div class="fade-item icon-container large">
+      <!-- Gadfly SVG -->
+      <svg viewBox="0 0 120 120">
+        <ellipse cx="60" cy="60" rx="20" ry="12" />
+        <ellipse cx="60" cy="55" rx="8" ry="6" />
+        <path d="M40 52 Q25 35 30 25" />
+        <path d="M80 52 Q95 35 90 25" />
+        <path d="M40 58 Q20 50 15 42" />
+        <path d="M80 58 Q100 50 105 42" />
+        <line x1="55" y1="49" x2="50" y2="40" />
+        <line x1="65" y1="49" x2="70" y2="40" />
+        <line x1="60" y1="72" x2="60" y2="85" />
+      </svg>
+    </div>
+    <div class="fade-item body-large mb-md">雅典是一匹高贵的骏马。<br>体型庞大，行动迟缓。</div>
+    <div class="fade-item display-medium mb-md">我是神派来叮它的牛虻。</div>
+    <div class="fade-item body-large mb-sm op-70">你们可以拍死我。</div>
+    <div class="fade-item body-large" style="font-weight:700;">但之后——谁来叫醒你们？</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 13: Two acts of courage ==================== -->
+<div class="slide bg-dark" data-notes="（坚定、自豪但不炫耀）两次。两次我用行动证明了我不是只会说。民主政体下，所有人投票要处死十位将军——违法的。我是唯一一个投反对票的人。暴政下，三十僭主命令我去抓人。我转身回家了。无论什么制度，无论谁掌权，我只听一个声音——正义。">
+  <div class="text-center max-w-wide">
+    <div class="fade-item display-medium mb-lg">两次勇气</div>
+    <div class="fade-item split-grid">
+      <div class="split-card">
+        <h3>民主之下</h3>
+        <p>所有人都说处死将军。<br><strong style="color:var(--accent);">我一个人说不。</strong></p>
+      </div>
+      <div class="split-card">
+        <h3>暴政之下</h3>
+        <p>命令我去抓人。<br><strong style="color:var(--accent);">我回家了。</strong></p>
+      </div>
+    </div>
+    <div class="fade-item body-large mt-lg op-70" style="font-style:italic;">无论什么制度，我只听正义的。</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 14: I will not beg ==================== -->
+<div class="slide bg-dark" data-notes="（克制的情感，眼中有泪但声音不抖）我有三个儿子。最小的还很小。我完全可以把他们带到这里，让他们哭，让他们跪——陪审团一定会心软。很多人就是这么做的。但我不会。因为你们宣了誓——依法审判。法庭不是施舍同情的地方。我尊重你们的誓言，即使你们自己不尊重。">
+  <div class="text-center max-w">
+    <div class="fade-item body-large mb-md">我有三个儿子。</div>
+    <div class="fade-item body-large mb-md op-70">但我不会把他们带来哭给你们看。</div>
+    <div class="fade-item divider" style="margin:24px auto;"></div>
+    <div class="fade-item body-large">因为你们宣誓<span class="red-underline">依法审判</span>——<br>不是施舍同情。</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 15: GUILTY ==================== -->
+<div class="slide bg-red" data-notes="（沉默。长沉默。然后平静地说）有罪。差30票。如果30个人改变主意——我就无罪。30个人。在501人中。这说明什么？说明今天的审判从一开始就不是关于证据的。是关于情绪的。关于24年累积的偏见。">
+  <div class="text-center">
+    <div class="fade-item display-huge" style="font-size:clamp(80px,15vw,200px); letter-spacing:0.1em;">有罪</div>
+    <div class="fade-item body-large mt-lg op-70">30票之差。</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 16: My "punishment" ==================== -->
+<div class="slide bg-dark" data-notes="（苦笑，带着挑衅的幽默）你们问我觉得自己该受什么罚？好吧。我认真想了想。我一辈子放弃赚钱的机会，穷到今天还得朋友帮忙凑罚款，就为了让你们变得更好。所以我的刑罚应该是——在普利坦尼昂免费吃饭。像奥运冠军一样。因为冠军给你们幸福的假象，我给你们真正的清醒。至于罚款——30弥那，朋友们替我出了。我自己？身无分文。">
+  <div class="text-center max-w">
+    <div class="fade-item body-large mb-md" style="opacity:0.6;">你们问我该受什么罚？</div>
+    <div class="fade-item display-medium mb-md" style="line-height:1.3;">我的建议：<span style="color:var(--accent);">免费吃饭。</span></div>
+    <div class="fade-item body-large mb-md op-70">在公共食堂。像奥林匹亚冠军一样。</div>
+    <div class="fade-item body-text op-70" style="font-style:italic;">因为冠军给你们幸福的假象——<br>我给你们<span class="red-underline">真的</span>。</div>
+    <div class="fade-item small-text mt-lg" style="opacity:0.4;">最终罚金：30弥那。朋友们替我出的。</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 17: THE quote ==================== -->
+<div class="slide bg-spotlight-intense" data-notes="（这是最重要的一句话。说得很慢，每一个字都像石头一样掷出去。让它在大厅里回响。）未经审视的人生不值得过。这不是一句鸡汤。这是我用一生——现在，用我的死——换来的真理。如果你今天只记住一句话，请记住这一句。">
+  <div class="text-center">
+    <div class="fade-item" style="margin-bottom:20px;">
+      <span class="red-quote" style="font-size:clamp(40px,6vw,100px);">"</span>
+    </div>
+    <div class="fade-item display-huge" style="margin-bottom:16px;">未经审视的人生</div>
+    <div class="fade-item display-huge" style="color:var(--accent);">不值得过。</div>
+    <div class="fade-item" style="margin-top:20px;">
+      <span class="red-quote" style="font-size:clamp(40px,6vw,100px);">"</span>
+    </div>
+    <div class="fade-item small-text mt-md" style="opacity:0.3; font-style:italic;">ὁ ἀνεξέταστος βίος οὐ βιωτὸς ἀνθρώπῳ</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 18: DEATH ==================== -->
+<div class="slide bg-red" data-notes="（声音没有颤抖。平静。这就是他们的决定。）死刑。他们选择了最重的惩罚。但请注意——我没有求饶，没有逃跑，没有假装忏悔。我站着接受了判决。不是因为我认为他们是对的。而是因为逃跑意味着承认我做错了。我没有。">
+  <div class="text-center">
+    <div class="fade-item display-huge" style="font-size:clamp(100px,18vw,260px); letter-spacing:0.15em;">死刑</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 19: To my condemners ==================== -->
+<div class="slide bg-dark" data-notes="（对着判我有罪的人，但没有愤怒，是一种超越的慈悲）你们以为杀了我就安静了？不。我死后会有更多年轻人站出来质问你们。他们比我年轻，比我无情，比我更不会给你们面子。封住一个人的嘴，不如反省自己的灵魂。这是我给你们的最后忠告。">
+  <div class="text-left max-w" style="padding-left:5%;">
+    <div class="fade-item body-large mb-md">我不怕死。我怕的是<span class="red-underline">不义</span>。</div>
+    <div class="fade-item body-large mb-md op-70">不义比死亡跑得更快。<br>死亡追上了我——不义追上了你们。</div>
+    <div class="fade-item divider"></div>
+    <div class="fade-item body-large mb-md">我死后，更多人会来质问你们。<br>他们更年轻，更无情。</div>
+    <div class="fade-item body-large" style="color:var(--accent); font-weight:700;">杀人堵不住嘴。改善自己吧。</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 20: On death ==================== -->
+<div class="slide bg-dark" data-notes="（语气变得温暖、哲学性的，甚至有些调皮）死亡是什么？只有两种可能。第一种：什么都没有。像一场无梦的深眠。你告诉我——你人生中睡得最好的那一晚是不是什么梦都没做？如果永恒不过就是这样一个好觉——那简直赚了。第二种呢？灵魂去了另一个地方。我能遇见荷马！遇见赫西俄德！我可以继续问问题！而且最棒的是——那里不会因为你提问就判你死刑。（笑）">
+  <div class="text-center max-w-wide">
+    <div class="fade-item display-medium mb-lg">两种可能——</div>
+    <div class="fade-item split-grid">
+      <div class="split-card" style="text-align:center;">
+        <h3 style="font-size:clamp(28px,3vw,48px); margin-bottom:20px;">无梦的长眠</h3>
+        <p>永恒不过是一个好觉。<br><br><strong style="color:var(--accent); font-size:1.2em;">赚了。</strong></p>
+      </div>
+      <div class="split-card" style="text-align:center;">
+        <h3 style="font-size:clamp(28px,3vw,48px); margin-bottom:20px;">灵魂的旅行</h3>
+        <p>遇见荷马！继续提问！<br><br><strong style="color:var(--accent); font-size:1.2em;">而且——那边不会因为提问就判死刑。</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 21: Farewell ==================== -->
+<div class="slide bg-spotlight" data-notes="（最后一次面对所有人。声音平静如水。一个用一生追求真理的人，在死亡面前的平静不是装出来的——是真正活明白了。）好人不会遭受真正的恶。无论生死。这是我最后说的话。然后我转身离开。走向监狱。走向那杯毒堇汁。你们继续生活。哪一个更好？我不知道。你们也不知道。只有神知道。这就是人的处境。谢谢。">
+  <div class="text-center max-w">
+    <div class="fade-item body-large mb-lg op-70">好人无论生死都不会遭受真正的恶。</div>
+    <div class="fade-item display-large" style="line-height:1.2; margin-bottom:32px;">
+      离别的时刻已经到来。<br>
+      我去赴死，你们去生活。
+    </div>
+    <div class="fade-item divider" style="margin:24px auto;"></div>
+    <div class="fade-item body-large" style="color:var(--accent); font-style:italic;">
+      <span class="red-underline">哪一个更好，只有神知道。</span>
+    </div>
+  </div>
+  <div class="red-bar"></div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <button id="btnPrev" aria-label="Previous slide">&#9664;</button>
+  <span class="slide-counter" id="slideCounter">1 / 21</span>
+  <button id="btnNext" aria-label="Next slide">&#9654;</button>
+  <button id="btnNotes" aria-label="Toggle notes" style="font-size:12px;">N</button>
+</nav>
+
+<!-- NOTES PANEL -->
+<div class="notes-panel" id="notesPanel">
+  <div class="notes-title">Speaker Notes</div>
+  <div id="notesContent"></div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let current = 0;
+
+  const counter = document.getElementById('slideCounter');
+  const progressBar = document.getElementById('progressBar');
+  const notesPanel = document.getElementById('notesPanel');
+  const notesContent = document.getElementById('notesContent');
+  let notesVisible = false;
+
+  function go(index) {
+    if (index < 0 || index >= total) return;
+    slides[current].classList.remove('active');
+    current = index;
+    slides[current].classList.add('active');
+    counter.textContent = (current + 1) + ' / ' + total;
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    // Update notes
+    const note = slides[current].getAttribute('data-notes') || '';
+    notesContent.textContent = note;
+  }
+
+  function next() { go(current + 1); }
+  function prev() { go(current - 1); }
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    switch(e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+      case ' ':
+      case 'PageDown':
+        e.preventDefault(); next(); break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+      case 'PageUp':
+        e.preventDefault(); prev(); break;
+      case 'Home': e.preventDefault(); go(0); break;
+      case 'End': e.preventDefault(); go(total - 1); break;
+      case 'n':
+      case 'N':
+        notesVisible = !notesVisible;
+        notesPanel.classList.toggle('visible', notesVisible);
+        break;
+      case 'f':
+      case 'F':
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(()=>{});
+        } else {
+          document.exitFullscreen();
+        }
+        break;
+    }
+  });
+
+  // Click nav
+  document.getElementById('btnNext').addEventListener('click', next);
+  document.getElementById('btnPrev').addEventListener('click', prev);
+  document.getElementById('btnNotes').addEventListener('click', function() {
+    notesVisible = !notesVisible;
+    notesPanel.classList.toggle('visible', notesVisible);
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    const diff = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(diff) > 50) {
+      diff < 0 ? next() : prev();
+    }
+  }, { passive: true });
+
+  // Init
+  go(0);
+})();
+</script>
+
+</body>
+</html>

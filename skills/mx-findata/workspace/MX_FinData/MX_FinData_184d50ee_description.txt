@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 沪深港通北向资金今日净买入额 陆股通 2026年4月15日
+数据文件路径: workspace/MX_FinData/MX_FinData_184d50ee.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_184d50ee_description.txt
+数据行数: 1
+表数量: 1
+Sheet 列表: 沪深A股(001004)沪深港通_北向资金成交额

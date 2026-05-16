@@ -1,0 +1,9 @@
+strategy_id,annual_return,max_drawdown,sharpe,win_rate,turnover,warnings,result_id
+batch_smallcap_momentum_quality,1.304904,-0.001311,21.624245,0.925532,1.0,Sharpe 异常高，优先检查样本、未来函数、合成数据或成交假设。; 年化收益异常高，不能作为实盘依据，必须用真实数据和样本外复核。,batch_smallcap_momentum_quality_batch_20260502_224330
+batch_dividend_lowvol_quality,1.285397,-0.001298,21.624245,0.925532,1.0,Sharpe 异常高，优先检查样本、未来函数、合成数据或成交假设。; 年化收益异常高，不能作为实盘依据，必须用真实数据和样本外复核。,batch_dividend_lowvol_quality_batch_20260502_224330
+batch_etf_trend_rotation,0.768822,-0.003642,8.568905,0.319149,3.0,Sharpe 异常高，优先检查样本、未来函数、合成数据或成交假设。,batch_etf_trend_rotation_batch_20260502_224330
+batch_multi_factor_index_enhanced,1.304904,-0.001311,21.624245,0.925532,1.0,Sharpe 异常高，优先检查样本、未来函数、合成数据或成交假设。; 年化收益异常高，不能作为实盘依据，必须用真实数据和样本外复核。,batch_multi_factor_index_enhanced_batch_20260502_224330
+batch_momentum_trend,0.584253,-0.0026,8.974741,0.361702,2.75,Sharpe 异常高，优先检查样本、未来函数、合成数据或成交假设。,batch_momentum_trend_batch_20260502_224330
+batch_short_term_reversal,1.153365,-0.001204,21.624245,0.925532,1.0,Sharpe 异常高，优先检查样本、未来函数、合成数据或成交假设。; 年化收益异常高，不能作为实盘依据，必须用真实数据和样本外复核。,batch_short_term_reversal_batch_20260502_224331
+batch_earnings_event,1.246873,-0.001271,21.624245,0.925532,1.0,Sharpe 异常高，优先检查样本、未来函数、合成数据或成交假设。; 年化收益异常高，不能作为实盘依据，必须用真实数据和样本外复核。,batch_earnings_event_batch_20260502_224331
+batch_dragon_tiger_momentum,1.184137,-0.007139,16.670474,0.861702,1.866667,Sharpe 异常高，优先检查样本、未来函数、合成数据或成交假设。; 年化收益异常高，不能作为实盘依据，必须用真实数据和样本外复核。,batch_dragon_tiger_momentum_batch_20260502_224331

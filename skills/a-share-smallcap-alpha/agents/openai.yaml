@@ -1,0 +1,4 @@
+interface:
+  display_name: "A股小盘弹性研究"
+  short_description: "结合MX数据筛选A股小盘高弹性机会并进行财务排雷评分"
+  default_prompt: "Use $a-share-smallcap-alpha to screen A股 small-cap high-alpha opportunities with catalyst, financial quality, and risk scoring."

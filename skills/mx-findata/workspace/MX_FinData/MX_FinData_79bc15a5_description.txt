@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 高澜股份 300499 主力净流入 超大单净流入 大单净流入 资金流向
+数据文件路径: workspace/MX_FinData/MX_FinData_79bc15a5.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_79bc15a5_description.txt
+数据行数: 8
+表数量: 1
+Sheet 列表: 高澜股份(300499.SZ)的(区间)主力净流入资金、(区间

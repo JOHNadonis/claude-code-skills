@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 光迅科技 002281 最新股价 量比 BOLL布林线 换手率 近期收盘价 成交量
+数据文件路径: workspace/MX_FinData/MX_FinData_437c36ca.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_437c36ca_description.txt
+数据行数: 5
+表数量: 2
+Sheet 列表: 光迅科技(002281.SZ)的BOLL布林线、量比, 光迅科技(002281.SZ)的收盘价、换手率等

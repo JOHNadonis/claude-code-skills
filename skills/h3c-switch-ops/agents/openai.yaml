@@ -1,0 +1,4 @@
+interface:
+  display_name: "H3C Switch Ops"
+  short_description: "Plan H3C switch config, migration, and safe rollout"
+  default_prompt: "Use this skill when the user needs H3C/华三 switch configuration generation, current-configuration parsing, old-to-new migration planning, rollback preparation, or cautious SSH/Telnet execution for Comware 5 or 7."

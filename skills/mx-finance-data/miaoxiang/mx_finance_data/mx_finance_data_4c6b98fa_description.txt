@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 002149 西部材料 000657 中钨高新 600602 云赛智联 最新价 涨跌幅 成交量 量比 换手率 主力净流入 超大单净流入
+数据文件路径: /Users/whc/.claude/skills/mx-finance-data/miaoxiang/mx_finance_data/mx_finance_data_4c6b98fa.xlsx
+描述文件路径: /Users/whc/.claude/skills/mx-finance-data/miaoxiang/mx_finance_data/mx_finance_data_4c6b98fa_description.txt
+数据行数: 78
+表数量: 7
+Sheet 列表: 西部材料(002149.SZ)等当前的成交量、量比等, 西部材料(002149.SZ)的成交量、主力净流入量等, 中钨高新(000657.SZ)的成交量、主力净流入量等, 云赛智联(600602.SH)的成交量、主力净流入量等, 西部材料(002149.SZ)等当前的主力净流入, 西部材料(002149.SZ)等当前的主力流出(元)、主力流入, 中钨高新(000657.SZ)的(区间)超大单净流入资金

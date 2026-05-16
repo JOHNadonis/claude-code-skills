@@ -1,0 +1,13 @@
+{
+  "name": "leading-indicator-pdf-generator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "PDF report generator for Leading Indicator Monitor",
+  "scripts": {
+    "generate": "node generate-pdf.mjs"
+  },
+  "dependencies": {
+    "puppeteer": "^23.0.0",
+    "marked": "^15.0.0"
+  }
+}

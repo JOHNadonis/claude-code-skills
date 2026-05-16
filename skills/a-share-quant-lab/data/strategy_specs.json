@@ -1,0 +1,67 @@
+{
+  "strategies": [
+    {
+      "strategy_id": "batch_dividend_lowvol_quality",
+      "name": "红利低波质量",
+      "template": "dividend_lowvol_quality",
+      "path": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/specs/batch_dividend_lowvol_quality.json",
+      "updated_at": "2026-05-02 22:43:30"
+    },
+    {
+      "strategy_id": "batch_dragon_tiger_momentum",
+      "name": "龙虎榜/资金情绪",
+      "template": "dragon_tiger_momentum",
+      "path": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/specs/batch_dragon_tiger_momentum.json",
+      "updated_at": "2026-05-02 22:43:31"
+    },
+    {
+      "strategy_id": "batch_earnings_event",
+      "name": "财报/业绩预告事件",
+      "template": "earnings_event",
+      "path": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/specs/batch_earnings_event.json",
+      "updated_at": "2026-05-02 22:43:31"
+    },
+    {
+      "strategy_id": "batch_etf_trend_rotation",
+      "name": "ETF 趋势轮动",
+      "template": "etf_trend_rotation",
+      "path": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/specs/batch_etf_trend_rotation.json",
+      "updated_at": "2026-05-02 22:43:30"
+    },
+    {
+      "strategy_id": "batch_momentum_trend",
+      "name": "动量趋势",
+      "template": "momentum_trend",
+      "path": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/specs/batch_momentum_trend.json",
+      "updated_at": "2026-05-02 22:43:30"
+    },
+    {
+      "strategy_id": "batch_multi_factor_index_enhanced",
+      "name": "多因子指数增强",
+      "template": "multi_factor_index_enhanced",
+      "path": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/specs/batch_multi_factor_index_enhanced.json",
+      "updated_at": "2026-05-02 22:43:30"
+    },
+    {
+      "strategy_id": "batch_short_term_reversal",
+      "name": "短期反转",
+      "template": "short_term_reversal",
+      "path": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/specs/batch_short_term_reversal.json",
+      "updated_at": "2026-05-02 22:43:31"
+    },
+    {
+      "strategy_id": "batch_smallcap_momentum_quality",
+      "name": "小市值质量增强",
+      "template": "smallcap_momentum_quality",
+      "path": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/specs/batch_smallcap_momentum_quality.json",
+      "updated_at": "2026-05-02 22:43:30"
+    },
+    {
+      "strategy_id": "demo_smallcap_v1",
+      "name": "小市值质量增强",
+      "template": "smallcap_momentum_quality",
+      "path": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/specs/demo_smallcap_v1.json",
+      "updated_at": "2026-05-02 12:59:59"
+    }
+  ]
+}

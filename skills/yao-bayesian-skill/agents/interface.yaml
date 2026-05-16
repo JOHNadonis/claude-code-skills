@@ -1,0 +1,24 @@
+interface:
+  display_name: "Yao Bayesian Skill"
+  short_description: "Turn uncertain choices into multi-turn Bayesian decision reports with Chinese-first Markdown and bilingual HTML"
+  default_prompt: "Use $yao-bayesian-skill to turn this uncertain decision into a multi-turn Bayesian evidence-to-action report: start with a weak prior if input is incomplete, iteratively ask for missing information, record each round, then export synchronized Markdown and bilingual HTML."
+compatibility:
+  canonical_format: "agent-skills"
+  adapter_targets:
+    - "openai"
+    - "claude"
+    - "generic"
+  activation:
+    mode: "manual"
+    paths: []
+  execution:
+    context: "inline"
+    shell: "bash"
+  trust:
+    source_tier: "local"
+    remote_inline_execution: "forbid"
+    remote_metadata_policy: "allow-metadata-only"
+  degradation:
+    openai: "metadata-adapter"
+    claude: "neutral-source-plus-adapter"
+    generic: "neutral-source"

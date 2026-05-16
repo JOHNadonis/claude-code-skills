@@ -1,0 +1,43 @@
+{
+  "name": "browserwing",
+  "version": "1.0.0",
+  "description": "Native Browser Automation Platform with AI Integration",
+  "keywords": [
+    "browser",
+    "automation",
+    "mcp",
+    "skills",
+    "ai",
+    "llm",
+    "rpa",
+    "web-automation"
+  ],
+  "homepage": "https://browserwing.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/browserwing/browserwing.git"
+  },
+  "bugs": {
+    "url": "https://github.com/browserwing/browserwing/issues"
+  },
+  "license": "MIT",
+  "author": "BrowserWing Team",
+  "bin": {
+    "browserwing": "bin/browserwing"
+  },
+  "scripts": {
+    "postinstall": "node install.js"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "result_id": "demo_smallcap_v1_20260502_125959",
+  "strategy_id": "demo_smallcap_v1",
+  "platform": "local_csv",
+  "engine": "local_csv_simple",
+  "created_at": "2026-05-02 12:59:59",
+  "spec_hash": "sha256:e1b4928ac02ee49d77d3fbd4e522aa730386ed493c1f679316e41ed3c604755d",
+  "data_hash": "sha256:2213a5587248e0fecf0be987de4a9af6816bac2f8016e658e9f3f2116dfe3b86",
+  "metrics": {
+    "total_return": 0.365448,
+    "annual_return": 1.304904,
+    "annual_volatility": 0.038714,
+    "sharpe": 21.624245,
+    "max_drawdown": -0.001311,
+    "win_rate": 0.925532,
+    "turnover": 1.0,
+    "rebalance_count": 5,
+    "average_holdings": 6.0
+  },
+  "artifacts": {
+    "equity_curve_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/demo_smallcap_v1_20260502_125959/equity_curve.csv",
+    "positions_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/demo_smallcap_v1_20260502_125959/positions.csv",
+    "trades_csv": "/Users/whc/.codex/skills/a-share-quant-lab/workspace/backtests/demo_smallcap_v1_20260502_125959/trades.csv"
+  },
+  "warnings": []
+}

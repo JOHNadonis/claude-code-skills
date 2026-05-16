@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codebase Questions"
+  short_description: "Turn repository links into beginner questions"
+  default_prompt: "Use $ask-codebase-questions to help me learn this repository from a source link."

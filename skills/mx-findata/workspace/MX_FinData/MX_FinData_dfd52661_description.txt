@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 沪电股份002463 最新股价 技术面 BOLL布林线
+数据文件路径: workspace/MX_FinData/MX_FinData_dfd52661.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_dfd52661_description.txt
+数据行数: 10
+表数量: 5
+Sheet 列表: 沪电股份(H5245.HK)的BOLL布林线, 沪电股份(002463.SZ)的BOLL布林线LOW、BOLL, 沪电股份(002463.SZ)的收盘价, 沪电股份(002463.SZ)的开盘价、收盘价, 沪电股份(002463.SZ)的区间涨跌幅、区间换手率等

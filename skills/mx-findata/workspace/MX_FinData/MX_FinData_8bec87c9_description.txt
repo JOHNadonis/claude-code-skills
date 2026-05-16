@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 泰晶科技 002771 最新股价 量比 BOLL布林线 换手率
+数据文件路径: workspace/MX_FinData/MX_FinData_8bec87c9.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_8bec87c9_description.txt
+数据行数: 7
+表数量: 3
+Sheet 列表: 泰晶科技(603738.SH)的BOLL布林线、量比, 泰晶科技(603738.SH)当前的量比、最新价等, 泰晶科技(603738.SH)的收盘价、换手率

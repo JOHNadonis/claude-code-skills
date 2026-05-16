@@ -1,0 +1,11 @@
+{
+  "name": "claude-code-skills",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Personal Claude Code / Agent skills collection",
+  "keywords": [
+    "claude-code",
+    "skills",
+    "agents"
+  ]
+}

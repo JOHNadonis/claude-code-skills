@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的申辩 — 苏格拉底</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --marble: #f8f5f0;
+  --dark: #2a2a1e;
+  --gold: #c5a55a;
+  --olive: #6b7c3e;
+  --terracotta: #c06030;
+  --text-dark: #2a2a1e;
+  --text-light: #f0ead6;
+  --text-secondary: #6b6355;
+  --parchment: #f3e8d0;
+  --shadow: rgba(42,42,30,0.1);
+  --radius: 4px;
+  --font-heading: 'Playfair Display', 'Georgia', serif;
+  --font-body: 'Crimson Text', 'Georgia', serif;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; background:#1a1a12; font-family: var(--font-body); }
+
+/* ============================================================
+   GREEK KEY BORDER PATTERN (CSS only)
+   ============================================================ */
+.greek-key-border {
+  position: absolute; inset: 0; pointer-events: none; z-index: 2;
+}
+.greek-key-border::before {
+  content: '';
+  position: absolute; inset: 12px;
+  border: 2px solid var(--gold);
+  border-radius: var(--radius);
+}
+.greek-key-border::after {
+  content: '';
+  position: absolute; inset: 20px;
+  border: 1px solid rgba(197,165,90,0.3);
+  border-radius: var(--radius);
+}
+
+/* Meander pattern strip */
+.meander-top, .meander-bottom {
+  position: absolute; left: 30px; right: 30px; height: 8px; z-index: 3;
+  background:
+    repeating-linear-gradient(90deg,
+      var(--gold) 0px, var(--gold) 4px,
+      transparent 4px, transparent 8px,
+      var(--gold) 8px, var(--gold) 12px,
+      transparent 12px, transparent 16px
+    );
+  mask: repeating-linear-gradient(90deg, #000 0px, #000 12px, transparent 12px, transparent 16px);
+  -webkit-mask: repeating-linear-gradient(90deg, #000 0px, #000 12px, transparent 12px, transparent 16px);
+  opacity: 0.5;
+}
+.meander-top { top: 15px; }
+.meander-bottom { bottom: 15px; }
+
+/* ============================================================
+   CORNER ORNAMENTS (light slides)
+   ============================================================ */
+.slide--light .corner-ornament { display: block; }
+.corner-ornament {
+  display: none;
+  position: absolute; width: 40px; height: 40px; z-index: 4;
+  opacity: 0.35;
+}
+.corner-ornament::before, .corner-ornament::after {
+  content: ''; position: absolute; background: var(--gold);
+}
+.corner-ornament--tl { top: 24px; left: 24px; }
+.corner-ornament--tl::before { width: 20px; height: 2px; top:0; left:0; }
+.corner-ornament--tl::after  { width: 2px; height: 20px; top:0; left:0; }
+.corner-ornament--tr { top: 24px; right: 24px; }
+.corner-ornament--tr::before { width: 20px; height: 2px; top:0; right:0; }
+.corner-ornament--tr::after  { width: 2px; height: 20px; top:0; right:0; }
+.corner-ornament--bl { bottom: 24px; left: 24px; }
+.corner-ornament--bl::before { width: 20px; height: 2px; bottom:0; left:0; }
+.corner-ornament--bl::after  { width: 2px; height: 20px; bottom:0; left:0; }
+.corner-ornament--br { bottom: 24px; right: 24px; }
+.corner-ornament--br::before { width: 20px; height: 2px; bottom:0; right:0; }
+.corner-ornament--br::after  { width: 2px; height: 20px; bottom:0; right:0; }
+
+/* ============================================================
+   NOISE TEXTURE (marble slides)
+   ============================================================ */
+.slide--light::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+/* ============================================================
+   SLIDE SYSTEM
+   ============================================================ */
+.slides-container {
+  width: 100vw; height: 100vh;
+  position: relative; overflow: hidden;
+}
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  padding: clamp(40px, 5vh, 80px) clamp(60px, 8vw, 160px);
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateX(40px);
+}
+.slide.active {
+  opacity: 1; visibility: visible;
+  transform: translateX(0);
+  z-index: 1;
+}
+.slide.prev {
+  opacity: 0; visibility: hidden;
+  transform: translateX(-40px);
+}
+
+.slide--light {
+  background: var(--marble);
+  color: var(--text-dark);
+}
+.slide--dark {
+  background: var(--dark);
+  color: var(--text-light);
+}
+.slide--dark .greek-key-border::before { border-color: rgba(197,165,90,0.5); }
+.slide--dark .greek-key-border::after  { border-color: rgba(197,165,90,0.15); }
+.slide--dark .meander-top, .slide--dark .meander-bottom { opacity: 0.3; }
+
+/* ============================================================
+   SLIDE INNER CONTENT
+   ============================================================ */
+.slide-inner {
+  position: relative; z-index: 1;
+  max-width: 1100px; width: 100%;
+  text-align: left;
+}
+.slide-inner.center { text-align: center; }
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+h1, h2, h3 { font-family: var(--font-heading); font-weight: 700; line-height: 1.2; }
+h1 { font-size: clamp(36px, 4vw, 56px); margin-bottom: 0.3em; }
+h2 { font-size: clamp(28px, 3vw, 42px); margin-bottom: 0.4em; }
+h3 { font-size: clamp(20px, 2vw, 28px); margin-bottom: 0.3em; font-weight: 600; }
+p, li { font-size: clamp(15px, 1.5vw, 18px); line-height: 1.8; margin-bottom: 0.5em; }
+.small { font-size: clamp(13px, 1.2vw, 15px); }
+.secondary { color: var(--text-secondary); }
+.slide--dark .secondary { color: rgba(240,234,214,0.6); }
+.gold { color: var(--gold); }
+.terracotta { color: var(--terracotta); }
+.olive-text { color: var(--olive); }
+.italic { font-style: italic; }
+
+/* Section number */
+.section-num {
+  font-family: var(--font-heading);
+  font-size: clamp(14px, 1.2vw, 16px);
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+
+/* ============================================================
+   QUOTE / SCROLL BLOCK
+   ============================================================ */
+.scroll-quote {
+  background: linear-gradient(135deg, var(--parchment) 0%, #efe3cc 100%);
+  border: 1px solid rgba(197,165,90,0.3);
+  border-radius: 6px;
+  padding: clamp(16px, 2vw, 28px) clamp(20px, 3vw, 36px);
+  margin: 16px 0;
+  position: relative;
+  color: var(--text-dark);
+  box-shadow: 0 4px 20px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+.scroll-quote::before, .scroll-quote::after {
+  content: '';
+  position: absolute; left: 8px; right: 8px; height: 12px;
+  background: radial-gradient(ellipse at center, rgba(197,165,90,0.15) 0%, transparent 70%);
+}
+.scroll-quote::before { top: -6px; }
+.scroll-quote::after  { bottom: -6px; }
+.scroll-quote p { font-style: italic; font-size: clamp(16px, 1.6vw, 20px); line-height: 1.7; }
+
+/* Big quote */
+.big-quote {
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--gold);
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.card-grid { display: grid; gap: 16px; margin: 16px 0; }
+.card-grid--2 { grid-template-columns: 1fr 1fr; }
+.card-grid--3 { grid-template-columns: 1fr 1fr 1fr; }
+.card-grid--4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+@media (max-width: 900px) {
+  .card-grid--2, .card-grid--3, .card-grid--4 { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(197,165,90,0.2);
+  border-radius: var(--radius);
+  padding: clamp(14px, 1.5vw, 22px);
+  box-shadow: 0 2px 12px var(--shadow);
+}
+.slide--dark .card {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(197,165,90,0.2);
+}
+
+.insight-card {
+  background: linear-gradient(135deg, rgba(197,165,90,0.12) 0%, rgba(107,124,62,0.08) 100%);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+  padding: clamp(12px, 1.5vw, 20px);
+  margin: 12px 0;
+}
+.slide--dark .insight-card {
+  background: linear-gradient(135deg, rgba(197,165,90,0.15) 0%, rgba(107,124,62,0.1) 100%);
+}
+
+/* ============================================================
+   TWO-COLUMN LAYOUT
+   ============================================================ */
+.two-col {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3vw, 40px);
+  align-items: start;
+}
+@media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+.col-divider {
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ============================================================
+   LOGIC CHAIN / STEPS
+   ============================================================ */
+.logic-chain { list-style: none; counter-reset: logic; }
+.logic-chain li {
+  counter-increment: logic;
+  padding: 8px 0 8px 40px;
+  position: relative;
+  border-left: 2px solid rgba(197,165,90,0.3);
+  margin-left: 15px;
+}
+.logic-chain li::before {
+  content: counter(logic);
+  position: absolute; left: -15px; top: 6px;
+  width: 28px; height: 28px;
+  background: var(--gold); color: var(--dark);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-heading); font-weight: 700; font-size: 14px;
+}
+
+/* ============================================================
+   VERDICT / LARGE LABEL
+   ============================================================ */
+.verdict {
+  font-family: var(--font-heading);
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 900;
+  color: var(--terracotta);
+  text-align: center;
+  margin: 20px 0;
+  text-shadow: 0 2px 20px rgba(192,96,48,0.3);
+}
+.slide--dark .verdict { color: var(--terracotta); }
+
+.part-label {
+  font-family: var(--font-heading);
+  font-size: clamp(16px, 1.5vw, 20px);
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+/* ============================================================
+   SVG STYLING
+   ============================================================ */
+.svg-icon { display: inline-block; vertical-align: middle; }
+.svg-icon--lg { width: clamp(80px, 10vw, 140px); height: auto; margin: 12px auto; display: block; }
+.svg-icon--md { width: clamp(50px, 6vw, 80px); height: auto; }
+.svg-icon--sm { width: clamp(30px, 4vw, 50px); height: auto; }
+.svg-icon--inline { width: 24px; height: 24px; margin-right: 6px; vertical-align: -4px; }
+.svg-center { text-align: center; }
+
+/* ============================================================
+   SLIDE NUMBER & PROGRESS
+   ============================================================ */
+.slide-number {
+  position: fixed; bottom: 12px; right: 24px;
+  font-family: var(--font-heading); font-size: 14px;
+  color: rgba(197,165,90,0.6); z-index: 100;
+}
+.progress-bar {
+  position: fixed; bottom: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--olive));
+  transition: width 0.4s ease; z-index: 100;
+}
+
+/* ============================================================
+   CONTROLS UI
+   ============================================================ */
+.controls {
+  position: fixed; top: 12px; right: 16px; z-index: 200;
+  display: flex; gap: 8px;
+}
+.controls button {
+  background: rgba(42,42,30,0.7); border: 1px solid rgba(197,165,90,0.3);
+  color: var(--text-light); padding: 6px 10px; border-radius: var(--radius);
+  cursor: pointer; font-family: var(--font-body); font-size: 13px;
+  transition: background 0.2s;
+}
+.controls button:hover { background: rgba(197,165,90,0.3); }
+.controls button.active { background: var(--gold); color: var(--dark); }
+
+/* Speaker notes panel */
+.notes-panel {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(42,42,30,0.95); color: var(--text-light);
+  padding: 16px 24px; font-size: 14px; line-height: 1.6;
+  transform: translateY(100%); transition: transform 0.3s ease;
+  z-index: 150; max-height: 30vh; overflow-y: auto;
+  border-top: 2px solid var(--gold);
+}
+.notes-panel.visible { transform: translateY(0); }
+
+/* ============================================================
+   PRINT STYLES
+   ============================================================ */
+@media print {
+  body { overflow: visible; background: white; }
+  .slide {
+    position: relative !important; opacity: 1 !important; visibility: visible !important;
+    transform: none !important; page-break-after: always; page-break-inside: avoid;
+    width: 100%; min-height: 100vh;
+  }
+  .controls, .slide-number, .progress-bar, .notes-panel { display: none !important; }
+  .greek-key-border::before { border-color: #999 !important; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .slide { padding: 30px 24px; }
+  .two-col { grid-template-columns: 1fr; gap: 16px; }
+  .card-grid--2, .card-grid--3, .card-grid--4 { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide.active .anim-in {
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+}
+.slide.active .anim-in:nth-child(1) { animation-delay: 0.1s; }
+.slide.active .anim-in:nth-child(2) { animation-delay: 0.25s; }
+.slide.active .anim-in:nth-child(3) { animation-delay: 0.4s; }
+.slide.active .anim-in:nth-child(4) { animation-delay: 0.55s; }
+.slide.active .anim-in:nth-child(5) { animation-delay: 0.7s; }
+</style>
+</head>
+<body>
+
+<div class="slides-container" id="slidesContainer">
+
+<!-- ============================================================
+     SLIDE 1 — 封面
+     ============================================================ -->
+<div class="slide slide--dark active" data-notes="这是我苏格拉底一生中最重要的一天。公元前399年，我站在由五百零一位公民组成的法庭前。我已经七十岁了，从未上过法庭。今天，我要为自己的一生做一次彻底的辩护。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="slide-inner center">
+    <!-- Laurel Wreath SVG -->
+    <div class="svg-center anim-in">
+      <svg class="svg-icon--lg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g opacity="0.9">
+          <!-- Left branch -->
+          <path d="M100 170 C60 160, 30 130, 25 90" stroke="#c5a55a" stroke-width="2" fill="none"/>
+          <ellipse cx="38" cy="130" rx="12" ry="6" transform="rotate(-30 38 130)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="30" cy="115" rx="12" ry="6" transform="rotate(-40 30 115)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="26" cy="100" rx="11" ry="5.5" transform="rotate(-55 26 100)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="28" cy="85" rx="11" ry="5.5" transform="rotate(-65 28 85)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="34" cy="72" rx="10" ry="5" transform="rotate(-75 34 72)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="42" cy="60" rx="10" ry="5" transform="rotate(-80 42 60)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="52" cy="50" rx="10" ry="5" transform="rotate(-85 52 50)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="64" cy="42" rx="9" ry="5" transform="rotate(10 64 42)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="78" cy="36" rx="9" ry="5" transform="rotate(20 78 36)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="90" cy="33" rx="9" ry="5" transform="rotate(30 90 33)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <!-- Right branch -->
+          <path d="M100 170 C140 160, 170 130, 175 90" stroke="#c5a55a" stroke-width="2" fill="none"/>
+          <ellipse cx="162" cy="130" rx="12" ry="6" transform="rotate(30 162 130)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="170" cy="115" rx="12" ry="6" transform="rotate(40 170 115)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="174" cy="100" rx="11" ry="5.5" transform="rotate(55 174 100)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="172" cy="85" rx="11" ry="5.5" transform="rotate(65 172 85)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="166" cy="72" rx="10" ry="5" transform="rotate(75 166 72)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="158" cy="60" rx="10" ry="5" transform="rotate(80 158 60)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="148" cy="50" rx="10" ry="5" transform="rotate(85 148 50)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="136" cy="42" rx="9" ry="5" transform="rotate(-10 136 42)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="122" cy="36" rx="9" ry="5" transform="rotate(-20 122 36)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="110" cy="33" rx="9" ry="5" transform="rotate(-30 110 33)" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <!-- Ribbon -->
+          <path d="M95 170 L90 190 M105 170 L110 190" stroke="#c5a55a" stroke-width="1.5" fill="none"/>
+        </g>
+      </svg>
+    </div>
+    <h1 class="anim-in" style="font-size:clamp(42px,5vw,64px); color:var(--text-light); margin-top:12px;">我的申辩</h1>
+    <p class="anim-in" style="font-family:var(--font-heading); font-size:clamp(20px,2.5vw,30px); color:var(--gold); letter-spacing:6px; margin-bottom:24px;">ἈΠΟΛΟΓΊΑ</p>
+    <p class="anim-in" style="font-size:clamp(16px,1.6vw,20px); color:var(--text-light); opacity:0.8;">苏格拉底 &middot; 致雅典公民法庭</p>
+    <p class="anim-in small" style="color:rgba(240,234,214,0.5); margin-top:12px;">公元前399年 &middot; 我生命的第七十个年头</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 2 — 开场
+     ============================================================ -->
+<div class="slide slide--light" data-notes="我的开场策略是以退为进。声称自己不善言辞，实际上是在建立信任。对比控告者的花言巧语和我的朴素真话，让陪审团放下戒心。这是我七十年来第一次踏进法庭——这本身就说明了我从未违法。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="corner-ornament corner-ornament--tl"></div>
+  <div class="corner-ornament corner-ornament--tr"></div>
+  <div class="corner-ornament corner-ornament--bl"></div>
+  <div class="corner-ornament corner-ornament--br"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">I &middot; 开场</div>
+    <!-- Owl SVG -->
+    <div class="anim-in" style="margin-bottom:12px;">
+      <svg class="svg-icon--sm" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="26" r="18" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <circle cx="23" cy="23" r="5" fill="none" stroke="#6b7c3e" stroke-width="1.5"/>
+        <circle cx="37" cy="23" r="5" fill="none" stroke="#6b7c3e" stroke-width="1.5"/>
+        <circle cx="23" cy="23" r="2" fill="#c5a55a"/>
+        <circle cx="37" cy="23" r="2" fill="#c5a55a"/>
+        <path d="M27 30 L30 34 L33 30" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M20 12 L23 18 M40 12 L37 18" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M22 40 L22 50 M30 42 L30 52 M38 40 L38 50" stroke="#6b7c3e" stroke-width="1"/>
+      </svg>
+    </div>
+    <h2 class="anim-in">雅典的公民们</h2>
+    <div class="scroll-quote anim-in">
+      <p>"我不知道你们是否被我的控告者说动了。但我要告诉你们——他们几乎没说过一句真话。"</p>
+    </div>
+    <p class="anim-in">"他们说你们要当心被我的'雄辩'所欺骗。这是他们最无耻的说法——除非他们所说的雄辩是指真理的力量。"</p>
+    <p class="anim-in">"我已经七十岁了，这是我第一次上法庭。请像对待一个外邦人一样包容我的说话方式。"</p>
+    <div class="insight-card anim-in">
+      <p style="margin:0;"><strong class="gold">我的策略</strong> —— 用"不会说话"来赢得你们的信任</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 3 — 两种敌人
+     ============================================================ -->
+<div class="slide slide--light" data-notes="我面对的是两波敌人：一波是多年以来散布谣言的人，尤其是阿里斯托芬的喜剧；另一波是今天站在法庭上的三个人。前者比后者更可怕，因为谣言已经渗透了你们的童年记忆。我无法传唤影子来对峙。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="corner-ornament corner-ornament--tl"></div>
+  <div class="corner-ornament corner-ornament--tr"></div>
+  <div class="corner-ornament corner-ornament--bl"></div>
+  <div class="corner-ornament corner-ornament--br"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">II &middot; 两种敌人</div>
+    <h2 class="anim-in">我必须对抗两种力量</h2>
+    <div class="two-col anim-in">
+      <div class="card">
+        <!-- Pillar SVG -->
+        <div class="svg-center" style="margin-bottom:8px;">
+          <svg class="svg-icon--sm" viewBox="0 0 40 60" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="8" width="24" height="4" rx="1" fill="none" stroke="#c5a55a" stroke-width="1.2"/>
+            <rect x="10" y="12" width="20" height="38" fill="none" stroke="#c5a55a" stroke-width="1.2"/>
+            <line x1="14" y1="12" x2="14" y2="50" stroke="#c5a55a" stroke-width="0.5" opacity="0.4"/>
+            <line x1="20" y1="12" x2="20" y2="50" stroke="#c5a55a" stroke-width="0.5" opacity="0.4"/>
+            <line x1="26" y1="12" x2="26" y2="50" stroke="#c5a55a" stroke-width="0.5" opacity="0.4"/>
+            <rect x="8" y="50" width="24" height="4" rx="1" fill="none" stroke="#c5a55a" stroke-width="1.2"/>
+            <rect x="6" y="4" width="28" height="4" rx="1" fill="none" stroke="#c5a55a" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <h3 class="terracotta">看不见的敌人</h3>
+        <p>"多年来，有些人一直在散布关于我的谣言。阿里斯托芬在《云》里把我演成一个'在空中行走'的怪人。这些流言从你们还是孩子的时候就开始影响你们了。"</p>
+        <p class="secondary italic">"我没法传唤这些人——我只能与影子搏斗。"</p>
+      </div>
+      <div class="card">
+        <div class="svg-center" style="margin-bottom:8px;">
+          <svg class="svg-icon--sm" viewBox="0 0 40 60" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="8" width="24" height="4" rx="1" fill="none" stroke="#6b7c3e" stroke-width="1.2"/>
+            <rect x="10" y="12" width="20" height="38" fill="none" stroke="#6b7c3e" stroke-width="1.2"/>
+            <line x1="14" y1="12" x2="14" y2="50" stroke="#6b7c3e" stroke-width="0.5" opacity="0.4"/>
+            <line x1="20" y1="12" x2="20" y2="50" stroke="#6b7c3e" stroke-width="0.5" opacity="0.4"/>
+            <line x1="26" y1="12" x2="26" y2="50" stroke="#6b7c3e" stroke-width="0.5" opacity="0.4"/>
+            <rect x="8" y="50" width="24" height="4" rx="1" fill="none" stroke="#6b7c3e" stroke-width="1.2"/>
+            <rect x="6" y="4" width="28" height="4" rx="1" fill="none" stroke="#6b7c3e" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <h3 class="olive-text">今天的控告者</h3>
+        <p>"美勒托斯代表诗人，安尼托斯代表工匠和政客，莱孔代表修辞家——我得罪了所有人。"</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 4 — 我不是什么人
+     ============================================================ -->
+<div class="slide slide--light" data-notes="我需要先澄清身份。我不是自然哲学家，不是智者学派。卡利亚斯的故事很有趣——他花大价钱请智者来教他的儿子，可我连一个铜板都没收过。我的贫穷就是最好的证据。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="corner-ornament corner-ornament--tl"></div>
+  <div class="corner-ornament corner-ornament--tr"></div>
+  <div class="corner-ornament corner-ornament--bl"></div>
+  <div class="corner-ornament corner-ornament--br"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">III &middot; 自我澄清</div>
+    <h2 class="anim-in">我不是什么人</h2>
+    <!-- Horse SVG -->
+    <div class="anim-in svg-center" style="margin-bottom:8px;">
+      <svg class="svg-icon--md" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M25 55 Q30 30, 50 25 Q60 23, 65 28 L70 22 L75 18 L73 25 L68 30 Q72 35, 70 45 L75 60 L72 62 L68 48 L60 60 L57 62 L55 48 L45 58 L42 60 L44 46 L35 58 L32 60 L36 45 Q28 50, 25 55Z" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <circle cx="72" cy="24" r="1.5" fill="#c5a55a"/>
+        <path d="M75 18 Q80 14, 78 10 M75 18 Q82 16, 84 12" stroke="#c5a55a" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+    <p class="anim-in">"他们说我研究天上地下的事物——那是阿那克萨哥拉的学说，不是我的。他们说我像智者学派一样收费教学——<strong>我从未收过一个铜板。</strong>"</p>
+    <div class="scroll-quote anim-in">
+      <p><strong class="gold">卡利亚斯的故事：</strong>"雅典首富卡利亚斯在智者身上花了大量金钱。我问他：如果你的儿子是马驹，你会请驯马师；他们是人，你请谁来教？他说帕罗斯岛的伊温诺斯，收费5弥那。"</p>
+    </div>
+    <p class="anim-in italic secondary">"如果我也有那种智慧，我一定会非常骄傲。但事实是——我没有。"</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 5 — 神谕
+     ============================================================ -->
+<div class="slide slide--dark" data-notes="凯瑞丰是我童年的朋友，性格急躁冲动。他跑去德尔斐问了那个改变我一生的问题。神谕说没有人比我更有智慧——这让我困惑不已。我知道自己无知，但神不会说谎。于是我踏上了验证神谕的旅程，这个旅程最终把我推向了法庭。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">IV &middot; 德尔斐神谕</div>
+    <!-- Temple SVG -->
+    <div class="anim-in svg-center">
+      <svg class="svg-icon--lg" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="100,10 170,50 30,50" fill="none" stroke="#c5a55a" stroke-width="2"/>
+        <line x1="50" y1="50" x2="50" y2="120" stroke="#c5a55a" stroke-width="2"/>
+        <line x1="80" y1="50" x2="80" y2="120" stroke="#c5a55a" stroke-width="2"/>
+        <line x1="120" y1="50" x2="120" y2="120" stroke="#c5a55a" stroke-width="2"/>
+        <line x1="150" y1="50" x2="150" y2="120" stroke="#c5a55a" stroke-width="2"/>
+        <rect x="30" y="120" width="140" height="6" fill="none" stroke="#c5a55a" stroke-width="2"/>
+        <rect x="25" y="126" width="150" height="4" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <rect x="40" y="46" width="120" height="4" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <!-- Flame -->
+        <ellipse cx="100" cy="90" rx="6" ry="12" fill="none" stroke="#c5a55a" stroke-width="1.2"/>
+        <ellipse cx="100" cy="86" rx="3" ry="6" fill="#c5a55a" opacity="0.3"/>
+      </svg>
+    </div>
+    <h2 class="anim-in" style="color:var(--gold);">神 谕</h2>
+    <div class="scroll-quote anim-in">
+      <p>"我的童年好友凯瑞丰——你们都认识他，那个性子急躁的人——他跑去德尔斐神庙，问女祭司：<strong>'有没有人比苏格拉底更有智慧？'</strong>"</p>
+      <p>"神谕的回答是：<strong style="color:var(--terracotta);">没有。</strong>"</p>
+    </div>
+    <p class="anim-in">"我听到这个消息时困惑极了。我知道自己一无所知——但神不会说谎。所以我决定用一个方法来检验：<strong>找到一个比我更有智慧的人，去反驳神谕。</strong>"</p>
+    <p class="anim-in big-quote" style="font-size:clamp(20px,2.2vw,28px);">"这个决定改变了我的一生。"</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 6 — 审问政客
+     ============================================================ -->
+<div class="slide slide--light" data-notes="我去找的第一个人是一位声名显赫的政客。谈话之后我发现他其实不懂装懂。当我试着指出这一点时，他恨上了我。但我从中悟到了一个关键的道理——无知本身不可怕，可怕的是不自知的无知。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="corner-ornament corner-ornament--tl"></div>
+  <div class="corner-ornament corner-ornament--tr"></div>
+  <div class="corner-ornament corner-ornament--bl"></div>
+  <div class="corner-ornament corner-ornament--br"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">V &middot; 审问政客</div>
+    <!-- Scales of Justice SVG -->
+    <div class="anim-in" style="margin-bottom:8px;">
+      <svg class="svg-icon--sm" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <line x1="30" y1="8" x2="30" y2="52" stroke="#c5a55a" stroke-width="1.5"/>
+        <line x1="10" y1="18" x2="50" y2="18" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M6 32 L10 18 L14 32" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M4 32 Q10 38, 16 32" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M46 28 L50 18 L54 28" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M44 28 Q50 34, 56 28" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <rect x="24" y="52" width="12" height="3" rx="1" fill="none" stroke="#c5a55a" stroke-width="1.2"/>
+        <circle cx="30" cy="8" r="3" fill="none" stroke="#c5a55a" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <h2 class="anim-in">审问政客</h2>
+    <p class="anim-in">"我首先去找了一位以智慧闻名的政客。交谈之后我发现——他并非真正有智慧，尽管很多人这么认为，他自己也深信不疑。"</p>
+    <p class="anim-in">"我试图向他解释这一点。结果？<strong class="terracotta">他恨我了</strong>，在场的人也跟着恨我。"</p>
+    <div class="insight-card anim-in">
+      <p style="margin:0;"><strong class="gold">关键领悟：</strong>"我离开时心想：我们都不知道什么真正美好的事物。但我比他强一点——因为<strong>他不知道却自以为知道；而我不知道，也不自以为知道。</strong>就这一点微小的差别，我似乎比他有智慧。"</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 7 — 审问诗人与工匠
+     ============================================================ -->
+<div class="slide slide--light" data-notes="诗人靠灵感写作，就像占卜者说出美妙的话却不理解含义。工匠确实有真才实学，但他们的问题和诗人一样：因为精通一个领域，就以为自己在所有领域都是专家。我的调查越深入，得罪的人就越多。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="corner-ornament corner-ornament--tl"></div>
+  <div class="corner-ornament corner-ornament--tr"></div>
+  <div class="corner-ornament corner-ornament--bl"></div>
+  <div class="corner-ornament corner-ornament--br"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">VI &middot; 审问诗人与工匠</div>
+    <h2 class="anim-in">继续验证</h2>
+    <div class="two-col anim-in">
+      <div class="card">
+        <!-- Lyre SVG -->
+        <div class="svg-center" style="margin-bottom:8px;">
+          <svg class="svg-icon--sm" viewBox="0 0 50 60" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 50 L15 20 Q15 8, 25 5 Q35 8, 35 20 L35 50" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+            <line x1="15" y1="50" x2="35" y2="50" stroke="#c5a55a" stroke-width="2"/>
+            <line x1="20" y1="15" x2="20" y2="48" stroke="#c5a55a" stroke-width="0.8"/>
+            <line x1="25" y1="12" x2="25" y2="48" stroke="#c5a55a" stroke-width="0.8"/>
+            <line x1="30" y1="15" x2="30" y2="48" stroke="#c5a55a" stroke-width="0.8"/>
+            <line x1="15" y1="20" x2="35" y2="20" stroke="#c5a55a" stroke-width="1"/>
+          </svg>
+        </div>
+        <h3 class="gold">诗 人</h3>
+        <p>"我拿他们最得意的作品来问他们是什么意思。结果在座的任何人都比他们自己更能解释。诗人写诗靠的是灵感，不是智慧——他们就像占卜者，说出美妙的话却不理解其含义。"</p>
+        <p class="secondary italic">"更糟的是，他们因为会写诗，就以为自己什么都懂。"</p>
+      </div>
+      <div class="card">
+        <!-- Hammer/Anvil SVG -->
+        <div class="svg-center" style="margin-bottom:8px;">
+          <svg class="svg-icon--sm" viewBox="0 0 50 60" xmlns="http://www.w3.org/2000/svg">
+            <rect x="12" y="42" width="26" height="8" rx="2" fill="none" stroke="#6b7c3e" stroke-width="1.5"/>
+            <rect x="8" y="50" width="34" height="4" rx="1" fill="none" stroke="#6b7c3e" stroke-width="1.5"/>
+            <rect x="20" y="18" width="10" height="24" rx="1" fill="none" stroke="#6b7c3e" stroke-width="1.5"/>
+            <rect x="14" y="10" width="22" height="10" rx="2" fill="none" stroke="#6b7c3e" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <h3 class="olive-text">工 匠</h3>
+        <p>"工匠确实知道很多我不知道的东西——这一点我承认。但他们的毛病和诗人一样：因为精通手艺，就以为自己在所有高深问题上都是专家。"</p>
+      </div>
+    </div>
+    <div class="scroll-quote anim-in" style="margin-top:12px;">
+      <p>"我问自己：我宁愿像现在这样一无所知但自知，还是像他们那样有些知识但盲目自大？答案是：<strong>保持现状。</strong>"</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 8 — 神谕的真相
+     ============================================================ -->
+<div class="slide slide--dark" data-notes="经过对政客、诗人、工匠的审问，我终于理解了神谕的含义。神不是在赞美我的智慧，而是用我的名字做一个例证：真正的智慧属于神，人类的智慧微不足道。我唯一的优势是知道自己无知。为了完成神赋予我的使命，我放弃了一切，活在赤贫之中。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="slide-inner center">
+    <div class="section-num anim-in">VII &middot; 神谕的真相</div>
+    <!-- Large Owl SVG -->
+    <div class="anim-in svg-center">
+      <svg class="svg-icon--lg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="80" cy="70" rx="40" ry="45" fill="none" stroke="#c5a55a" stroke-width="2"/>
+        <circle cx="65" cy="60" r="12" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <circle cx="95" cy="60" r="12" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <circle cx="65" cy="60" r="5" fill="#c5a55a" opacity="0.4"/>
+        <circle cx="95" cy="60" r="5" fill="#c5a55a" opacity="0.4"/>
+        <circle cx="65" cy="60" r="2.5" fill="#c5a55a"/>
+        <circle cx="95" cy="60" r="2.5" fill="#c5a55a"/>
+        <path d="M75 75 L80 82 L85 75" fill="none" stroke="#c5a55a" stroke-width="2"/>
+        <path d="M55 35 L62 48 M105 35 L98 48" stroke="#c5a55a" stroke-width="2"/>
+        <path d="M50 90 Q45 100, 50 108 L55 105 Q52 98, 55 90" fill="none" stroke="#c5a55a" stroke-width="1.2"/>
+        <path d="M110 90 Q115 100, 110 108 L105 105 Q108 98, 105 90" fill="none" stroke="#c5a55a" stroke-width="1.2"/>
+        <path d="M65 112 L65 130 M75 115 L75 135 M85 115 L85 135 M95 112 L95 130" stroke="#c5a55a" stroke-width="1.2"/>
+        <!-- Olive branch around owl -->
+        <path d="M30 130 Q50 110, 80 140 Q110 110, 130 130" fill="none" stroke="#6b7c3e" stroke-width="1" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="big-quote anim-in">"只有神是真正有智慧的。人类的智慧微不足道。"</div>
+    <div class="scroll-quote anim-in" style="max-width:800px; margin:16px auto;">
+      <p>"神谕的意思是：最有智慧的人，是像我苏格拉底这样，知道自己的智慧实际上毫无价值的人。"</p>
+    </div>
+    <div class="card-grid card-grid--3 anim-in" style="max-width:800px; margin:16px auto;">
+      <div class="card" style="text-align:center;">
+        <p class="gold" style="font-size:20px; font-weight:700;">①</p>
+        <p>神不是在赞美我<br>而是用我做一个例证</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <p class="gold" style="font-size:20px; font-weight:700;">②</p>
+        <p>真正的智慧<br>只属于神</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <p class="gold" style="font-size:20px; font-weight:700;">③</p>
+        <p>我的"优势"仅仅在于<br><strong>我知道自己无知</strong></p>
+      </div>
+    </div>
+    <p class="anim-in secondary" style="margin-top:12px;">"为了服务于神的这个使命，我放弃了一切世俗事务，生活在赤贫之中。"</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 9 — 为什么你们恨我
+     ============================================================ -->
+<div class="slide slide--light" data-notes="每次揭穿一个人，我就多一个敌人。更糟糕的是，雅典的年轻人开始模仿我——那些富家子弟闲着没事，跟在我后面看我审问人，然后他们自己也去审问别人。这让被审问的人更加恼火，于是他们把矛头指向我。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="corner-ornament corner-ornament--tl"></div>
+  <div class="corner-ornament corner-ornament--tr"></div>
+  <div class="corner-ornament corner-ornament--bl"></div>
+  <div class="corner-ornament corner-ornament--br"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">VIII &middot; 仇恨的根源</div>
+    <!-- Angry crowd SVG -->
+    <div class="anim-in" style="margin-bottom:8px;">
+      <svg class="svg-icon--md" viewBox="0 0 120 50" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#c06030" stroke-width="1.2" fill="none">
+          <circle cx="20" cy="12" r="6"/><line x1="20" y1="18" x2="20" y2="35"/><line x1="20" y1="35" x2="15" y2="48"/><line x1="20" y1="35" x2="25" y2="48"/><line x1="20" y1="24" x2="12" y2="30"/><line x1="20" y1="24" x2="28" y2="20"/>
+          <circle cx="45" cy="10" r="6"/><line x1="45" y1="16" x2="45" y2="33"/><line x1="45" y1="33" x2="40" y2="48"/><line x1="45" y1="33" x2="50" y2="48"/><line x1="45" y1="22" x2="37" y2="18"/><line x1="45" y1="22" x2="53" y2="28"/>
+          <circle cx="70" cy="12" r="6"/><line x1="70" y1="18" x2="70" y2="35"/><line x1="70" y1="35" x2="65" y2="48"/><line x1="70" y1="35" x2="75" y2="48"/><line x1="70" y1="24" x2="62" y2="20"/><line x1="70" y1="24" x2="78" y2="28"/>
+          <circle cx="95" cy="10" r="6"/><line x1="95" y1="16" x2="95" y2="33"/><line x1="95" y1="33" x2="90" y2="48"/><line x1="95" y1="33" x2="100" y2="48"/><line x1="95" y1="22" x2="87" y2="28"/><line x1="95" y1="22" x2="103" y2="18"/>
+        </g>
+      </svg>
+    </div>
+    <h2 class="anim-in">为什么你们恨我</h2>
+    <p class="anim-in">"每次我揭穿一个人的虚假智慧，他就会感到羞辱，然后把怒气撒在我身上。他们大喊：<strong class="terracotta">'这个该死的苏格拉底，青年的败坏者！'</strong>被问到我到底教了什么坏东西，他们答不上来。"</p>
+    <p class="anim-in">"更让他们恼火的是——你们的孩子开始模仿我。那些富家子弟没事可做，跟在我后面，看我审问那些自命不凡的人，觉得很有趣。然后他们也开始去审问别人。"</p>
+    <div class="insight-card anim-in">
+      <p style="margin:0;"><strong class="gold">"这就是为什么今天有三个人站在那里控告我。"</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 10 — 法庭交锋：驯马师
+     ============================================================ -->
+<div class="slide slide--dark" data-notes="这是我反击美勒托斯的第一个回合。我用驯马师类比来证明他的指控荒谬——不可能全雅典都在改善青年，唯独我一人在腐蚀。就像马一样，改善需要专业知识，多数人只会造成伤害。而且如果我真的腐蚀了身边的人，他们反过来会伤害我——我又不是傻子。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">IX &middot; 法庭交锋</div>
+    <!-- Horse SVG -->
+    <div class="anim-in svg-center" style="margin-bottom:8px;">
+      <svg class="svg-icon--md" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M25 55 Q30 30, 50 25 Q60 23, 65 28 L70 22 L75 18 L73 25 L68 30 Q72 35, 70 45 L75 60 L72 62 L68 48 L60 60 L57 62 L55 48 L45 58 L42 60 L44 46 L35 58 L32 60 L36 45 Q28 50, 25 55Z" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <circle cx="72" cy="24" r="1.5" fill="#c5a55a"/>
+        <path d="M75 18 Q80 14, 78 10 M75 18 Q82 16, 84 12" stroke="#c5a55a" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+    <h2 class="anim-in" style="color:var(--gold);">驯马师类比</h2>
+    <p class="anim-in">"让我来当面质问美勒托斯。"</p>
+    <ol class="logic-chain anim-in">
+      <li>我问：如果我是腐蚀者，<strong>谁是改善者？</strong></li>
+      <li>美勒托斯答：法律、法官、元老、全体公民——<strong>整个雅典都在改善青年，只有我在腐蚀！</strong></li>
+      <li>我的反击：对于马，是一个驯马师能让它变好，还是所有人都能？</li>
+      <li>答案：<strong>少数专家</strong>能改善，多数人反而会伤害。</li>
+      <li>结论：认为一个人腐蚀而所有人改善——<strong class="terracotta">这完全是胡说八道。</strong></li>
+    </ol>
+    <p class="anim-in secondary italic" style="margin-top:12px;">"而且，如果我真的腐蚀了身边的人，他们会反过来伤害我——我为什么要做对自己不利的事？"</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 11 — 法庭交锋：逻辑陷阱
+     ============================================================ -->
+<div class="slide slide--dark" data-notes="第二回合更精彩。美勒托斯一方面说我是无神论者，另一方面控告书又说我信奉神灵之事。这是一个明显的自相矛盾。我用了骡子的比喻——这就像承认骡子存在却否认马和驴的存在。这个逻辑陷阱让美勒托斯当场哑口无言。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">X &middot; 逻辑陷阱</div>
+    <!-- Net/Trap SVG -->
+    <div class="anim-in svg-center" style="margin-bottom:8px;">
+      <svg class="svg-icon--md" viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 10 L40 50 L70 10" fill="none" stroke="#c5a55a" stroke-width="2"/>
+        <line x1="10" y1="10" x2="70" y2="10" stroke="#c5a55a" stroke-width="2"/>
+        <line x1="18" y1="10" x2="40" y2="50" stroke="#c5a55a" stroke-width="0.5" opacity="0.5"/>
+        <line x1="26" y1="10" x2="40" y2="50" stroke="#c5a55a" stroke-width="0.5" opacity="0.5"/>
+        <line x1="34" y1="10" x2="40" y2="50" stroke="#c5a55a" stroke-width="0.5" opacity="0.5"/>
+        <line x1="46" y1="10" x2="40" y2="50" stroke="#c5a55a" stroke-width="0.5" opacity="0.5"/>
+        <line x1="54" y1="10" x2="40" y2="50" stroke="#c5a55a" stroke-width="0.5" opacity="0.5"/>
+        <line x1="62" y1="10" x2="40" y2="50" stroke="#c5a55a" stroke-width="0.5" opacity="0.5"/>
+        <line x1="15" y1="20" x2="65" y2="20" stroke="#c5a55a" stroke-width="0.5" opacity="0.5"/>
+        <line x1="22" y1="30" x2="58" y2="30" stroke="#c5a55a" stroke-width="0.5" opacity="0.5"/>
+        <line x1="30" y1="40" x2="50" y2="40" stroke="#c5a55a" stroke-width="0.5" opacity="0.5"/>
+      </svg>
+    </div>
+    <h2 class="anim-in" style="color:var(--gold);">自相矛盾</h2>
+    <p class="anim-in">"美勒托斯说我是'彻底的无神论者'，说我认为太阳是石头、月亮是泥土。美勒托斯，你搞错了——那是阿那克萨哥拉的学说，在剧场花一个德拉克马就能听到。"</p>
+    <div class="card anim-in" style="margin:12px 0;">
+      <p style="text-align:center; margin-bottom:8px;"><strong class="gold">逻辑推导链：</strong></p>
+      <p style="text-align:center;">控告书说我"信奉神灵之事" <span class="gold">&rarr;</span> 能信神灵之事而不信精灵吗？<span class="gold">&rarr;</span> <strong>不能</strong> <span class="gold">&rarr;</span> 精灵是神或神的后代 <span class="gold">&rarr;</span> 因此你说我不信神，又说我信神 <span class="gold">&rarr;</span> <strong class="terracotta">自相矛盾！</strong></p>
+    </div>
+    <div class="scroll-quote anim-in">
+      <p>"这就像说：<strong>承认骡子存在，却否认马和驴的存在。</strong>美勒托斯，你写这份控告书，只是因为你找不到真正的罪名来指控我。"</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 12 — 牛虻
+     ============================================================ -->
+<div class="slide slide--light" data-notes="牛虻的比喻是整篇申辩中最著名的段落之一。我把自己比作一只被神赐给雅典的牛虻，把雅典比作一匹高贵但懒惰的大马。我整天叮咬这匹马，让它保持清醒。如果你们拍死我，你们可以继续沉睡——除非神再派来一只。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="corner-ornament corner-ornament--tl"></div>
+  <div class="corner-ornament corner-ornament--tr"></div>
+  <div class="corner-ornament corner-ornament--bl"></div>
+  <div class="corner-ornament corner-ornament--br"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">XI &middot; 牛虻</div>
+    <!-- Gadfly SVG -->
+    <div class="anim-in svg-center">
+      <svg class="svg-icon--lg" viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(80,60)">
+          <!-- Body -->
+          <ellipse cx="0" cy="0" rx="18" ry="10" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <ellipse cx="22" cy="-2" rx="8" ry="6" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <!-- Head -->
+          <circle cx="32" cy="-4" r="5" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+          <line x1="37" y1="-6" x2="42" y2="-12" stroke="#c5a55a" stroke-width="1"/>
+          <line x1="36" y1="-8" x2="40" y2="-16" stroke="#c5a55a" stroke-width="1"/>
+          <!-- Stinger -->
+          <line x1="37" y1="-2" x2="44" y2="0" stroke="#c06030" stroke-width="1.5"/>
+          <!-- Wings -->
+          <ellipse cx="-5" cy="-18" rx="20" ry="10" fill="none" stroke="#c5a55a" stroke-width="1" opacity="0.6" transform="rotate(-15)"/>
+          <ellipse cx="5" cy="-20" rx="18" ry="8" fill="none" stroke="#c5a55a" stroke-width="1" opacity="0.6" transform="rotate(10)"/>
+          <!-- Legs -->
+          <line x1="-10" y1="8" x2="-18" y2="20" stroke="#c5a55a" stroke-width="1"/>
+          <line x1="-2" y1="9" x2="-6" y2="22" stroke="#c5a55a" stroke-width="1"/>
+          <line x1="8" y1="8" x2="6" y2="22" stroke="#c5a55a" stroke-width="1"/>
+          <line x1="16" y1="5" x2="18" y2="18" stroke="#c5a55a" stroke-width="1"/>
+          <!-- Eye -->
+          <circle cx="34" cy="-5" r="1.5" fill="#c5a55a"/>
+        </g>
+      </svg>
+    </div>
+    <h2 class="anim-in" style="color:var(--gold);">我就是那只牛虻</h2>
+    <div class="scroll-quote anim-in">
+      <p>"如果你们杀了我，你们不容易找到我的继任者。请允许我用一个滑稽的比喻——<strong>我就像一只牛虻，被神赐给了这个城邦。而雅典就像一匹高贵的骏马，因为体型庞大而行动迟缓。</strong>我就是整天叮在你们身上的那只牛虻，唤醒你们、说服你们、责备你们。"</p>
+    </div>
+    <p class="anim-in">"你们可以一巴掌拍死我，然后在余生中继续沉睡。除非神再派来另一只牛虻。"</p>
+    <p class="anim-in secondary italic">"如果你们不信我是神派来的，看看我的贫穷就知道了——有谁会为了自讨苦吃而放弃一切？"</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 13 — 我的两次抗命
+     ============================================================ -->
+<div class="slide slide--light" data-notes="这两个故事证明我不是空谈正义，而是真正用生命去实践。在民主制度下，我拒绝违法的集体审判；在暴政之下，我拒绝逮捕无辜者。两次我都差点丧命。无论政体如何变化，我只服从一个主人——正义。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="corner-ornament corner-ornament--tl"></div>
+  <div class="corner-ornament corner-ornament--tr"></div>
+  <div class="corner-ornament corner-ornament--bl"></div>
+  <div class="corner-ornament corner-ornament--br"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">XII &middot; 两次抗命</div>
+    <!-- Shield SVG -->
+    <div class="anim-in" style="margin-bottom:8px;">
+      <svg class="svg-icon--sm" viewBox="0 0 50 60" xmlns="http://www.w3.org/2000/svg">
+        <path d="M25 5 L45 15 L45 35 Q45 50, 25 58 Q5 50, 5 35 L5 15 Z" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M25 12 L38 19 L38 34 Q38 45, 25 51 Q12 45, 12 34 L12 19 Z" fill="none" stroke="#c5a55a" stroke-width="0.8" opacity="0.4"/>
+        <line x1="25" y1="20" x2="25" y2="45" stroke="#c5a55a" stroke-width="0.8" opacity="0.4"/>
+        <line x1="15" y1="30" x2="35" y2="30" stroke="#c5a55a" stroke-width="0.8" opacity="0.4"/>
+      </svg>
+    </div>
+    <h2 class="anim-in">我用生命实践正义</h2>
+    <div class="two-col anim-in">
+      <div class="card">
+        <h3 class="olive-text">民主下的不义（公元前406年）</h3>
+        <p>"阿吉纽西海战后，你们要集体审判十位将军——这违反法律。我当时恰好是执政团成员，<strong>我是唯一一个投反对票的人。</strong>你们威胁要逮捕我。但我宁可冒生命危险，也不参与违法行为。"</p>
+      </div>
+      <div class="card">
+        <h3 class="terracotta">暴政下的不义（公元前404年）</h3>
+        <p>"三十僭主命令我和另外四人去逮捕萨拉米斯的莱昂处死。其他四个人去了。而我——<strong>悄悄回了家。</strong>如果僭主没有很快倒台，我现在就不会站在这里了。"</p>
+      </div>
+    </div>
+    <div class="insight-card anim-in" style="text-align:center; margin-top:12px;">
+      <p style="margin:0; font-size:clamp(16px,1.6vw,20px);"><strong class="gold">"无论是民主还是暴政，我只服从一个主人——正义。"</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 14 — 我不会求饶
+     ============================================================ -->
+<div class="slide slide--light" data-notes="这是古希腊法庭上常见的做法——被告把妻儿带上来哭泣求情。但我拒绝这样做。我有三个儿子，一个快成年了，两个还小。但我认为用同情来影响判决既有损我的尊严，也是在逼法官违背誓言。当我因为'不虔诚'受审时，我怎能做出不虔诚的事？">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="corner-ornament corner-ornament--tl"></div>
+  <div class="corner-ornament corner-ornament--tr"></div>
+  <div class="corner-ornament corner-ornament--bl"></div>
+  <div class="corner-ornament corner-ornament--br"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">XIII &middot; 尊严</div>
+    <!-- Dignified figure SVG -->
+    <div class="anim-in svg-center" style="margin-bottom:8px;">
+      <svg class="svg-icon--md" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="14" r="8" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M30 22 L30 50" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M30 30 L15 42" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M30 30 L45 42" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M30 50 L20 72" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M30 50 L40 72" stroke="#c5a55a" stroke-width="1.5"/>
+        <!-- Robe -->
+        <path d="M22 28 Q18 40, 15 55 Q25 52, 30 50 Q35 52, 45 55 Q42 40, 38 28" fill="none" stroke="#c5a55a" stroke-width="1" opacity="0.5"/>
+      </svg>
+    </div>
+    <h2 class="anim-in">我不会求饶</h2>
+    <p class="anim-in">"我有三个儿子——一个快成年了，两个还年幼。但我不会把他们带上来哭哭啼啼地求你们开恩。"</p>
+    <div class="card-grid card-grid--3 anim-in">
+      <div class="card">
+        <p class="gold" style="font-size:18px; font-weight:700;">①</p>
+        <p>"到了我这个年纪，做那种事太丢人了"</p>
+      </div>
+      <div class="card">
+        <p class="gold" style="font-size:18px; font-weight:700;">②</p>
+        <p>"那会让雅典在外邦人面前显得可笑"</p>
+      </div>
+      <div class="card">
+        <p class="gold" style="font-size:18px; font-weight:700;">③</p>
+        <p>"你们宣誓是依法审判，不是施舍同情。如果我求你们法外开恩，那不就是在逼你们违背誓言吗？"</p>
+      </div>
+    </div>
+    <div class="scroll-quote anim-in" style="margin-top:12px;">
+      <p>"当我自己正因'不虔诚'受审时，我怎能做出如此不虔诚的事？<strong>我把命运交给你们和神。</strong>"</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 15 — VERDICT
+     ============================================================ -->
+<div class="slide slide--dark" data-notes="五百零一位陪审员投票。有罪票仅比无罪票多出约三十票——也就是说如果有十五六个人改变想法，我就获释了。这个微小的差距说明控告的理由并不充分。如果没有安尼托斯和莱孔的参与，美勒托斯连五分之一的票都拿不到——那样他自己反而要被罚款。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="slide-inner center">
+    <!-- Scales SVG -->
+    <div class="anim-in svg-center">
+      <svg class="svg-icon--md" viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="5" x2="40" y2="50" stroke="#c5a55a" stroke-width="2"/>
+        <line x1="10" y1="15" x2="70" y2="15" stroke="#c5a55a" stroke-width="2"/>
+        <path d="M4 30 L10 15 L16 30" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M2 30 Q10 38, 18 30" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M64 25 L70 15 L76 25" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M62 25 Q70 32, 78 25" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <rect x="32" y="50" width="16" height="4" rx="1" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <circle cx="40" cy="5" r="4" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="verdict anim-in">判决：有罪</div>
+    <p class="anim-in" style="font-size:clamp(16px,1.6vw,20px);">"仅以约30票之差。如果安尼托斯和莱孔没有参与，美勒托斯连五分之一的票都拿不到。"</p>
+    <div class="part-label anim-in" style="margin-top:24px;">P A R T &nbsp; I I &nbsp; &mdash; &nbsp; 量 刑</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 16 — 我该受什么"罚"？
+     ============================================================ -->
+<div class="slide slide--light" data-notes="按雅典法律，被判有罪后被告可以提出量刑建议。我的建议令法庭震惊——我说我应该在普里塔尼厄姆免费用餐，就像奥林匹亚冠军一样。这不是傲慢，而是我真诚地认为自己是雅典的恩人。然后我逐一排除了其他可能的刑罚。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="corner-ornament corner-ornament--tl"></div>
+  <div class="corner-ornament corner-ornament--tr"></div>
+  <div class="corner-ornament corner-ornament--bl"></div>
+  <div class="corner-ornament corner-ornament--br"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">XIV &middot; 量刑建议</div>
+    <!-- Olive Wreath SVG -->
+    <div class="anim-in svg-center" style="margin-bottom:8px;">
+      <svg class="svg-icon--md" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M40 70 C20 65, 8 45, 10 25" stroke="#6b7c3e" stroke-width="1.5" fill="none"/>
+        <path d="M40 70 C60 65, 72 45, 70 25" stroke="#6b7c3e" stroke-width="1.5" fill="none"/>
+        <ellipse cx="14" cy="50" rx="8" ry="4" transform="rotate(-25 14 50)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <ellipse cx="11" cy="38" rx="8" ry="4" transform="rotate(-45 11 38)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <ellipse cx="14" cy="28" rx="7" ry="3.5" transform="rotate(-65 14 28)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <ellipse cx="66" cy="50" rx="8" ry="4" transform="rotate(25 66 50)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <ellipse cx="69" cy="38" rx="8" ry="4" transform="rotate(45 69 38)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <ellipse cx="66" cy="28" rx="7" ry="3.5" transform="rotate(65 66 28)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <ellipse cx="22" cy="20" rx="7" ry="3.5" transform="rotate(-80 22 20)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <ellipse cx="58" cy="20" rx="7" ry="3.5" transform="rotate(80 58 20)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <ellipse cx="32" cy="14" rx="7" ry="3.5" transform="rotate(10 32 14)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <ellipse cx="48" cy="14" rx="7" ry="3.5" transform="rotate(-10 48 14)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+      </svg>
+    </div>
+    <h2 class="anim-in">我该受什么"罚"？</h2>
+    <p class="anim-in">"按规矩，现在我要提出一个量刑建议。好吧，让我想想——一个穷人，是你们的恩人，需要闲暇来教导你们，他该得到什么？"</p>
+    <div class="scroll-quote anim-in">
+      <p>"答案很简单：<strong>在普里塔尼厄姆免费用餐</strong>——就像奥林匹亚冠军一样。而且我比他们更有资格，因为奥林匹亚冠军只给你们幸福的表象，而我给你们<strong class="gold">真实的幸福。</strong>"</p>
+    </div>
+    <div class="card-grid card-grid--4 anim-in">
+      <div class="card" style="text-align:center;">
+        <p class="terracotta" style="font-weight:700;">死刑</p>
+        <p class="small">"我不知道死是好是坏"</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <p class="terracotta" style="font-weight:700;">监禁</p>
+        <p class="small">"给官吏当奴隶？"</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <p class="terracotta" style="font-weight:700;">流放</p>
+        <p class="small">"到哪里年轻人都会跟着我"</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <p class="terracotta" style="font-weight:700;">沉默</p>
+        <p class="small">"那是对神的违抗"</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 17 — 未经审视的人生
+     ============================================================ -->
+<div class="slide slide--dark" data-notes="这是整篇申辩中最著名的一句话——未经审视的人生不值得过。这不是一句空洞的格言，而是我用一生来实践的信念。审视自己和他人，谈论美德——这是人最大的善。最终我的朋友们替我凑了三十弥那作为罚金，但法庭不接受。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="slide-inner center">
+    <div class="section-num anim-in">XV &middot; 最著名的话</div>
+    <!-- Lantern SVG -->
+    <div class="anim-in svg-center">
+      <svg class="svg-icon--md" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M25 15 Q25 5, 30 3 Q35 5, 35 15" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <rect x="20" y="15" width="20" height="35" rx="3" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <line x1="20" y1="22" x2="40" y2="22" stroke="#c5a55a" stroke-width="0.8" opacity="0.5"/>
+        <line x1="20" y1="43" x2="40" y2="43" stroke="#c5a55a" stroke-width="0.8" opacity="0.5"/>
+        <ellipse cx="30" cy="32" rx="4" ry="6" fill="#c5a55a" opacity="0.3"/>
+        <ellipse cx="30" cy="30" rx="2" ry="3" fill="#c5a55a" opacity="0.6"/>
+        <rect x="22" y="50" width="16" height="3" rx="1" fill="none" stroke="#c5a55a" stroke-width="1.2"/>
+        <line x1="30" y1="53" x2="30" y2="60" stroke="#c5a55a" stroke-width="1.2"/>
+        <rect x="25" y="60" width="10" height="3" rx="1" fill="none" stroke="#c5a55a" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <div class="big-quote anim-in" style="margin:20px 0;">"未经审视的人生不值得过"</div>
+    <p class="anim-in" style="font-family:var(--font-heading); color:rgba(240,234,214,0.5); font-style:italic; font-size:clamp(14px,1.4vw,18px);">ὁ δὲ ἀνεξέταστος βίος οὐ βιωτὸς ἀνθρώπῳ</p>
+    <div class="scroll-quote anim-in" style="max-width:800px; margin:20px auto;">
+      <p>"每天谈论美德，审视自己和他人——这是人最大的善。你们让我闭嘴？那不可能。"</p>
+    </div>
+    <p class="anim-in secondary">"最终，我的朋友们——柏拉图、克里托、克里托布鲁斯、阿波罗多洛斯——替我凑了<strong>30弥那</strong>作为罚金。"</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 18 — SENTENCE
+     ============================================================ -->
+<div class="slide slide--dark" data-notes="法庭拒绝了罚金方案，判处死刑。据说第二次投票中，判死刑的票数比第一次判有罪的票数还多——可能是因为我的'免费用餐'建议激怒了更多陪审员。但我不后悔。宁可坦然面对死亡，也不愿卑躬屈膝。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="slide-inner center">
+    <!-- Hemlock Cup SVG -->
+    <div class="anim-in svg-center">
+      <svg class="svg-icon--lg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <path d="M35 40 Q35 90, 60 95 Q85 90, 85 40" fill="none" stroke="#c5a55a" stroke-width="2"/>
+        <line x1="30" y1="40" x2="90" y2="40" stroke="#c5a55a" stroke-width="2"/>
+        <ellipse cx="60" cy="40" rx="30" ry="6" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <path d="M60 95 L60 105" stroke="#c5a55a" stroke-width="2"/>
+        <ellipse cx="60" cy="108" rx="15" ry="4" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <!-- Liquid -->
+        <path d="M42 60 Q42 85, 60 88 Q78 85, 78 60" fill="#c5a55a" opacity="0.15"/>
+        <ellipse cx="60" cy="60" rx="22" ry="4" fill="#c5a55a" opacity="0.2"/>
+        <!-- Steam -->
+        <path d="M50 32 Q48 25, 52 20" stroke="#c5a55a" stroke-width="0.8" fill="none" opacity="0.4"/>
+        <path d="M60 30 Q58 22, 62 16" stroke="#c5a55a" stroke-width="0.8" fill="none" opacity="0.4"/>
+        <path d="M70 32 Q68 25, 72 20" stroke="#c5a55a" stroke-width="0.8" fill="none" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="verdict anim-in">判决：死刑</div>
+    <div class="part-label anim-in">P A R T &nbsp; I I I &nbsp; &mdash; &nbsp; 最 后 的 话</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 19 — 致判我死刑的人
+     ============================================================ -->
+<div class="slide slide--light" data-notes="面对死刑判决，我没有沉默，而是对判我死刑的人说出了最后的警告。赛跑的比喻深刻而美丽——死亡追上了我，因为我老了跑得慢；但不义追上了你们，因为不义比死亡跑得更快。我还做出了预言：杀我不能堵住批评的嘴，只会招来更多更年轻的质问者。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="corner-ornament corner-ornament--tl"></div>
+  <div class="corner-ornament corner-ornament--tr"></div>
+  <div class="corner-ornament corner-ornament--bl"></div>
+  <div class="corner-ornament corner-ornament--br"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">XVI &middot; 致判我死刑的人</div>
+    <!-- Pointing figure SVG -->
+    <div class="anim-in" style="margin-bottom:8px;">
+      <svg class="svg-icon--sm" viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="15" cy="10" r="6" fill="none" stroke="#c06030" stroke-width="1.5"/>
+        <line x1="15" y1="16" x2="15" y2="35" stroke="#c06030" stroke-width="1.5"/>
+        <line x1="15" y1="35" x2="10" y2="48" stroke="#c06030" stroke-width="1.5"/>
+        <line x1="15" y1="35" x2="20" y2="48" stroke="#c06030" stroke-width="1.5"/>
+        <line x1="15" y1="22" x2="50" y2="18" stroke="#c06030" stroke-width="1.5"/>
+        <circle cx="52" cy="18" r="2" fill="#c06030"/>
+      </svg>
+    </div>
+    <h2 class="anim-in">致判我死刑的人</h2>
+    <div class="scroll-quote anim-in">
+      <p>"<strong>我宁愿以我自己的方式说话而死，也不愿以你们的方式说话而活。</strong>"</p>
+    </div>
+    <div class="card anim-in" style="margin:12px 0;">
+      <h3 class="gold">赛跑比喻</h3>
+      <p>"逃避死亡并不难，难的是逃避不义——因为<strong class="terracotta">不义比死亡跑得更快。</strong>我年老体衰，较慢的跑者——死亡——追上了我。而你们年轻力壮，但较快的跑者——不义——已经追上了你们。"</p>
+    </div>
+    <div class="insight-card anim-in">
+      <p style="margin:0;"><strong class="gold">预言：</strong>"我即将死去，在这个时刻，人被赋予预言的能力：在我之后，会有更多、更年轻的控告者来质问你们。<strong>杀人不能堵住批评的嘴——改善自己才是唯一的出路。</strong>"</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 20 — 论死亡
+     ============================================================ -->
+<div class="slide slide--dark" data-notes="这段关于死亡的论述是整篇申辩中最动人的部分。我的神灵之声——那个从小伴随我的内心声音——今天全程沉默。它连小事都会阻止我，但今天一声不吭。这意味着发生在我身上的事是好的。然后我提出了死亡的两种可能，两种都不可怕。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="slide-inner">
+    <div class="section-num anim-in">XVII &middot; 论死亡</div>
+    <!-- Fork in road SVG -->
+    <div class="anim-in svg-center" style="margin-bottom:12px;">
+      <svg class="svg-icon--md" viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 65 L50 35" stroke="#c5a55a" stroke-width="2"/>
+        <path d="M50 35 L20 8" stroke="#c5a55a" stroke-width="2"/>
+        <path d="M50 35 L80 8" stroke="#c5a55a" stroke-width="2"/>
+        <circle cx="50" cy="35" r="3" fill="#c5a55a"/>
+        <!-- Left: moon (sleep) -->
+        <path d="M14 8 Q8 2, 14 -2 Q22 4, 14 8Z" fill="none" stroke="#c5a55a" stroke-width="1.2" transform="translate(2,4)"/>
+        <!-- Right: sun (afterlife) -->
+        <circle cx="82" cy="8" r="5" fill="none" stroke="#c5a55a" stroke-width="1.2"/>
+        <line x1="82" y1="0" x2="82" y2="-3" stroke="#c5a55a" stroke-width="0.8"/><line x1="82" y1="16" x2="82" y2="19" stroke="#c5a55a" stroke-width="0.8"/>
+        <line x1="74" y1="8" x2="71" y2="8" stroke="#c5a55a" stroke-width="0.8"/><line x1="90" y1="8" x2="93" y2="8" stroke="#c5a55a" stroke-width="0.8"/>
+      </svg>
+    </div>
+    <h2 class="anim-in" style="color:var(--gold);">两条路，都不可怕</h2>
+    <p class="anim-in">"我的神灵之声今天全程沉默——从我出门，到上庭，到此刻。它连小事都会阻止我，但今天一声不吭。这说明什么？<strong>发生在我身上的事，是好的。</strong>"</p>
+    <div class="two-col anim-in" style="margin-top:12px;">
+      <div class="card">
+        <h3 class="gold" style="text-align:center;">无梦之眠</h3>
+        <p>"如果死亡是完全无意识的状态——选出你一生中连梦都没有的安睡之夜，即使波斯大王也找不出几个。如果永恒就是这样一个夜晚，<strong>那死亡真是赚到了。</strong>"</p>
+      </div>
+      <div class="card">
+        <h3 class="gold" style="text-align:center;">灵魂的迁徙</h3>
+        <p>"如果死后是前往另一个世界——我可以遇见弥诺斯、荷马、赫西俄德！与他们交谈、向他们提问——<strong>那该是多么无穷的喜悦！</strong>"</p>
+      </div>
+    </div>
+    <p class="anim-in" style="text-align:center; margin-top:12px; color:var(--gold); font-style:italic;">"而且最重要的是——在那个世界，他们不会因为一个人提问就判他死刑。"</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     SLIDE 21 — 最后的话
+     ============================================================ -->
+<div class="slide slide--dark" data-notes="这是苏格拉底最后的遗言。他请求雅典人善待他的儿子——如果他们偏离了美德的道路，请像他折磨雅典人一样折磨他们。最后那句'哪一个更好，只有神知道'是全篇的最后一句话，也是西方哲学史上最优雅的告别。">
+  <div class="greek-key-border"></div>
+  <div class="meander-top"></div>
+  <div class="meander-bottom"></div>
+  <div class="slide-inner center">
+    <div class="section-num anim-in">XVIII &middot; 永别</div>
+    <!-- Hemlock + Olive SVG -->
+    <div class="anim-in svg-center">
+      <svg class="svg-icon--lg" viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- Cup -->
+        <path d="M55 35 Q55 80, 80 85 Q105 80, 105 35" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <line x1="50" y1="35" x2="110" y2="35" stroke="#c5a55a" stroke-width="1.5"/>
+        <ellipse cx="80" cy="35" rx="30" ry="5" fill="none" stroke="#c5a55a" stroke-width="1"/>
+        <path d="M80 85 L80 95" stroke="#c5a55a" stroke-width="1.5"/>
+        <ellipse cx="80" cy="98" rx="12" ry="3" fill="none" stroke="#c5a55a" stroke-width="1.5"/>
+        <!-- Olive branch draped over cup -->
+        <path d="M40 30 Q60 20, 80 25 Q100 20, 120 30" fill="none" stroke="#6b7c3e" stroke-width="1.5"/>
+        <ellipse cx="50" cy="26" rx="6" ry="3" transform="rotate(-15 50 26)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <ellipse cx="65" cy="22" rx="6" ry="3" transform="rotate(-5 65 22)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <ellipse cx="95" cy="22" rx="6" ry="3" transform="rotate(5 95 22)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <ellipse cx="110" cy="26" rx="6" ry="3" transform="rotate(15 110 26)" fill="none" stroke="#6b7c3e" stroke-width="1"/>
+        <!-- Small olives -->
+        <circle cx="57" cy="24" r="2" fill="#6b7c3e" opacity="0.4"/>
+        <circle cx="103" cy="24" r="2" fill="#6b7c3e" opacity="0.4"/>
+      </svg>
+    </div>
+    <p class="anim-in" style="font-size:clamp(16px,1.6vw,20px); max-width:700px; margin:0 auto 16px;">"要记住一件事：<strong>好人无论在生前还是死后，都不会遭受真正的恶。</strong>神不会忽视他。"</p>
+    <p class="anim-in" style="font-size:clamp(15px,1.4vw,18px); max-width:700px; margin:0 auto 20px; opacity:0.85;">"我有一个最后的请求——等我的儿子长大了，如果他们更在乎金钱而非美德，如果他们假装很了不起其实一无是处——请像我折磨你们一样折磨他们。"</p>
+    <div class="big-quote anim-in" style="font-size:clamp(22px,2.8vw,36px); max-width:800px; margin:16px auto;">"离别的时刻已经到来。我们各走各路——我去赴死，你们去生活。哪一个更好，只有神知道。"</div>
+  </div>
+</div>
+
+</div><!-- /slides-container -->
+
+<!-- ============================================================
+   CONTROLS
+   ============================================================ -->
+<div class="controls">
+  <button onclick="toggleAutoplay()" id="btnAutoplay" title="自动播放 (A)">&#9654; 自动</button>
+  <button onclick="toggleNotes()" id="btnNotes" title="演讲者备注 (N)">备注</button>
+  <button onclick="goFullscreen()" title="全屏 (F)">全屏</button>
+</div>
+
+<div class="slide-number" id="slideNumber">1 / 21</div>
+<div class="progress-bar" id="progressBar"></div>
+<div class="notes-panel" id="notesPanel"></div>
+
+<script>
+// ============================================================
+// SLIDE ENGINE
+// ============================================================
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let currentSlide = 0;
+let autoplayInterval = null;
+let notesVisible = false;
+
+function showSlide(index) {
+  if (index < 0 || index >= totalSlides) return;
+  slides.forEach((s, i) => {
+    s.classList.remove('active', 'prev');
+    if (i === index) s.classList.add('active');
+    else if (i < index) s.classList.add('prev');
+  });
+  currentSlide = index;
+  document.getElementById('slideNumber').textContent = (index + 1) + ' / ' + totalSlides;
+  document.getElementById('progressBar').style.width = ((index + 1) / totalSlides * 100) + '%';
+  updateNotes();
+}
+
+function nextSlide() { showSlide(Math.min(currentSlide + 1, totalSlides - 1)); }
+function prevSlide() { showSlide(Math.max(currentSlide - 1, 0)); }
+
+function updateNotes() {
+  const note = slides[currentSlide].getAttribute('data-notes') || '';
+  document.getElementById('notesPanel').textContent = note;
+}
+
+function toggleNotes() {
+  notesVisible = !notesVisible;
+  document.getElementById('notesPanel').classList.toggle('visible', notesVisible);
+  document.getElementById('btnNotes').classList.toggle('active', notesVisible);
+}
+
+function toggleAutoplay() {
+  if (autoplayInterval) {
+    clearInterval(autoplayInterval);
+    autoplayInterval = null;
+    document.getElementById('btnAutoplay').classList.remove('active');
+  } else {
+    autoplayInterval = setInterval(() => {
+      if (currentSlide < totalSlides - 1) nextSlide();
+      else { clearInterval(autoplayInterval); autoplayInterval = null; document.getElementById('btnAutoplay').classList.remove('active'); }
+    }, 8000);
+    document.getElementById('btnAutoplay').classList.add('active');
+  }
+}
+
+function goFullscreen() {
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+}
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); nextSlide(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); prevSlide(); }
+  else if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+  else if (e.key === 'End') { e.preventDefault(); showSlide(totalSlides - 1); }
+  else if (e.key === 'f' || e.key === 'F') goFullscreen();
+  else if (e.key === 'n' || e.key === 'N') toggleNotes();
+  else if (e.key === 'a' || e.key === 'A') toggleAutoplay();
+  else if (e.key === 'Escape') {
+    if (autoplayInterval) toggleAutoplay();
+    if (notesVisible) toggleNotes();
+  }
+});
+
+// Click navigation
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.controls') || e.target.closest('.notes-panel')) return;
+  const x = e.clientX / window.innerWidth;
+  if (x > 0.5) nextSlide(); else prevSlide();
+});
+
+// Touch support
+let touchStartX = 0;
+document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 50) { if (dx < 0) nextSlide(); else prevSlide(); }
+});
+
+// Initialize
+showSlide(0);
+</script>
+
+</body>
+</html>

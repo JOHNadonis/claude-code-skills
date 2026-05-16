@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 多氟多 002407 最新价 涨跌幅 量比 DDX 支撑位 压力位 分时均价 BOLL
+数据文件路径: workspace/MX_FinData/MX_FinData_4472dc63.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_4472dc63_description.txt
+数据行数: 15
+表数量: 4
+Sheet 列表: 多氟多(002407.SZ)当前的支撑位、压力位, 多氟多(002407.SZ)的BOLL布林线LOW、BOLL布, 多氟多(002407.SZ)当前的量比、最新价等, 多氟多(002407.SZ)的收盘价、涨跌幅

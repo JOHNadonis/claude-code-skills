@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 赤峰黄金600988 今日现价 量比 DDX今日 超大单净流入今日 换手率 BOLL上轨 RSI14
+数据文件路径: workspace/MX_FinData/MX_FinData_f4565fa4.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_f4565fa4_description.txt
+数据行数: 8
+表数量: 3
+Sheet 列表: 赤峰黄金(06693.HK)等的BOLL布林线、RSI相对强弱, 赤峰黄金(06693.HK)等当前的量比、最新价等, 赤峰黄金(06693.HK)等的(区间)超大单净流入资金

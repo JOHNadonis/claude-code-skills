@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-05-15T05:39:57.427001Z",
+  "sites": [
+    {
+      "site_id": "wallstreetcn",
+      "site_name": "华尔街见闻",
+      "ok": true,
+      "item_count": 350,
+      "duration_ms": 4174,
+      "error": null
+    },
+    {
+      "site_id": "jin10",
+      "site_name": "金十数据",
+      "ok": true,
+      "item_count": 18,
+      "duration_ms": 482,
+      "error": null
+    },
+    {
+      "site_id": "blockbeats",
+      "site_name": "律动BlockBeats",
+      "ok": true,
+      "item_count": 0,
+      "duration_ms": 649,
+      "error": null
+    },
+    {
+      "site_id": "cls",
+      "site_name": "财联社",
+      "ok": true,
+      "item_count": 50,
+      "duration_ms": 461,
+      "error": null
+    },
+    {
+      "site_id": "eastmoney",
+      "site_name": "东方财富",
+      "ok": true,
+      "item_count": 10,
+      "duration_ms": 376,
+      "error": null
+    },
+    {
+      "site_id": "gelonghui",
+      "site_name": "格隆汇",
+      "ok": true,
+      "item_count": 15,
+      "duration_ms": 313,
+      "error": null
+    },
+    {
+      "site_id": "polymarket",
+      "site_name": "Polymarket",
+      "ok": true,
+      "item_count": 39,
+      "duration_ms": 1386,
+      "error": null
+    }
+  ],
+  "successful_sites": 7,
+  "failed_sites": [],
+  "zero_item_sites": [
+    "blockbeats"
+  ],
+  "fetched_raw_items": 482,
+  "items_before_topic_filter": 783,
+  "items_in_24h": 556,
+  "rss_opml": {
+    "enabled": false,
+    "path": null,
+    "feed_total": 0,
+    "effective_feed_total": 0,
+    "ok_feeds": 0,
+    "failed_feeds": [],
+    "zero_item_feeds": [],
+    "skipped_feeds": [],
+    "replaced_feeds": [],
+    "feeds": []
+  }
+}

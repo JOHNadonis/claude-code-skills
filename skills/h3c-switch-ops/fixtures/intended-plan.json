@@ -1,0 +1,85 @@
+{
+  "current": {
+    "hostname": "H3C-C7-ACCESS",
+    "version_family": "comware7",
+    "vlans": [
+      {"id": 10, "name": "OFFICE"},
+      {"id": 99, "name": "MGMT"}
+    ],
+    "interfaces": [
+      {
+        "name": "GigabitEthernet1/0/1",
+        "description": "USER-01",
+        "link_type": "access",
+        "access_vlan": 10,
+        "shutdown": false
+      },
+      {
+        "name": "GigabitEthernet1/0/24",
+        "description": "UPLINK-CORE",
+        "link_type": "trunk",
+        "trunk_vlans": [10, 99],
+        "trunk_pvid": 99,
+        "shutdown": false
+      }
+    ],
+    "svis": [
+      {
+        "vlan": 99,
+        "description": "MGMT",
+        "ip_address": "192.168.99.2",
+        "mask": "255.255.255.0",
+        "shutdown": false
+      }
+    ],
+    "static_routes": [
+      {
+        "destination": "0.0.0.0",
+        "mask": "0.0.0.0",
+        "next_hop": "192.168.99.1"
+      }
+    ]
+  },
+  "target": {
+    "hostname": "H3C-C7-ACCESS-NEW",
+    "version_family": "comware7",
+    "vlans": [
+      {"id": 10, "name": "OFFICE"},
+      {"id": 20, "name": "VOICE"},
+      {"id": 99, "name": "MGMT"}
+    ],
+    "interfaces": [
+      {
+        "name": "GigabitEthernet1/0/1",
+        "description": "IP-PHONE-01",
+        "link_type": "access",
+        "access_vlan": 20,
+        "shutdown": false
+      },
+      {
+        "name": "GigabitEthernet1/0/24",
+        "description": "UPLINK-CORE",
+        "link_type": "trunk",
+        "trunk_vlans": [10, 20, 99],
+        "trunk_pvid": 99,
+        "shutdown": false
+      }
+    ],
+    "svis": [
+      {
+        "vlan": 99,
+        "description": "MGMT",
+        "ip_address": "192.168.99.2",
+        "mask": "255.255.255.0",
+        "shutdown": false
+      }
+    ],
+    "static_routes": [
+      {
+        "destination": "0.0.0.0",
+        "mask": "0.0.0.0",
+        "next_hop": "192.168.99.1"
+      }
+    ]
+  }
+}

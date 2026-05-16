@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 璞泰来603659 多氟多002407 金圆股份000546 集合竞价 竞价量比 开盘溢价率 竞价成交量
+数据文件路径: workspace/MX_FinData/MX_FinData_047c800e.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_047c800e_description.txt
+数据行数: 2
+表数量: 1
+Sheet 列表: 璞泰来(603659.SH)等的量比

@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 002149 西部材料 000657 中钨高新 600602 云赛智联 PE PB 营收同比 净利润同比 ROE 资产负债率
+数据文件路径: /Users/whc/.claude/skills/mx-finance-data/miaoxiang/mx_finance_data/mx_finance_data_850aad0b.xlsx
+描述文件路径: /Users/whc/.claude/skills/mx-finance-data/miaoxiang/mx_finance_data/mx_finance_data_850aad0b_description.txt
+数据行数: 20
+表数量: 8
+Sheet 列表: 西部材料(002149.SZ)的净利润同比增长率、资产负债率等, 中钨高新(000657.SZ)的净利润同比增长率、资产负债率等, 云赛智联(600602.SH)的净利润同比增长率、资产负债率等, 西部材料(002149.SZ)的市净率PB、市盈率PE(TTM, 中钨高新(000657.SZ)的市净率PB, 云赛智联(600602.SH)的市净率PB、市盈率PE(TTM, 西部材料(002149.SZ)等当前的市盈率(TTM), 中钨高新(000657.SZ)的市盈率(PE)

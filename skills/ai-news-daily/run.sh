@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+cd "$(dirname "$0")"
+
+echo "📰 AI 新闻日报 v1.0.2"
+echo "======================"
+echo ""
+
+# 优先使用本地虚拟环境
+if [ -x ".venv/bin/python" ]; then
+  PYTHON=".venv/bin/python"
+else
+  PYTHON="python3"
+fi
+
+# 检查数据库是否存在，不存在则初始化
+if [ ! -f "data/news.db" ]; then
+    echo "🔄 首次运行，初始化数据库..."
+    mkdir -p data
+fi
+
+# 1. 抓取新闻
+echo "📥 正在抓取新闻..."
+"$PYTHON" src/daily_fetch.py
+
+echo ""
+echo "✅ 抓取完成！"
+echo ""
+echo "💡 消息已保存到: data/openclaw_message.txt"
+echo ""
+echo "📅 每天早上 9:00 会自动推送"
+echo "   手动推送请运行: $PYTHON src/push.py"

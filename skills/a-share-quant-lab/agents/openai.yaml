@@ -1,0 +1,4 @@
+interface:
+  display_name: "A股AI量化研究台"
+  short_description: "把A股想法沉淀成可回测策略规格、聚宽骨架和风控检查"
+  default_prompt: "Use $a-share-quant-lab to turn my A股交易想法 into a strategy spec, JoinQuant scaffold, and validation checklist."

@@ -1,0 +1,8 @@
+金融数据查询结果说明
+========================================
+查询内容: 兆驰股份002429 最新股价 量比 BOLL布林线上轨中轨下轨 换手率
+数据文件路径: workspace/MX_FinData/MX_FinData_08056e9f.xlsx
+描述文件路径: workspace/MX_FinData/MX_FinData_08056e9f_description.txt
+数据行数: 4
+表数量: 2
+Sheet 列表: 兆驰股份(002429.SZ)的BOLL布林线、量比, 兆驰股份(002429.SZ)的收盘价、换手率
