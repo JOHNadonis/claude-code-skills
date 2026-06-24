@@ -1,0 +1,13 @@
+{
+  "name": "workplace-high-eq",
+  "version": "0.1.0",
+  "owner": "whc",
+  "updated_at": "2026-06-24",
+  "status": "scaffold",
+  "maturity_tier": "personal",
+  "lifecycle_stage": "scaffold",
+  "context_budget_tier": "light",
+  "review_cadence": "on-use",
+  "target_platforms": ["claude", "generic"],
+  "components": ["SKILL.md", "agents/interface.yaml", "references/workplace-eq-framework.md", "evals/trigger_cases.json", "scripts/trigger_eval.py"]
+}

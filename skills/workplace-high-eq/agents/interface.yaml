@@ -1,0 +1,22 @@
+interface:
+  display_name: "Workplace High EQ"
+  short_description: "Value-aware workplace EQ scripts and training"
+  default_prompt: "Use $workplace-high-eq to turn this workplace relationship problem into a boundary-aware high-EQ response script. This adapter file is for non-Claude loaders that read agents/interface.yaml."
+compatibility:
+  canonical_format: "agent-skills"
+  adapter_targets:
+    - "claude"
+    - "generic"
+  activation:
+    mode: "manual_or_router"
+    paths: []
+  execution:
+    context: "inline"
+    shell: "none"
+  trust:
+    source_tier: "local"
+    remote_inline_execution: "forbid"
+    remote_metadata_policy: "allow-metadata-only"
+  degradation:
+    claude: "native-skill"
+    generic: "frontmatter-plus-instructions"
